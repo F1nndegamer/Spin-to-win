@@ -6,6 +6,7 @@ public class Controller : MonoBehaviour
 
     void Awake() {
         level = GetComponent<Level>();
+        level.UpdateGravity(); // update the gravity immediately so we aren't floating as soon as we start -Sabrina
     }
 
     void Update()
