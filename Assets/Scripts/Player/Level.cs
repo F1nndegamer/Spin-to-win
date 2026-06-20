@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Level : MonoBehaviour
@@ -5,9 +6,11 @@ public class Level : MonoBehaviour
     public Camera camera;
     public GravityHandler gravityHandler;
     private bool rotating = false;
-    public float gravity = 1f;
+    public float gravity = 9.8f;
 
     public enum Direction {
+        Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
+
         Down = 0,
         Right = 1,
         Up = 2,
@@ -19,8 +22,47 @@ public class Level : MonoBehaviour
     public void Rotate(int dir)
     {
         if(rotating) return;
+        // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
+        StartCoroutine(RotateRoutine(dir));
+    }
+
+
+    IEnumerator RotateRoutine(int dir)
+    {
+        SetPhysicsEnabled(false);
+
+        yield return StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
         gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
+        if(gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
         UpdateGravity();
+
+        SetPhysicsEnabled(true);
+    }
+
+
+    float lerpAngleFormula(float t)
+    {
+        // if we want a bezier curve, or ease in/out we can modify our formula/return here -Sabrina
+        return t;
+    }
+    IEnumerator RotateCamera(int dir)
+    {
+        rotating = true;
+
+        Vector3 startingRotation = camera.transform.rotation.eulerAngles;
+        float endRotationZ = startingRotation.z + (90f * dir);
+        float duration = 1f;
+        float t = 0f;
+        while(t < duration)
+        {
+            t += Time.deltaTime;
+            float newZAngle = Mathf.LerpAngle(startingRotation.z, endRotationZ, lerpAngleFormula(t / duration));
+            camera.transform.rotation = Quaternion.Euler(0, 0, newZAngle);
+            yield return null;
+        }
+
+        rotating = false;
+        yield return null;
     }
 
     public void UpdateGravity(){
@@ -38,6 +80,13 @@ public class Level : MonoBehaviour
                 gravityHandler.setGravityLeft(gravity);
                 break;
         }
+    }
+
+
+    private void SetPhysicsEnabled(bool enabled)
+    {
+        SimulationMode2D mode = enabled ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
+        Physics2D.simulationMode = mode;
     }
 
     // Implement later after the rest of game is setup
