@@ -4,11 +4,11 @@ public class Controller : MonoBehaviour
 {
     public Level level;
 
-    void Awake() {
+    private void Awake() {
         level = GetComponent<Level>();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
