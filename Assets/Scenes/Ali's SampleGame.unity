@@ -130,6 +130,8 @@ GameObject:
   - component: {fileID: 189607812}
   - component: {fileID: 189607811}
   - component: {fileID: 189607810}
+  - component: {fileID: 189607815}
+  - component: {fileID: 189607814}
   - component: {fileID: 189607813}
   m_Layer: 0
   m_Name: Main Camera
@@ -222,9 +224,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 189607809}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0baa17a488154435ca0eb38c6389d1b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8dc1f1b7a2f1fca4787c14deea5a7f72, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Control
+  m_EditorClassIdentifier: Assembly-CSharp::GravityHandler
+--- !u!114 &189607814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189607809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2949383fbb759fd6da0459887fde4040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Level
+  camera: {fileID: 189607811}
+  gravityHandler: {fileID: 189607813}
+  gravity: 1
+--- !u!114 &189607815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189607809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7dcad9d9f590ec2092e248ff50c5499, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Controller
+  level: {fileID: 189607814}
 --- !u!1 &934212487
 GameObject:
   m_ObjectHideFlags: 0
