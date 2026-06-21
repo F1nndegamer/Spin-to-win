@@ -33,7 +33,7 @@ public class DraggableItem : MonoBehaviour
     private void OnMouseDrag()
     {
         if(!Level.Instance.StartedLevel)
-        Drag();
+            Drag();
     }
 
     private void OnMouseUp()
