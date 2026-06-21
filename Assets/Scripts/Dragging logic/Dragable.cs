@@ -12,10 +12,15 @@ public class DraggableItem : MonoBehaviour
     private Vector2Int currentCell;
 
     private Camera cam;
+    public GameObject PlacedParent;
 
     private void Awake()
     {
         cam = Camera.main;
+        if (PlacedParent == null)
+        {
+            PlacedParent = GameObject.Find("PlacedObjects");
+        }
     }
 
     private void OnMouseDown()
@@ -82,7 +87,7 @@ public class DraggableItem : MonoBehaviour
         currentCell = cell;
 
         transform.position = GridManager.Instance.CellToWorld(cell);
-
+        transform.parent = PlacedParent.transform;
         GridManager.Instance.Register(this, cell);
     }
 }
