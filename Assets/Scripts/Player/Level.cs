@@ -1,19 +1,24 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Level : MonoBehaviour
 {
     public Camera camera;
     public GravityHandler gravityHandler;
+    [HideInInspector] public bool StartedLevel;
     public PlayerBox player;
     private bool rotating = false;
     public float gravity = 9.8f;
-    
+
     [Header("Mechanic")]
     public bool AllowMidairSwitch = false;
     public bool PreserveMomentum = false;
 
-    public enum Direction {
+    private GameObject Inventory;
+    public static Level Instance;
+    public enum Direction
+    {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
 
         Down = 0,
@@ -23,17 +28,24 @@ public class Level : MonoBehaviour
     };
 
     private Direction gravityDirection;
-    
-    private void LateUpdate() {
+    void Awake()
+    {
+        Inventory = GameObject.Find("Inventory");
+        Instance = this;
+    }
+    private void LateUpdate()
+    {
         transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
     }
 
     public void Rotate(int dir)
     {
+        StartedLevel = true;
+        if (Inventory != null) Inventory.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
         if (rotating || (!IsGrounded() || AllowMidairSwitch)) return;
-        
+
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
         StartCoroutine(RotateRoutine(dir));
     }
@@ -41,11 +53,11 @@ public class Level : MonoBehaviour
 
     IEnumerator RotateRoutine(int dir)
     {
-        if(!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
+        if (!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
         SetPhysicsEnabled(false);
         yield return StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
         gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
-        if(gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
+        if (gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
         UpdateGravity();
 
         SetPhysicsEnabled(true);
@@ -65,7 +77,7 @@ public class Level : MonoBehaviour
         float endRotationZ = startingRotation.z + (90f * dir);
         float duration = 1f;
         float t = 0f;
-        while(t < duration)
+        while (t < duration)
         {
             t += Time.deltaTime;
             float newZAngle = Mathf.LerpAngle(startingRotation.z, endRotationZ, lerpAngleFormula(t / duration));
@@ -77,8 +89,10 @@ public class Level : MonoBehaviour
         yield return null;
     }
 
-    public void UpdateGravity(){
-        switch (gravityDirection) {
+    public void UpdateGravity()
+    {
+        switch (gravityDirection)
+        {
             case Direction.Down:
                 gravityHandler.setGravityDown(gravity);
                 break;
@@ -106,6 +120,10 @@ public class Level : MonoBehaviour
     }
 
     // Implement later after the rest of game is setup
-    public void Pause() {}
-    public void Restart() {}
+    public void Pause() { }
+    public void Restart()
+    {
+        //for now
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }
