@@ -1,40 +1,44 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class DraggableItem : MonoBehaviour,
-    IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DraggableItem : MonoBehaviour
 {
     public Vector2Int size = Vector2Int.one;
-
-    private RectTransform rect;
-    private Canvas canvas;
-    private CanvasGroup group;
 
     private Vector3 startPos;
     private Transform startParent;
 
+    private bool isDragging;
     private bool placed;
     private Vector2Int currentCell;
 
+    private Camera cam;
+
     private void Awake()
     {
-        rect = GetComponent<RectTransform>();
-        canvas = GetComponentInParent<Canvas>();
-        group = GetComponent<CanvasGroup>();
-
-        if (!group)
-            group = gameObject.AddComponent<CanvasGroup>();
+        cam = Camera.main;
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    private void OnMouseDown()
     {
-        startPos = rect.position;
+        StartDrag();
+    }
+
+    private void OnMouseDrag()
+    {
+        Drag();
+    }
+
+    private void OnMouseUp()
+    {
+        EndDrag();
+    }
+
+    private void StartDrag()
+    {
+        startPos = transform.position;
         startParent = transform.parent;
 
-        transform.SetParent(canvas.transform);
-        group.blocksRaycasts = false;
-
-        rect.localScale = Vector3.one * 1.1f;
+        isDragging = true;
 
         if (placed)
         {
@@ -43,17 +47,24 @@ public class DraggableItem : MonoBehaviour,
         }
     }
 
-    public void OnDrag(PointerEventData eventData)
+    private void Drag()
     {
-        rect.position += (Vector3)eventData.delta / canvas.scaleFactor;
+        if (!isDragging) return;
+
+        Vector3 mouse = Input.mousePosition;
+        mouse.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
+
+        Vector3 world = cam.ScreenToWorldPoint(mouse);
+        world.z = transform.position.z;
+
+        transform.position = world;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    private void EndDrag()
     {
-        group.blocksRaycasts = true;
-        rect.localScale = Vector3.one;
+        isDragging = false;
 
-        Vector2Int cell = GridManager.Instance.WorldToCell(rect.position);
+        Vector2Int cell = GridManager.Instance.WorldToCell(transform.position);
 
         if (GridManager.Instance.CanPlace(cell, size))
         {
@@ -61,7 +72,7 @@ public class DraggableItem : MonoBehaviour,
         }
         else
         {
-            rect.position = startPos;
+            transform.position = startPos;
         }
     }
 
@@ -70,7 +81,7 @@ public class DraggableItem : MonoBehaviour,
         placed = true;
         currentCell = cell;
 
-        rect.position = GridManager.Instance.CellToWorld(cell);
+        transform.position = GridManager.Instance.CellToWorld(cell);
 
         GridManager.Instance.Register(this, cell);
     }
