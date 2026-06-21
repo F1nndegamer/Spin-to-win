@@ -11,8 +11,6 @@ public class PlayerBox : MonoBehaviour
 
     public bool IsGrounded()
     {
-        Debug.Log(sinceGrounded > threshold);
-        Debug.Log(GetComponent<Rigidbody2D>().linearVelocity.magnitude > threshold);
         return (sinceGrounded > threshold) && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold);
     }
 
