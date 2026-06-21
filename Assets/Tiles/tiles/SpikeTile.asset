@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4ecbc9b03ee8b4468a39e4b49ca65c3, type: 3}
   m_Name: SpikeTile
   m_EditorClassIdentifier: Assembly-CSharp::SpikeTile
-  m_Sprite: {fileID: -1929834416523346238, guid: 1a9f8294bfa28bc449de917308b8b6ad, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1a9f8294bfa28bc449de917308b8b6ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

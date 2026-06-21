@@ -99,7 +99,7 @@ Tilemap:
     m_Data: {fileID: -7955819631750886615, guid: 0137b577636817a4981563293b628042, type: 3}
   - serializedVersion: 2
     m_RefCount: 1
-    m_Data: {fileID: -1929834416523346238, guid: 1a9f8294bfa28bc449de917308b8b6ad, type: 3}
+    m_Data: {fileID: 21300000, guid: 1a9f8294bfa28bc449de917308b8b6ad, type: 3}
   - serializedVersion: 2
     m_RefCount: 2
     m_Data: {fileID: 7482667652216324306, guid: 22410add6de9bb4a5b38442ece29ca72, type: 3}
@@ -201,7 +201,7 @@ TilemapRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0.046875, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -252,7 +252,7 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &6225805462401742565
+--- !u!114 &8739574718171938622
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
