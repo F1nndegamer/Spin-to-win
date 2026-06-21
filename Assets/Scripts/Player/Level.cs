@@ -11,6 +11,7 @@ public class Level : MonoBehaviour
     private bool rotating = false;
     public float gravity = 9.8f;
     public float lerpSpeed = 3f;
+    public int CurrentLevel = 0;
     [Range(0f, 1f)]
     public float followSpeed = 0.5f;
 
@@ -45,7 +46,11 @@ public class Level : MonoBehaviour
     public void Rotate(int dir)
     {
         StartedLevel = true;
-        if (Inventory != null) Inventory.SetActive(false);
+        if (Inventory == null)
+        {
+            Inventory = GameObject.Find("Inventory");
+        }
+        Inventory.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
         if (rotating || (!IsGrounded() || AllowMidairSwitch)) return;
@@ -138,5 +143,10 @@ public class Level : MonoBehaviour
     {
         //for now
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("Level" + CurrentLevel.ToString(), LoadSceneMode.Additive);
+    }
+    public void NextLevel()
+    {
+
     }
 }

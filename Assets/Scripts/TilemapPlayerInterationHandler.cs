@@ -14,7 +14,7 @@ public class TilemapPlayerInterationHandler : MonoBehaviour
     void Start()
     {
         // if we forget to assign the tilemap then a fallback is that we placed the script directly on the tilemap
-        if(tilemap == null) { tilemap = transform.GetComponent<Tilemap>(); }
+        if(tilemap == null) {tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>(); }
     }
 
     void Update()
@@ -35,7 +35,7 @@ public class TilemapPlayerInterationHandler : MonoBehaviour
     {
         TileBase tile = getTileAtPosition(playerPos);
         PlayerInteractionHandler playerInteractionHandler = player.GetComponent<PlayerInteractionHandler>();
-
+        if(playerInteractionHandler == null) Debug.Log("wtf, why!!");
         // this switch statement is equivilent to `tile is SpikeTile`, it just looks cleaner like this imo -Sabrina
         switch (tile)
         {
