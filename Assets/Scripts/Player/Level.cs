@@ -168,6 +168,8 @@ public class Level : MonoBehaviour
 
     private IEnumerator RestartRoutine()
     {
+        Rotate((Level.Direction)0);
+        
         yield return null;
 
         if (levelScene.IsValid())
@@ -198,7 +200,7 @@ public class Level : MonoBehaviour
 
         yield return null;
         yield return new WaitForEndOfFrame();
-
+        Inventory = GameObject.Find("Inventory");
         TilemapPlayerInterationHandler.instance.tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
 
         GameObject dataObj = GameObject.Find("LevelData");
