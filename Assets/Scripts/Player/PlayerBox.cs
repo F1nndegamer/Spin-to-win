@@ -11,7 +11,7 @@ public class PlayerBox : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return (sinceGrounded > threshold) && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold);
+        return sinceGrounded > threshold;
     }
 
     void FixedUpdate()
@@ -21,7 +21,7 @@ public class PlayerBox : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.tag == "Ground" && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold))
         {
             sinceGrounded += 2; // This runs after fixed update, hence a net increment in value
         }

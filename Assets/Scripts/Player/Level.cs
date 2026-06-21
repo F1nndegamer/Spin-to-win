@@ -24,6 +24,7 @@ public class Level : MonoBehaviour
     {
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
+        Debug.Log(IsGrounded());
         if (rotating || !IsGrounded()) return;
         
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
@@ -33,8 +34,8 @@ public class Level : MonoBehaviour
 
     IEnumerator RotateRoutine(int dir)
     {
+        player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
         SetPhysicsEnabled(false);
-
         yield return StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
         gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
         if(gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
