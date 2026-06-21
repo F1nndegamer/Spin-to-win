@@ -8,6 +8,10 @@ public class Level : MonoBehaviour
     public PlayerBox player;
     private bool rotating = false;
     public float gravity = 9.8f;
+    
+    [Header("Mechanic")]
+    public bool AllowMidairSwitch = false;
+    public bool PreserveMomentum = false;
 
     public enum Direction {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -24,7 +28,7 @@ public class Level : MonoBehaviour
     {
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
-        if (rotating || !IsGrounded()) return;
+        if (rotating || (!IsGrounded() || AllowMidairSwitch)) return;
         
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
         StartCoroutine(RotateRoutine(dir));
@@ -33,7 +37,7 @@ public class Level : MonoBehaviour
 
     IEnumerator RotateRoutine(int dir)
     {
-        player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
+        if(!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
         SetPhysicsEnabled(false);
         yield return StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
         gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
