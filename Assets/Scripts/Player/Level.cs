@@ -10,6 +10,7 @@ public class Level : MonoBehaviour
     public PlayerBox player;
     private bool rotating = false;
     public float gravity = 9.8f;
+    public float lerpSpeed = 3f;
 
     [Header("Mechanic")]
     public bool AllowMidairSwitch = false;
@@ -50,16 +51,24 @@ public class Level : MonoBehaviour
         StartCoroutine(RotateRoutine(dir));
     }
 
+    public void Rotate(Direction targetDirection)
+    {
+        int currentDir = (int)gravityDirection;
+        int targetDir = (int)targetDirection;
+        int offset = (targetDir - currentDir) % 4;
+        if (offset < 0) offset = 4 + offset;
+        StartCoroutine(RotateRoutine(offset));
+    }
 
     IEnumerator RotateRoutine(int dir)
     {
         if (!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
         SetPhysicsEnabled(false);
-        yield return StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
+        StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
+        yield return new WaitForSecondsRealtime(1f / lerpSpeed - 0.1f);
         gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
         if (gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
         UpdateGravity();
-
         SetPhysicsEnabled(true);
     }
 
@@ -67,7 +76,8 @@ public class Level : MonoBehaviour
     float lerpAngleFormula(float t)
     {
         // if we want a bezier curve, or ease in/out we can modify our formula/return here -Sabrina
-        return t;
+        // Use quadratic ease out MWHAHWHAWHH - Ali
+        return t * (2f - t);
     }
     IEnumerator RotateCamera(int dir)
     {
@@ -75,15 +85,15 @@ public class Level : MonoBehaviour
 
         Vector3 startingRotation = camera.transform.rotation.eulerAngles;
         float endRotationZ = startingRotation.z + (90f * dir);
-        float duration = 1f;
         float t = 0f;
-        while (t < duration)
+        while (t < 1f)
         {
-            t += Time.deltaTime;
-            float newZAngle = Mathf.LerpAngle(startingRotation.z, endRotationZ, lerpAngleFormula(t / duration));
+            t += Time.deltaTime * lerpSpeed;
+            float newZAngle = Mathf.LerpAngle(startingRotation.z, endRotationZ, lerpAngleFormula(t));
             camera.transform.rotation = Quaternion.Euler(0, 0, newZAngle);
             yield return null;
         }
+        camera.transform.rotation = Quaternion.Euler(0, 0, endRotationZ);
 
         rotating = false;
         yield return null;

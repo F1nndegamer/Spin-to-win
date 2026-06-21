@@ -1,13 +1,13 @@
 using System.Collections;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
     public int waveID;
-    public Direction direction;
+    public Level.Direction direction;
     private static Teleporter[] teleporters;
     public bool showAnnoyingLogs;
+    
     public void AnnoyingLog(string text)
     {
         if (!showAnnoyingLogs) return;
@@ -43,22 +43,22 @@ public class Teleporter : MonoBehaviour
             Vector2 offset = Vector2.zero;
             switch (tp.direction)
             {
-                case Direction.left:
+                case Level.Direction.Left:
                     {
                         offset = Vector2.left;
                         break;
                     }
-                case Direction.right:
+                case Level.Direction.Right:
                     {
                         offset = Vector2.right;
                         break;
                     }
-                case Direction.up:
+                case Level.Direction.Up:
                     {
                         offset = Vector2.up;
                         break;
                     }
-                case Direction.down:
+                case Level.Direction.Down:
                     {
                         offset = Vector2.down;
                         break;
@@ -75,41 +75,16 @@ public class Teleporter : MonoBehaviour
 
                 newVelocity = tp.direction switch
                 {
-                    Direction.left => Vector2.left * speed,
-                    Direction.right => Vector2.right * speed,
-                    Direction.up => Vector2.up * speed,
-                    Direction.down => Vector2.down * speed,
+                    Level.Direction.Left => Vector2.left * speed,
+                    Level.Direction.Right => Vector2.right * speed, 
+                    Level.Direction.Up => Vector2.up * speed,
+                    Level.Direction.Down => Vector2.down * speed,
                     _ => velocity
                 };
                 rb.linearVelocity = newVelocity;
             }
-            GravityHandler gravityHandler = FindAnyObjectByType<GravityHandler>();
             Level level = Level.Instance;
-            if (gravityHandler != null)
-            {
-                switch (tp.direction)
-                {
-                    case Direction.left:
-                        gravityHandler.setGravityLeft(level.gravity);
-                        level.camera.transform.rotation = Quaternion.Euler(0, 0, -90);
-                        break;
-
-                    case Direction.right:
-                        gravityHandler.setGravityRight(level.gravity);
-                        level.camera.transform.rotation = Quaternion.Euler(0, 0, 90);
-                        break;
-
-                    case Direction.up:
-                        gravityHandler.setGravityUp(level.gravity);
-                        level.camera.transform.rotation = Quaternion.Euler(0, 0, 180);
-                        break;
-
-                    case Direction.down:
-                        gravityHandler.setGravityDown(level.gravity);
-                        level.camera.transform.rotation = Quaternion.identity;
-                        break;
-                }
-            }
+            level.Rotate((Level.Direction)tp.direction);
             tp.StartCoroutine(tp.TeleportCooldown(player));
 
             break;
@@ -130,5 +105,3 @@ public class Teleporter : MonoBehaviour
             false);
     }
 }
-
-public enum Direction { left, right, up, down };
