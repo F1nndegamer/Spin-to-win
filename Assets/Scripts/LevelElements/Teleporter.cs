@@ -91,12 +91,12 @@ public class Teleporter : MonoBehaviour
                 {
                     case Direction.left:
                         gravityHandler.setGravityLeft(level.gravity);
-                        level.camera.transform.rotation = Quaternion.Euler(0, 0, 90);
+                        level.camera.transform.rotation = Quaternion.Euler(0, 0, -90);
                         break;
 
                     case Direction.right:
                         gravityHandler.setGravityRight(level.gravity);
-                        level.camera.transform.rotation = Quaternion.Euler(0, 0, -90);
+                        level.camera.transform.rotation = Quaternion.Euler(0, 0, 90);
                         break;
 
                     case Direction.up:
