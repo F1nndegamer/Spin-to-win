@@ -396,7 +396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6409285295478162764, guid: adca468ab0e481436b71c804dd11149e, type: 3}
       propertyPath: direction
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6409285295478162764, guid: adca468ab0e481436b71c804dd11149e, type: 3}
       propertyPath: showAnnoyingLogs
