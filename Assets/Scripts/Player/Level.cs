@@ -23,6 +23,10 @@ public class Level : MonoBehaviour
     };
 
     private Direction gravityDirection;
+    
+    private void LateUpdate() {
+        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+    }
 
     public void Rotate(int dir)
     {
