@@ -12,10 +12,12 @@ public class DraggableItem : MonoBehaviour
     private Vector2Int currentCell;
 
     private Camera cam;
+    private BoxCollider2D collider;
     public GameObject PlacedParent;
 
     private void Awake()
     {
+        collider = GetComponent<BoxCollider2D>();
         cam = Camera.main;
         if (PlacedParent == null)
         {
@@ -43,6 +45,8 @@ public class DraggableItem : MonoBehaviour
         startPos = transform.position;
         startParent = transform.parent;
 
+        collider.enabled = false;
+
         isDragging = true;
 
         if (placed)
@@ -68,7 +72,7 @@ public class DraggableItem : MonoBehaviour
     private void EndDrag()
     {
         isDragging = false;
-
+        collider.enabled = true;
         Vector2Int cell = GridManager.Instance.WorldToCell(transform.position);
 
         if (GridManager.Instance.CanPlace(cell, size))
