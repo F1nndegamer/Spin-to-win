@@ -24,7 +24,6 @@ public class Level : MonoBehaviour
     {
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
-        Debug.Log(IsGrounded());
         if (rotating || !IsGrounded()) return;
         
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina

@@ -7,23 +7,19 @@ public class PlayerBox : MonoBehaviour
 {
     public int threshold = 5; // Number of FixedUpdates that player collision stays until it is marked as grounded
     public float velocityThreshold = 0.05f; // Minimum velocity to count the object being at rest
-    private int sinceGrounded = 0;
+    private bool grounded = false;
 
     public bool IsGrounded()
     {
-        return sinceGrounded > threshold;
+        if(grounded && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold)) { grounded = false; return true; }
+        return false;
     }
 
-    void FixedUpdate()
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if(sinceGrounded > 0) sinceGrounded--; // Fixed update runs first
-    }
-
-    private void OnCollisionStay2D(Collision2D other)
-    {
-        if (other.gameObject.tag == "Ground" && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold))
+        if (other.gameObject.tag == "Ground")
         {
-            sinceGrounded += 2; // This runs after fixed update, hence a net increment in value
+            grounded = true;
         }
     }
 }
