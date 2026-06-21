@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class Level : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class Level : MonoBehaviour
 
     private GameObject Inventory;
     public static Level Instance;
+    Scene levelScene;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -36,6 +38,10 @@ public class Level : MonoBehaviour
     {
         Inventory = GameObject.Find("Inventory");
         Instance = this;
+    }
+    void Start()
+    {
+        CacheLevelScene();
     }
     private void FixedUpdate()
     {
@@ -136,17 +142,85 @@ public class Level : MonoBehaviour
         SimulationMode2D mode = enabled ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
         Physics2D.simulationMode = mode;
     }
+    private void CacheLevelScene()
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+
+            if (scene.name.StartsWith("Level"))
+            {
+                levelScene = scene;
+                SceneManager.SetActiveScene(scene);
+                return;
+            }
+        }
+
+        Debug.LogWarning("No level scene found at startup!");
+    }
 
     // Implement later after the rest of game is setup
     public void Pause() { }
     public void Restart()
     {
-        //for now
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        SceneManager.LoadScene("Level" + CurrentLevel.ToString(), LoadSceneMode.Additive);
+        StartCoroutine(RestartRoutine());
+    }
+
+    private IEnumerator RestartRoutine()
+    {
+        yield return null;
+
+        if (levelScene.IsValid())
+        {
+            yield return SceneManager.UnloadSceneAsync(levelScene);
+        }
+
+        yield return null;
+
+        if (Inventory != null)
+            Destroy(Inventory);
+
+        GameObject grid = GameObject.Find("Grid");
+        if (grid != null)
+            Destroy(grid);
+        TilemapPlayerInterationHandler.instance.tilemap = null;
+        yield return null;
+
+        string sceneName = "Level" + CurrentLevel.ToString();
+
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        loadOp.allowSceneActivation = true;
+
+        yield return loadOp;
+
+        levelScene = SceneManager.GetSceneByName(sceneName);
+        SceneManager.SetActiveScene(levelScene);
+
+        yield return null;
+        yield return new WaitForEndOfFrame();
+
+        TilemapPlayerInterationHandler.instance.tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
+
+        GameObject dataObj = GameObject.Find("LevelData");
+        LevelData data = dataObj.GetComponent<LevelData>();
+
+        if (data == null)
+        {
+            Debug.LogError("LevelData component missing on LevelData object!");
+            yield break;
+        }
+
+        if (player == null)
+        {
+            Debug.LogError("Player reference is missing!");
+            yield break;
+        }
+
+        player.transform.position = data.PlayerSpawnPos;
     }
     public void NextLevel()
     {
-
+        CurrentLevel += 1;
+        Restart();
     }
 }

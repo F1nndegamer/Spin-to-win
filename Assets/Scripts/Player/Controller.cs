@@ -4,7 +4,8 @@ public class Controller : MonoBehaviour
 {
     public Level level;
 
-    private void Awake() {
+    private void Awake()
+    {
         level = GetComponent<Level>();
         level.UpdateGravity(); // update the gravity immediately so we aren't floating as soon as we start -Sabrina
     }
@@ -26,7 +27,7 @@ public class Controller : MonoBehaviour
             level.Pause();
         }
 
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             level.Restart();
         }
