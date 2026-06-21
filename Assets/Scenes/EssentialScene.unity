@@ -1222,7 +1222,7 @@ TilemapRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
-  m_ChunkCullingBounds: {x: 0, y: 0.046875, z: 0}
+  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 0
@@ -1559,7 +1559,8 @@ MonoBehaviour:
   gravityHandler: {fileID: 1464102696}
   StartedLevel: 0
   player: {fileID: 95512390}
-  gravity: 9.8
+  gravity: 20
+  lerpSpeed: 5
   AllowMidairSwitch: 0
   PreserveMomentum: 0
 --- !u!114 &1464102698

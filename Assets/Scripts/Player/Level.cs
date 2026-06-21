@@ -11,6 +11,8 @@ public class Level : MonoBehaviour
     private bool rotating = false;
     public float gravity = 9.8f;
     public float lerpSpeed = 3f;
+    [Range(0f, 1f)]
+    public float followSpeed = 0.5f;
 
     [Header("Mechanic")]
     public bool AllowMidairSwitch = false;
@@ -36,7 +38,8 @@ public class Level : MonoBehaviour
     }
     private void LateUpdate()
     {
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+        Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+        transform.position = Vector3.Lerp(transform.position, target, followSpeed);
     }
 
     public void Rotate(int dir)
