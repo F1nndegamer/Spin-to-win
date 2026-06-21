@@ -36,7 +36,7 @@ public class Level : MonoBehaviour
         Inventory = GameObject.Find("Inventory");
         Instance = this;
     }
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
         transform.position = Vector3.Lerp(transform.position, target, followSpeed);
@@ -68,7 +68,7 @@ public class Level : MonoBehaviour
         if (!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
         SetPhysicsEnabled(false);
         StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
-        yield return new WaitForSecondsRealtime(1f / lerpSpeed - 0.1f);
+        yield return new WaitForSecondsRealtime(0.1f); // needs to be fixed in order to not collide with the teleport coroutine - Ali
         gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
         if (gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
         UpdateGravity();
