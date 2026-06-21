@@ -84,32 +84,30 @@ public class Teleporter : MonoBehaviour
                 rb.linearVelocity = newVelocity;
             }
             GravityHandler gravityHandler = FindAnyObjectByType<GravityHandler>();
-            Level level = FindAnyObjectByType<Level>();
+            Level level = Level.Instance;
             if (gravityHandler != null)
             {
                 switch (tp.direction)
                 {
                     case Direction.left:
-                        {
-                            gravityHandler.setGravityLeft(level.gravity);
-                            break;
-                        }
-                    case Direction.right:
-                        {
-                            gravityHandler.setGravityRight(level.gravity);
-                            break;
-                        }
-                    case Direction.up:
-                        {
-                            gravityHandler.setGravityUp(level.gravity);
-                            break;
-                        }
-                    case Direction.down:
-                        {
-                            gravityHandler.setGravityDown(level.gravity);
-                            break;
-                        }
+                        gravityHandler.setGravityLeft(level.gravity);
+                        level.camera.transform.rotation = Quaternion.Euler(0, 0, -90);
+                        break;
 
+                    case Direction.right:
+                        gravityHandler.setGravityRight(level.gravity);
+                        level.camera.transform.rotation = Quaternion.Euler(0, 0, 90);
+                        break;
+
+                    case Direction.up:
+                        gravityHandler.setGravityUp(level.gravity);
+                        level.camera.transform.rotation = Quaternion.Euler(0, 0, 180);
+                        break;
+
+                    case Direction.down:
+                        gravityHandler.setGravityDown(level.gravity);
+                        level.camera.transform.rotation = Quaternion.identity;
+                        break;
                 }
             }
             tp.StartCoroutine(tp.TeleportCooldown(player));
