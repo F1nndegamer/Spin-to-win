@@ -7,7 +7,7 @@ public class Teleporter : MonoBehaviour
     public Level.Direction direction;
     private static Teleporter[] teleporters;
     public bool showAnnoyingLogs;
-    
+
     public void AnnoyingLog(string text)
     {
         if (!showAnnoyingLogs) return;
@@ -20,6 +20,7 @@ public class Teleporter : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!Level.Instance.StartedLevel) return;
         AnnoyingLog("bLOCK COLLIDE WITH Something");
         if (!other.CompareTag("Player"))
             return;
@@ -76,7 +77,7 @@ public class Teleporter : MonoBehaviour
                 newVelocity = tp.direction switch
                 {
                     Level.Direction.Left => Vector2.left * speed,
-                    Level.Direction.Right => Vector2.right * speed, 
+                    Level.Direction.Right => Vector2.right * speed,
                     Level.Direction.Up => Vector2.up * speed,
                     Level.Direction.Down => Vector2.down * speed,
                     _ => velocity
