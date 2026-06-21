@@ -24,44 +24,35 @@ public class GridManager : MonoBehaviour
             0f
         );
     }
-    public bool CanPlace(Vector2Int origin, Vector2Int size)
+    public bool CanPlace(Vector2Int origin, DraggableItem item)
     {
-        for (int x = 0; x < size.x; x++)
+        foreach (Vector2Int offset in item.GetOccupiedCells())
         {
-            for (int y = 0; y < size.y; y++)
+            Vector2Int cell = origin + offset;
+            if (occupied.ContainsKey(cell))
+                return false;
+            if (blockingTilemap != null)
             {
-                Vector2Int cell = origin + new Vector2Int(x, y);
-                if (occupied.ContainsKey(cell))
+                if (blockingTilemap.HasTile(new Vector3Int(cell.x, cell.y, 0)))
                     return false;
-                if (blockingTilemap != null)
-                {
-                    if (blockingTilemap.HasTile(new Vector3Int(cell.x, cell.y, 0)))
-                        return false;
-                }
             }
         }
         return true;
     }
     public void Register(DraggableItem item, Vector2Int origin)
     {
-        for (int x = 0; x < item.size.x; x++)
+        foreach (Vector2Int offset in item.GetOccupiedCells())
         {
-            for (int y = 0; y < item.size.y; y++)
-            {
-                occupied[origin + new Vector2Int(x, y)] = item;
-            }
+            occupied[origin + offset] = item;
         }
     }
     public void Unregister(DraggableItem item, Vector2Int origin)
     {
-        for (int x = 0; x < item.size.x; x++)
+        foreach (Vector2Int offset in item.GetOccupiedCells())
         {
-            for (int y = 0; y < item.size.y; y++)
-            {
-                Vector2Int cell = origin + new Vector2Int(x, y);
-                if (occupied.TryGetValue(cell, out var v) && v == item)
-                    occupied.Remove(cell);
-            }
+            Vector2Int cell = origin + offset;
+            if (occupied.TryGetValue(cell, out var v) && v == item)
+                occupied.Remove(cell);
         }
     }
 }

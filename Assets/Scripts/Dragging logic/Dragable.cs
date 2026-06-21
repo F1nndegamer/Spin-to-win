@@ -1,8 +1,11 @@
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DraggableItem : MonoBehaviour
 {
-    public Vector2Int size = Vector2Int.one;
+    private Vector2Int size = Vector2Int.one;
+    private List<Vector2Int> shapeCells = new();
 
     private Vector3 startPos;
     private Transform startParent;
@@ -13,10 +16,16 @@ public class DraggableItem : MonoBehaviour
 
     private Camera cam;
     private BoxCollider2D collider;
-    public GameObject PlacedParent;
+    private GameObject PlacedParent;
 
     private void Awake()
     {
+        shapeCells.Add(new Vector2Int(0, 0));
+        foreach (Transform child in transform)
+        {
+            if(!child.GetComponent<DragChild>()) continue;
+            shapeCells.Add(Vector2Int.RoundToInt(child.transform.localPosition));
+        }
         collider = GetComponent<BoxCollider2D>();
         cam = Camera.main;
         if (PlacedParent == null)
@@ -25,18 +34,18 @@ public class DraggableItem : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
         StartDrag();
     }
 
-    private void OnMouseDrag()
+    public void OnMouseDrag()
     {
-        if(!Level.Instance.StartedLevel)
+        if (!Level.Instance.StartedLevel)
             Drag();
     }
 
-    private void OnMouseUp()
+    public void OnMouseUp()
     {
         EndDrag();
     }
@@ -47,7 +56,13 @@ public class DraggableItem : MonoBehaviour
         startParent = transform.parent;
 
         collider.enabled = false;
-
+        foreach (Transform child in transform)
+        {
+            if (child.TryGetComponent(out BoxCollider2D childCollider))
+            {
+                childCollider.enabled = false;
+            }
+        }
         isDragging = true;
 
         if (placed)
@@ -74,9 +89,16 @@ public class DraggableItem : MonoBehaviour
     {
         isDragging = false;
         collider.enabled = true;
+        foreach (Transform child in transform)
+        {
+            if (child.TryGetComponent(out BoxCollider2D childCollider))
+            {
+                childCollider.enabled = true;
+            }
+        }
         Vector2Int cell = GridManager.Instance.WorldToCell(transform.position);
 
-        if (GridManager.Instance.CanPlace(cell, size))
+        if (GridManager.Instance.CanPlace(cell, this))
         {
             Place(cell);
         }
@@ -94,5 +116,24 @@ public class DraggableItem : MonoBehaviour
         transform.position = GridManager.Instance.CellToWorld(cell);
         transform.parent = PlacedParent.transform;
         GridManager.Instance.Register(this, cell);
+    }
+
+    public IEnumerable<Vector2Int> GetOccupiedCells()
+    {
+        if (shapeCells != null && shapeCells.Count > 0)
+        {
+            return shapeCells;
+        }
+
+        List<Vector2Int> fallbackCells = new();
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                fallbackCells.Add(new Vector2Int(x, y));
+            }
+        }
+
+        return fallbackCells;
     }
 }
