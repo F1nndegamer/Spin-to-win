@@ -67,11 +67,14 @@ public class GameManager : MonoBehaviour
     
     private IEnumerator LoadSceneCoroutine (int sceneIndex, int additiveSceneIndex)
     {
+        levelReady = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!loadScene.isDone) yield return null;
         if (additiveSceneIndex != -1) // Load extra scene only when needed
         {
+            if(additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
+            // The current level scene
             AsyncOperation loadAdditiveScene = SceneManager.LoadSceneAsync(additiveSceneIndex, LoadSceneMode.Additive);
             while (!loadAdditiveScene.isDone) yield return null;
         }
@@ -82,14 +85,58 @@ public class GameManager : MonoBehaviour
         }
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex)); 
         GameRegistry.Execute();
+        levelReady = true;
     }
+    #endregion
+
+    #region LevelLoading
+
+    public void LoadLevel(int levelIndex)
+    {
+        int sceneIndex = levelIndex + 2; // Levels start at index 3, so level 1 is index 3
+        if (SceneManager.GetSceneByBuildIndex(sceneIndex) != null) // Check if next scene exists
+        {
+            if (SceneManager.GetSceneByBuildIndex(sceneIndex).name.ToLower().StartsWith("level")) // Check if next scene is a level
+            {
+                StartCoroutine(LoadLevelCoroutine(sceneIndex));
+            }
+            else
+            {
+                LoadScene(sceneIndex); // The next scene is prolly a credits scene or smth, load it
+            }
+            return;
+        }
+        Debug.LogError("Next scene not found!");
+    }
+
+    private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
+    {
+        levelReady = false;
+        AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex);
+        while (!nextLevel.isDone) yield return null;
+        AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
+        while (!unload.isDone) yield return null;
+        GameRegistry.Execute();
+        levelReady = true;
+    }
+
+    public void Win()
+    {
+        if (!levelReady) return; 
+        // Dont win or oad the next scene twice
+        levelReady = false;
+        LoadLevel(level + 1);
+    }
+
     #endregion
 
     #region State
 
     public static int level = -1;
     public static Inventory inventory;
-    public static LevelData levelData; 
+    public static LevelData levelData;
+    public static Scene currentLevel;
+    public static bool levelReady = false;
 
     #endregion
 }

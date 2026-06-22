@@ -70,4 +70,15 @@ public class PlayerBox : GameBehaviour
             grounded = true;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "Win")
+        {
+            GetComponent<Rigidbody2D>().gravityScale = 0;
+            GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            GetComponent<Rigidbody2D>().angularVelocity = 0;
+            GameManager.Instance.Win();
+        }
+    }
 }
