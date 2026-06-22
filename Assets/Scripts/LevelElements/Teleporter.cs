@@ -20,7 +20,7 @@ public class Teleporter : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!Level.Instance.StartedLevel) return;
+        if (!Level.Instance.startedLevel) return;
         AnnoyingLog("bLOCK COLLIDE WITH Something");
         if (!other.CompareTag("Player"))
             return;

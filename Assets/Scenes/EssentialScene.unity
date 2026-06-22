@@ -220,7 +220,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -602,15 +602,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Level
   camera: {fileID: 1464102700}
   gravityHandler: {fileID: 1464102696}
-  StartedLevel: 0
+  startedLevel: 0
   player: {fileID: 95512390}
   gravity: 20
   lerpSpeed: 4
-  CurrentLevel: 0
+  currentLevel: 0
   followSpeed: 0.8
-  maxSpeed: 5
-  AllowMidairSwitch: 0
-  PreserveMomentum: 0
+  allowMidairSwitch: 0
+  preserveMomentum: 0
 --- !u!114 &1464102698
 MonoBehaviour:
   m_ObjectHideFlags: 0
