@@ -5,7 +5,6 @@ public class Teleporter : MonoBehaviour
 {
     public int waveID;
     public Level.Direction direction;
-    private static Teleporter[] teleporters;
     public bool showAnnoyingLogs;
 
     public void AnnoyingLog(string text)
@@ -13,14 +12,15 @@ public class Teleporter : MonoBehaviour
         if (!showAnnoyingLogs) return;
         Debug.Log(text);
     }
+
     private void Awake()
     {
-        teleporters = FindObjectsByType<Teleporter>();
+        GameManager.teleporters.Add(this);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!Level.Instance.startedLevel) return;
+        if (!GameManager.levelStarted) return;
         AnnoyingLog("bLOCK COLLIDE WITH Something");
         if (!other.CompareTag("Player"))
             return;
@@ -31,7 +31,7 @@ public class Teleporter : MonoBehaviour
     {
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
 
-        foreach (Teleporter tp in teleporters)
+        foreach (Teleporter tp in GameManager.teleporters) // Use gamemanager to keep track of teleporters
         {
             if (tp == this)
                 continue;

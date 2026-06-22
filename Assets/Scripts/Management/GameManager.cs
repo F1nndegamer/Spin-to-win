@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator LoadSceneCoroutine (int sceneIndex, int additiveSceneIndex)
     {
         levelReady = false;
+        levelStarted = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!loadScene.isDone) yield return null;
@@ -125,6 +127,8 @@ public class GameManager : MonoBehaviour
         if (!levelReady) return; 
         // Dont win or oad the next scene twice
         levelReady = false;
+        levelStarted = false;
+        teleporters = new List<Teleporter>(); // Flush teleporter list
         LoadLevel(level + 1);
     }
 
@@ -136,7 +140,9 @@ public class GameManager : MonoBehaviour
     public static Inventory inventory;
     public static LevelData levelData;
     public static Scene currentLevel;
-    public static bool levelReady = false;
+    public static bool levelReady = false; // Level is initiated and GameAwake and GameReady have all been called
+    public static bool levelStarted = false; // The user has changed gravity at least once
+    public static List<Teleporter> teleporters = new List<Teleporter>();
 
     #endregion
 }

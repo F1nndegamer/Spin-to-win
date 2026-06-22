@@ -455,6 +455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Menu
   playButton: {fileID: 765777096}
   playButtonText: {fileID: 1850898333}
+  currentCamera: {fileID: 280019569}
 --- !u!1 &519971824
 GameObject:
   m_ObjectHideFlags: 0

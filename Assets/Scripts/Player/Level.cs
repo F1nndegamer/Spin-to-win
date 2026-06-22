@@ -191,7 +191,11 @@ public class Level : GameBehaviour
         yield return null;
 
         if (_inventory != null)
+        {
             Destroy(_inventory);
+            GameManager.levelStarted = true;
+            // This will either crash or run once
+        }
 
         GameObject grid = GameObject.Find("Grid");
         if (grid != null)
