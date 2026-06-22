@@ -16,6 +16,10 @@ public class Level : MonoBehaviour
     [Range(0f, 1f)]
     public float followSpeed = 0.5f;
 
+    private Vector3 velocity = Vector3.zero;
+    [SerializeField] private float maxSpeed = 5;
+    private int unsynced_offset = 0;
+
     [Header("Mechanic")]
     public bool AllowMidairSwitch = false;
     public bool PreserveMomentum = false;
@@ -43,10 +47,10 @@ public class Level : MonoBehaviour
     {
         CacheLevelScene();
     }
-    private void FixedUpdate()
+    private void LateUpdate()
     {
         Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, target, followSpeed);
+        transform.position = Vector3.Lerp(transform.position, target, lerpSpeed * Time.deltaTime);
     }
 
     public void Rotate(int dir)
@@ -69,19 +73,27 @@ public class Level : MonoBehaviour
     {
         int currentDir = (int)gravityDirection;
         int targetDir = (int)targetDirection;
-        int offset = (targetDir - currentDir) % 4;
+        int offset = (targetDir - currentDir + unsynced_offset) % 4;
         if (offset < 0) offset = 4 + offset;
         StartCoroutine(RotateRoutine(offset));
     }
 
     IEnumerator RotateRoutine(int dir)
     {
-        if (!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
-        SetPhysicsEnabled(false);
-        StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
-        yield return new WaitForSecondsRealtime(0.1f); // needs to be fixed in order to not collide with the teleport coroutine - Ali
-        gravityDirection = (Direction)(((int)gravityDirection + dir) % 4);
+        gravityDirection = (Direction)(((int)gravityDirection + dir - unsynced_offset) % 4);
         if (gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
+        if (!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
+        unsynced_offset = 0;
+        SetPhysicsEnabled(false);
+        if (!player.WillTeleport(gravityDirection)) // Do not coroutine when the player teleports next step, instead, initiate the coroutine when player teleports 
+        {
+            StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
+            yield return new WaitForSecondsRealtime(0.1f); // needs to be fixed in order to not collide with the teleport coroutine - Ali
+        }
+        else
+        {
+            unsynced_offset += dir;
+        }
         UpdateGravity();
         SetPhysicsEnabled(true);
     }
@@ -99,6 +111,7 @@ public class Level : MonoBehaviour
 
         Vector3 startingRotation = camera.transform.rotation.eulerAngles;
         float endRotationZ = startingRotation.z + (90f * dir);
+        endRotationZ = Mathf.Round(endRotationZ / 90f) * 90f; // Make sure it snaps to nearest 90
         float t = 0f;
         while (t < 1f)
         {

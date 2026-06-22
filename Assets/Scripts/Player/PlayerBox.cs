@@ -10,6 +10,41 @@ public class PlayerBox : MonoBehaviour
     private bool grounded = false;
     private int sinceSwitch = 5;
 
+    [SerializeField] private string TeleportTag = "Teleport";
+    [SerializeField] private float maxDistance = 50f;
+    [SerializeField] private LayerMask checkLayer;
+
+    public bool WillTeleport(Level.Direction direction)
+    {
+        Vector2 origin = transform.position;
+        Vector2 dir = Vector2.down;
+        switch (direction)
+        {
+            case Level.Direction.Left:
+                dir = Vector2.left;
+                break;
+            case Level.Direction.Right:
+                dir = Vector2.right;
+                break;
+            case Level.Direction.Up:
+                dir = Vector2.up;
+                break;
+            case Level.Direction.Down:
+                dir = Vector2.down;
+                break;
+        }
+        
+        RaycastHit2D hit = Physics2D.Raycast(origin, dir, maxDistance, checkLayer);
+        if (hit.collider != null)
+        {
+            if (hit.collider.CompareTag(TeleportTag))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool IsGrounded()
     {
         if(grounded && sinceSwitch == 5 && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold)) { grounded = false;

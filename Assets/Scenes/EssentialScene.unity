@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 95512391}
   - component: {fileID: 95512390}
   - component: {fileID: 95512395}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -154,6 +154,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBox
   threshold: 5
   velocityThreshold: 0.05
+  TeleportTag: Teleport
+  maxDistance: 1
+  checkLayer:
+    serializedVersion: 2
+    m_Bits: 51
 --- !u!61 &95512391
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -296,8 +301,8 @@ Transform:
   m_GameObject: {fileID: 95512389}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 2.4, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalPosition: {x: 1.5, y: 2.5, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2072222554}
@@ -602,7 +607,8 @@ MonoBehaviour:
   gravity: 20
   lerpSpeed: 4
   CurrentLevel: 0
-  followSpeed: 0.3
+  followSpeed: 0.8
+  maxSpeed: 5
   AllowMidairSwitch: 0
   PreserveMomentum: 0
 --- !u!114 &1464102698
@@ -751,7 +757,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2072222554}
   - component: {fileID: 2072222555}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
