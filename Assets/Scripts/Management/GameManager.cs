@@ -84,4 +84,11 @@ public class GameManager : MonoBehaviour
         GameRegistry.Execute();
     }
     #endregion
+
+    #region State
+
+    public static int level = -1;
+    public static Inventory inventory;
+
+    #endregion
 }

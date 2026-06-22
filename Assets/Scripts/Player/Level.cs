@@ -37,7 +37,7 @@ public class Level : GameBehaviour
     private Direction gravityDirection;
     public override void GameAwake()
     {
-        _inventory = GameObject.Find("Inventory");
+        _inventory = GameManager.inventory.gameObject;
     }
     void Awake()
     {
@@ -55,7 +55,7 @@ public class Level : GameBehaviour
         startedLevel = true;
         if (_inventory == null)
         {
-            _inventory = GameObject.Find("Inventory");
+            _inventory = GameManager.inventory.gameObject;
         }
         _inventory.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
@@ -178,6 +178,7 @@ public class Level : GameBehaviour
 
     private IEnumerator RestartRoutine()
     {
+        Debug.Log("Restarting...");
         Rotate((Level.Direction)0);
         
         yield return null;
@@ -210,7 +211,7 @@ public class Level : GameBehaviour
 
         yield return null;
         yield return new WaitForEndOfFrame();
-        _inventory = GameObject.Find("Inventory");
+        _inventory = GameManager.inventory.gameObject;
         TilemapPlayerInterationHandler.instance.tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
 
         GameObject dataObj = GameObject.Find("LevelData");

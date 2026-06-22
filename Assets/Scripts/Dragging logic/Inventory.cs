@@ -1,10 +1,15 @@
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory : GameBehaviour
 {
     void Awake()
     {
-        GameObject Maincamera = GameObject.FindGameObjectWithTag("MainCamera");
-        transform.SetParent(Maincamera.transform);
+        GameManager.inventory = this;
+    }
+
+    public override void GameStart()
+    {
+        GameObject mainCamera = Camera.current.gameObject;
+        transform.SetParent(mainCamera.transform);
     }
 }

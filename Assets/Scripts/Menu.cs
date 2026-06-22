@@ -13,6 +13,7 @@ public class Menu : MonoBehaviour
     {
         playButton.enabled = false;
         playButtonText.text = "Loading...";
+        Camera.current.GetComponent<AudioListener>().enabled = false;
 
         GameManager.Instance.LoadScene(2, 3);
         // Remember that:
