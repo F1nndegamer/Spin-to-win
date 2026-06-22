@@ -7,26 +7,23 @@ public class Level : MonoBehaviour
 {
     public Camera camera;
     public GravityHandler gravityHandler;
-    [HideInInspector] public bool StartedLevel;
+    public bool startedLevel;
     public PlayerBox player;
-    private bool rotating = false;
+    private bool _rotating = false;
     public float gravity = 9.8f;
     public float lerpSpeed = 3f;
-    public int CurrentLevel = 0;
+    public int currentLevel = 0;
     [Range(0f, 1f)]
     public float followSpeed = 0.5f;
-
-    private Vector3 velocity = Vector3.zero;
-    [SerializeField] private float maxSpeed = 5;
-    private int unsynced_offset = 0;
+    private int _unsyncedOffset = 0;
 
     [Header("Mechanic")]
-    public bool AllowMidairSwitch = false;
-    public bool PreserveMomentum = false;
+    public bool allowMidairSwitch = false;
+    public bool preserveMomentum = false;
 
-    private GameObject Inventory;
+    private GameObject _inventory;
     public static Level Instance;
-    Scene levelScene;
+    private Scene _levelScene;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -40,7 +37,7 @@ public class Level : MonoBehaviour
     private Direction gravityDirection;
     void Awake()
     {
-        Inventory = GameObject.Find("Inventory");
+        _inventory = GameObject.Find("Inventory");
         Instance = this;
     }
     void Start()
@@ -55,15 +52,15 @@ public class Level : MonoBehaviour
 
     public void Rotate(int dir)
     {
-        StartedLevel = true;
-        if (Inventory == null)
+        startedLevel = true;
+        if (_inventory == null)
         {
-            Inventory = GameObject.Find("Inventory");
+            _inventory = GameObject.Find("Inventory");
         }
-        Inventory.SetActive(false);
+        _inventory.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
-        if (rotating || (!IsGrounded() || AllowMidairSwitch)) return;
+        if (_rotating || (!IsGrounded() || allowMidairSwitch)) return;
 
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
         StartCoroutine(RotateRoutine(dir));
@@ -73,17 +70,17 @@ public class Level : MonoBehaviour
     {
         int currentDir = (int)gravityDirection;
         int targetDir = (int)targetDirection;
-        int offset = (targetDir - currentDir + unsynced_offset) % 4;
+        int offset = (targetDir - currentDir + _unsyncedOffset) % 4;
         if (offset < 0) offset = 4 + offset;
         StartCoroutine(RotateRoutine(offset));
     }
 
     IEnumerator RotateRoutine(int dir)
     {
-        gravityDirection = (Direction)(((int)gravityDirection + dir - unsynced_offset) % 4);
+        gravityDirection = (Direction)(((int)gravityDirection + dir - _unsyncedOffset) % 4);
         if (gravityDirection == Direction.Underflow) { gravityDirection = Direction.Left; }
-        if (!PreserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
-        unsynced_offset = 0;
+        if (!preserveMomentum) player.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero; // Momentum be set to zero
+        _unsyncedOffset = 0;
         SetPhysicsEnabled(false);
         if (!player.WillTeleport(gravityDirection)) // Do not coroutine when the player teleports next step, instead, initiate the coroutine when player teleports 
         {
@@ -92,7 +89,7 @@ public class Level : MonoBehaviour
         }
         else
         {
-            unsynced_offset += dir;
+            _unsyncedOffset += dir;
         }
         UpdateGravity();
         SetPhysicsEnabled(true);
@@ -107,7 +104,7 @@ public class Level : MonoBehaviour
     }
     IEnumerator RotateCamera(int dir)
     {
-        rotating = true;
+        _rotating = true;
 
         Vector3 startingRotation = camera.transform.rotation.eulerAngles;
         float endRotationZ = startingRotation.z + (90f * dir);
@@ -122,7 +119,7 @@ public class Level : MonoBehaviour
         }
         camera.transform.rotation = Quaternion.Euler(0, 0, endRotationZ);
 
-        rotating = false;
+        _rotating = false;
         yield return null;
     }
 
@@ -163,7 +160,7 @@ public class Level : MonoBehaviour
 
             if (scene.name.StartsWith("Level"))
             {
-                levelScene = scene;
+                _levelScene = scene;
                 SceneManager.SetActiveScene(scene);
                 return;
             }
@@ -185,15 +182,15 @@ public class Level : MonoBehaviour
         
         yield return null;
 
-        if (levelScene.IsValid())
+        if (_levelScene.IsValid())
         {
-            yield return SceneManager.UnloadSceneAsync(levelScene);
+            yield return SceneManager.UnloadSceneAsync(_levelScene);
         }
 
         yield return null;
 
-        if (Inventory != null)
-            Destroy(Inventory);
+        if (_inventory != null)
+            Destroy(_inventory);
 
         GameObject grid = GameObject.Find("Grid");
         if (grid != null)
@@ -201,19 +198,19 @@ public class Level : MonoBehaviour
         TilemapPlayerInterationHandler.instance.tilemap = null;
         yield return null;
 
-        string sceneName = "Level" + CurrentLevel.ToString();
+        string sceneName = "Level" + currentLevel.ToString();
 
         AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         loadOp.allowSceneActivation = true;
 
         yield return loadOp;
 
-        levelScene = SceneManager.GetSceneByName(sceneName);
-        SceneManager.SetActiveScene(levelScene);
+        _levelScene = SceneManager.GetSceneByName(sceneName);
+        SceneManager.SetActiveScene(_levelScene);
 
         yield return null;
         yield return new WaitForEndOfFrame();
-        Inventory = GameObject.Find("Inventory");
+        _inventory = GameObject.Find("Inventory");
         TilemapPlayerInterationHandler.instance.tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
 
         GameObject dataObj = GameObject.Find("LevelData");
@@ -235,7 +232,7 @@ public class Level : MonoBehaviour
     }
     public void NextLevel()
     {
-        CurrentLevel += 1;
+        currentLevel += 1;
         Restart();
     }
 }
