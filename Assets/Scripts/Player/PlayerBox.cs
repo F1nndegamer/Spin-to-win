@@ -16,6 +16,7 @@ public class PlayerBox : GameBehaviour
 
     public override void GameStart()
     {
+        transform.position = GameManager.levelData.PlayerSpawnPos.transform.position;
         GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after scene is loaded successfully
     }
 

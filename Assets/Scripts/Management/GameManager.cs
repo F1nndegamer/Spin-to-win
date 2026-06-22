@@ -89,6 +89,7 @@ public class GameManager : MonoBehaviour
 
     public static int level = -1;
     public static Inventory inventory;
+    public static LevelData levelData; 
 
     #endregion
 }

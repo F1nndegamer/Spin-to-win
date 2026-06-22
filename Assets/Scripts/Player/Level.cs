@@ -229,7 +229,7 @@ public class Level : GameBehaviour
             yield break;
         }
 
-        player.transform.position = data.PlayerSpawnPos;
+        player.transform.position = data.PlayerSpawnPos.position;
     }
     public void NextLevel()
     {
