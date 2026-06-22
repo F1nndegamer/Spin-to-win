@@ -3,27 +3,31 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 
-public class TilemapPlayerInterationHandler : MonoBehaviour
+public class TilemapPlayerInterationHandler : GameBehaviour
 {
     public Tilemap tilemap;
     public GameObject player; // or just a general interactee
     public static TilemapPlayerInterationHandler instance;
+
+    private bool readyForUpdate = false;
     // List of tiles for handling and stuff
     List<Vector3Int> fragileTilesToDestroy = new List<Vector3Int>();
 
-    void Awake()
+    private void Awake()
     {
         instance = this;
     }
-    void Start()
+    public override void GameStart()
     {
-
         // if we forget to assign the tilemap then a fallback is that we placed the script directly on the tilemap
         if (tilemap == null) { tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>(); }
+
+        readyForUpdate = true;
     }
 
     void Update()
     {
+        if (!readyForUpdate) return;
         Vector3Int playerPos = positionToTilemapPos(player.transform.position);
         List<Vector3Int> adjacentTilePositions = new List<Vector3Int>() {
             positionToTilemapPos(player.transform.position + Vector3.up),
