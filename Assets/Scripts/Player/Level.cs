@@ -57,7 +57,7 @@ public class Level : GameBehaviour
         {
             _inventory = GameManager.inventory.gameObject;
         }
-        _inventory.SetActive(false);
+        _inventory?.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
         if (_rotating || (!IsGrounded() || allowMidairSwitch)) return;
