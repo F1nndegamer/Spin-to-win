@@ -14,6 +14,11 @@ public class PlayerBox : MonoBehaviour
     [SerializeField] private float maxDistance = 50f;
     [SerializeField] private LayerMask checkLayer;
 
+    public void GameStart()
+    {
+        
+    }
+
     public bool WillTeleport(Level.Direction direction)
     {
         Vector2 origin = transform.position;

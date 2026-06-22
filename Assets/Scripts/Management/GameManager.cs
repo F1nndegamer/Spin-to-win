@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
             SceneManager.SetActiveScene(baseScene);
         }
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex)); 
+        GameRegistry.Execute();
     }
     #endregion
 }
