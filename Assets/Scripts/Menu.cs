@@ -8,12 +8,13 @@ public class Menu : MonoBehaviour
 {
     [SerializeField] private Button playButton;
     [SerializeField] private TextMeshProUGUI playButtonText;
+    public Camera currentCamera;
 
     public void OnPlay()
     {
         playButton.enabled = false;
         playButtonText.text = "Loading...";
-        Camera.current.GetComponent<AudioListener>().enabled = false;
+        currentCamera.GetComponent<AudioListener>().enabled = false;
 
         GameManager.Instance.LoadScene(2, 3);
         // Remember that:
