@@ -3,7 +3,7 @@ using UnityEngine;
 
 // This script measures whether or not the player is currently grounded - Ali
 
-public class PlayerBox : MonoBehaviour
+public class PlayerBox : GameBehaviour
 {
     public int threshold = 5; // Number of FixedUpdates that player collision stays until it is marked as grounded
     public float velocityThreshold = 0.05f; // Minimum velocity to count the object being at rest
@@ -14,9 +14,9 @@ public class PlayerBox : MonoBehaviour
     [SerializeField] private float maxDistance = 50f;
     [SerializeField] private LayerMask checkLayer;
 
-    public void GameStart()
+    public override void GameStart()
     {
-        
+        GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after scene is loaded successfully
     }
 
     public bool WillTeleport(Level.Direction direction)

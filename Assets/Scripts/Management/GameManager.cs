@@ -37,8 +37,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        LoadScene(1);
-        // Load the menu after the Setup is done
+        // Load the menu after the Setup is done, only if this scene was opened directly
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            LoadScene(1);
+        }
+        else
+        {
+            // The scene was loaded indirectly, only unload the scene and execute GameRegistry
+            SceneManager.UnloadSceneAsync(0); 
+            GameRegistry.Execute();
+        }
     }
     #endregion
 

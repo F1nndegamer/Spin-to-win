@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
-public class Level : MonoBehaviour
+public class Level : GameBehaviour
 {
     public Camera camera;
     public GravityHandler gravityHandler;
@@ -35,14 +35,14 @@ public class Level : MonoBehaviour
     };
 
     private Direction gravityDirection;
-    void Awake()
+    public override void GameAwake()
     {
         _inventory = GameObject.Find("Inventory");
-        Instance = this;
     }
-    void Start()
+    void Awake()
     {
-        CacheLevelScene();
+        Instance = this;
+        //CacheLevelScene();
     }
     private void LateUpdate()
     {
