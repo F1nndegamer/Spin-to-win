@@ -75,10 +75,12 @@ public class GameManager : MonoBehaviour
         while (!loadScene.isDone) yield return null;
         if (additiveSceneIndex != -1) // Load extra scene only when needed
         {
-            if(additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
             // The current level scene
             AsyncOperation loadAdditiveScene = SceneManager.LoadSceneAsync(additiveSceneIndex, LoadSceneMode.Additive);
             while (!loadAdditiveScene.isDone) yield return null;
+
+            // set the current level AFTER we have loaded the scene because if we try to do so before it returns a Scene object that has empty fields!
+            if (additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
         }
         Scene baseScene = SceneManager.GetSceneByBuildIndex(sceneIndex);
         if (baseScene.IsValid())
@@ -121,6 +123,7 @@ public class GameManager : MonoBehaviour
         while (!nextLevel.isDone) yield return null;
         AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
         while (!unload.isDone) yield return null;
+        currentLevel = SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
         GameRegistry.Execute();
         levelReady = true;
     }

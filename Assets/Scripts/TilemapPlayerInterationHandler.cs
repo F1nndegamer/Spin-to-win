@@ -17,16 +17,25 @@ public class TilemapPlayerInterationHandler : GameBehaviour
     {
         instance = this;
     }
+    private void findAndSetTilemap()
+    {
+        GameObject tilemaleGO = GameObject.Find("Tilemap");
+        if (tilemaleGO == null){ return; } // we could not find a GameObject named "Tilemap" we will just return gracefully
+        tilemap = tilemaleGO.GetComponent<Tilemap>();
+    }
+
     public override void GameStart()
     {
-        // if we forget to assign the tilemap then a fallback is that we placed the script directly on the tilemap
-        if (tilemap == null) { tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>(); }
-
         readyForUpdate = true;
     }
 
     void Update()
     {
+        if (tilemap == null) {
+            findAndSetTilemap();
+            return; // we can afford to skip this frame, and if the function didn't assign a tilemap then we have just saved ourselves from crashing
+        }
+
         if (!readyForUpdate) return;
         Vector3Int playerPos = positionToTilemapPos(player.transform.position);
         List<Vector3Int> adjacentTilePositions = new List<Vector3Int>() {
