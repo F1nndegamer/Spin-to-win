@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     // Always use GameManager.LoadScene instead of SceneManager
     // - Ali
     private static GameManager _instance;
-    [SerializeField] private GameObject[] destroyOnLoad;
     public static GameManager Instance
     {
         get
@@ -38,10 +37,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (GameObject obj in destroyOnLoad)
-        {
-            GameObject.Destroy(obj);
-        }
         LoadScene(1);
         // Load the menu after the Setup is done
     }
@@ -76,8 +71,7 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.SetActiveScene(baseScene);
         }
-        if(activeSceneIndex != 0) // Do not unload the GameManager
-            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(additiveSceneIndex)); 
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex)); 
     }
     #endregion
 }

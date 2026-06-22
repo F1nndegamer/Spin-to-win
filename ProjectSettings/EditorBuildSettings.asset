@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/EssentialScene.unity
     guid: 250d7a2459d8456e89d8fd5d601acb98
   - enabled: 1
-    path: Assets/Scenes/Level0.unity
+    path: Assets/Scenes/Level3.unity
     guid: 836c510b6ebf455cb9aa4b39472d7fdc
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
