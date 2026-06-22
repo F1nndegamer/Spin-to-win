@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Teleporter : MonoBehaviour
+public class Teleporter : GameBehaviour
 {
     public int waveID;
     public Level.Direction direction;
@@ -13,7 +13,7 @@ public class Teleporter : MonoBehaviour
         Debug.Log(text);
     }
 
-    private void Awake()
+    public override void GameAwake() // Use GameAwake instead of Awake so that we dont crash out when game is started without loading from menu
     {
         GameManager.teleporters.Add(this);
     }
