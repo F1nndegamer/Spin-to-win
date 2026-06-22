@@ -9,7 +9,7 @@ public class Inventory : GameBehaviour
 
     public override void GameStart()
     {
-        GameObject mainCamera = Camera.current.gameObject;
+        GameObject mainCamera = Level.Instance.gameObject;
         transform.SetParent(mainCamera.transform);
     }
 }

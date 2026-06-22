@@ -96,25 +96,28 @@ public class GameManager : MonoBehaviour
     public void LoadLevel(int levelIndex)
     {
         int sceneIndex = levelIndex + 2; // Levels start at index 3, so level 1 is index 3
-        if (SceneManager.GetSceneByBuildIndex(sceneIndex) != null) // Check if next scene exists
+        if (sceneIndex >= 0 && sceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            if (SceneManager.GetSceneByBuildIndex(sceneIndex).name.ToLower().StartsWith("level")) // Check if next scene is a level
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(sceneIndex);
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(scenePath);
+            if (sceneName.ToLower().StartsWith("level")) // Check if next scene is a level
             {
                 StartCoroutine(LoadLevelCoroutine(sceneIndex));
             }
             else
             {
-                LoadScene(sceneIndex); // The next scene is prolly a credits scene or smth, load it
+                LoadScene(sceneIndex); // The next scene is probably a credits scene or smth, load it
             }
             return;
         }
+
         Debug.LogError("Next scene not found!");
     }
 
     private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
     {
         levelReady = false;
-        AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex);
+        AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!nextLevel.isDone) yield return null;
         AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
         while (!unload.isDone) yield return null;

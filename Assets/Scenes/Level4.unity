@@ -1732,6 +1732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   PlayerSpawnPos: {fileID: 1525052966}
+  level: 4
 --- !u!1001 &1357804954
 PrefabInstance:
   m_ObjectHideFlags: 0

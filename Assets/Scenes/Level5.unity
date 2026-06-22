@@ -1777,7 +1777,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18ce134fa9b35f3e8a84c96b8bf11f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  PlayerSpawnPos: {fileID: 0}
+  PlayerSpawnPos: {fileID: 1730045543}
+  level: 5
 --- !u!1 &1730045542
 GameObject:
   m_ObjectHideFlags: 0
