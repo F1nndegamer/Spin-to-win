@@ -129,7 +129,8 @@ public class GameManager : MonoBehaviour
         levelReady = false;
         levelStarted = false;
         teleporters = new List<Teleporter>(); // Flush teleporter list
-        LoadLevel(level + 1);
+        level++;
+        LoadLevel(level);
     }
 
     #endregion
