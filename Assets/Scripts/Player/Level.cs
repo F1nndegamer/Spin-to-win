@@ -29,6 +29,7 @@ public class Level : GameBehaviour
     
     private bool shiftMode = false; // For faster movement, hold shift
     private Vector3Int moveInput = Vector3Int.zero; // Vector representation of movement input
+    private float originalCameraSize = 7.89f;
 
     [Header("Mechanic")]
     public bool allowMidairSwitch = false;
@@ -58,6 +59,7 @@ public class Level : GameBehaviour
         bounds.isSet = true;
         bounds.topLeft = GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
+        originalCameraSize = camera.orthographicSize; // get this so we can restore it later
         // Set new boundary on Level load
         // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
     }
@@ -91,7 +93,15 @@ public class Level : GameBehaviour
 
     private void ManageMovement()
     {
-        
+        float speed = 5; // uh todo: lets make this a variable in Controller.cs
+        float speedMult = shiftMode ? 2f : 1f;
+        Vector3 posAdd = (Vector3)moveInput * speed * speedMult * Time.unscaledDeltaTime; // unscaledDeltaTime since we call ManageMovement from LateUpdate
+
+        // camera zoom:
+        camera.orthographicSize += posAdd.z; // this is our zoom factor
+        posAdd.z = 0; // make sure we dont actually move our in and our else we could go too far in and stop rendering the level
+
+        camera.transform.position += posAdd;
     }
 
     public void ShiftMode(bool mode)
@@ -104,12 +114,14 @@ public class Level : GameBehaviour
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject?.SetActive(false);
+        camera.orthographicSize = originalCameraSize;
     }
 
     public void Rotate(int dir)
     {
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
+        Debug.Log(IsGrounded());
         if (_rotating || (!IsGrounded() || allowMidairSwitch)) return;
         
         // Increment moves counter

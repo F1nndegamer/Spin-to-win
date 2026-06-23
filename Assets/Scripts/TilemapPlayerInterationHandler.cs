@@ -69,6 +69,13 @@ public class TilemapPlayerInterationHandler : GameBehaviour
                 Debug.Log("I shouldn't have been able to collide w/ FragileWall!");
                 tilemap.SetTile(playerPos, null); // might as well destroy it now to free our player
                 break;
+            case WinTile:
+                Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+                rb.gravityScale = 0;
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0;
+                GameManager.Instance.Win();
+                break;
         }
     }
 

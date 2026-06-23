@@ -1087,6 +1087,16 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 2147483649
+  - first: {x: 9, y: 4, z: 0}
+    second:
+      serializedVersion: 2
+      m_TileIndex: 3
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 1
+      m_TileObjectToInstantiateIndex: 65535
+      dummyAlignment: 0
+      m_AllTileFlags: 1
   - first: {x: 10, y: 4, z: 0}
     second:
       serializedVersion: 2
@@ -2838,9 +2848,12 @@ Tilemap:
   - serializedVersion: 2
     m_RefCount: 106
     m_Data: {fileID: 11400000, guid: c838f207427dcb04f85875f3996a8b94, type: 2}
+  - serializedVersion: 2
+    m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: d38a5c4ab3020d94c9ea58a030fe9685, type: 2}
   m_TileSpriteArray:
   - serializedVersion: 2
-    m_RefCount: 85
+    m_RefCount: 86
     m_Data: {fileID: 7482667652216324306, guid: 22410add6de9bb4a5b38442ece29ca72, type: 3}
   - serializedVersion: 2
     m_RefCount: 106
@@ -2850,7 +2863,7 @@ Tilemap:
     m_Data: {fileID: 21300000, guid: 1a9f8294bfa28bc449de917308b8b6ad, type: 3}
   m_TileMatrixArray:
   - serializedVersion: 2
-    m_RefCount: 210
+    m_RefCount: 211
     m_Data:
       e00: 1
       e01: 0
@@ -2929,6 +2942,9 @@ Tilemap:
   - serializedVersion: 2
     m_RefCount: 263
     m_Data: {r: 1, g: 1, b: 1, a: 1}
+  - serializedVersion: 2
+    m_RefCount: 1
+    m_Data: {r: 1, g: 0.90588236, b: 0, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3431,63 +3447,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1012536622
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1037863956667121131, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_Name
-      value: Win
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 9.45
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.459804
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2650149213345930953, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c3f63350bb1dce6a39f6a009dfa703ae, type: 3}
 --- !u!1 &1130495437
 GameObject:
   m_ObjectHideFlags: 0
@@ -3564,6 +3523,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   PlayerSpawnPos: {fileID: 762106995}
+  topLeftBound: {fileID: 0}
+  bottomRightBound: {fileID: 0}
 --- !u!1 &1754279555
 GameObject:
   m_ObjectHideFlags: 0
@@ -3617,5 +3578,4 @@ SceneRoots:
   - {fileID: 1754279556}
   - {fileID: 1237335382}
   - {fileID: 1130495438}
-  - {fileID: 1012536622}
   - {fileID: 762106995}
