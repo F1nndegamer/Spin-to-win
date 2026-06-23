@@ -7,7 +7,6 @@ public class Level : GameBehaviour
 {
     public Camera camera;
     public GravityHandler gravityHandler;
-    public bool startedLevel;
     public PlayerBox player;
     private bool _rotating = false;
     public float gravity = 9.8f;
@@ -52,7 +51,6 @@ public class Level : GameBehaviour
 
     public void Rotate(int dir)
     {
-        startedLevel = true;
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject?.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali

@@ -20,7 +20,11 @@ public class Teleporter : GameBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!GameManager.levelStarted) return;
+        if (!GameManager.levelStarted)
+        {
+            AnnoyingLog("Haha cant teleport yet!");
+            return;
+        }
         AnnoyingLog("bLOCK COLLIDE WITH Something");
         if (!other.CompareTag("Player"))
             return;

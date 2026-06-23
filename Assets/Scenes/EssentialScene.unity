@@ -1347,7 +1347,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Level
   camera: {fileID: 1464102700}
   gravityHandler: {fileID: 1464102696}
-  startedLevel: 0
   player: {fileID: 95512390}
   gravity: 20
   lerpSpeed: 4
@@ -1411,7 +1410,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7.89
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

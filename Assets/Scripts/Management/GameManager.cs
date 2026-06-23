@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 {
     #region Initiation
     // This is the entry point of our game, it will persist throughout the game and manage stuff too
-    // The GameManager must always exist
+    // The GameManager must always exist!!
     // Always use GameManager.LoadScene instead of SceneManager
     // - Ali
     private static GameManager _instance;
@@ -41,6 +41,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // For ppl who like to disable "Reload domain" on play
+        levelStarted = false;
+        levelReady = true;
+        levelLoaded = true;
+        teleporters = new List<Teleporter>();
+        level = 1;
+        
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
@@ -48,7 +55,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // The scene was loaded indirectly, only unload the scene and execute GameRegistry
+            // The scene was loaded indirectly, update level and currentLevel and unload the scene and execute GameRegistry
+            level = Int32.Parse(SceneManager.GetSceneAt(1).name.Replace("Level", ""));
+            currentLevel = SceneManager.GetSceneAt(1);
             SceneManager.UnloadSceneAsync(0); 
             GameRegistry.Execute();
         }
@@ -152,7 +161,7 @@ public class GameManager : MonoBehaviour
 
     #region State
 
-    public static int level = -1;
+    public static int level = 1; // Just go 1 to N, so we can reorder levels easily through build settings
     public static PlayerBox player;
     public static Inventory inventory;
     public static LevelData levelData;
