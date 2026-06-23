@@ -43,11 +43,17 @@ public class Level : GameBehaviour
     {
         Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
         transform.position = Vector3.Lerp(transform.position, target, lerpSpeed * Time.deltaTime);
+        if (GameManager.levelStarted)
+        {
+            GameManager.timeThisLevel += Time.unscaledDeltaTime;
+            GameManager.totalTimePlayed += Time.unscaledDeltaTime;
+        }
     }
 
     public void Rotate(int dir)
     {
         startedLevel = true;
+        GameManager.levelStarted = true;
         GameManager.inventory.gameObject?.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael

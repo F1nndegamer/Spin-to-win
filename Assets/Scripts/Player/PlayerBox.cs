@@ -135,7 +135,7 @@ public class PlayerBox : GameBehaviour
         levelCompletePanel.alpha = 1;
         movesText.text = $"Moves: {GameManager.movesThisLevel}";
         timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
-        
+         
         // THen we wait until the next level button is pressed
         yield return new WaitUntil(() => nextLevel);
         

@@ -26,15 +26,6 @@ public class GameManager : MonoBehaviour
         Setup();
     }
 
-    private void Update()
-    {
-        if (levelStarted)
-        {
-            timeThisLevel += Time.unscaledDeltaTime;
-            totalTimePlayed += Time.unscaledDeltaTime;
-        }
-    }
-
     private void Setup()
     {
         if (_instance != null && _instance != this)
