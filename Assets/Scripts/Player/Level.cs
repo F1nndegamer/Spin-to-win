@@ -21,7 +21,6 @@ public class Level : GameBehaviour
     public bool allowMidairSwitch = false;
     public bool preserveMomentum = false;
 
-    private GameObject _inventory;
     public static Level Instance;
     private Scene _levelScene;
     public enum Direction
@@ -35,10 +34,6 @@ public class Level : GameBehaviour
     };
 
     private Direction gravityDirection;
-    public override void GameAwake()
-    {
-        _inventory = GameManager.inventory.gameObject;
-    }
     void Awake()
     {
         Instance = this;
@@ -53,14 +48,14 @@ public class Level : GameBehaviour
     public void Rotate(int dir)
     {
         startedLevel = true;
-        if (_inventory == null)
-        {
-            _inventory = GameManager.inventory.gameObject;
-        }
-        _inventory?.SetActive(false);
+        GameManager.inventory.gameObject?.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
         if (_rotating || (!IsGrounded() || allowMidairSwitch)) return;
+        
+        // Increment moves counter
+        GameManager.movesThisLevel++;
+        GameManager.totalMoves++;
 
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
         StartCoroutine(RotateRoutine(dir));
@@ -190,9 +185,9 @@ public class Level : GameBehaviour
 
         yield return null;
 
-        if (_inventory != null)
+        if (GameManager.inventory.gameObject != null)
         {
-            Destroy(_inventory);
+            Destroy(GameManager.inventory.gameObject);
             GameManager.levelStarted = true;
             // This will either crash or run once
         }
@@ -215,7 +210,6 @@ public class Level : GameBehaviour
 
         yield return null;
         yield return new WaitForEndOfFrame();
-        _inventory = GameManager.inventory.gameObject;
         TilemapPlayerInterationHandler.instance.tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
 
         GameObject dataObj = GameObject.Find("LevelData");

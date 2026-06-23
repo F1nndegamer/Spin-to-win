@@ -1,4 +1,9 @@
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
+/*
+
+This method is now depracated
+Instead of updating the entire tilemap,
+we rotate the camera and switch gravity
+
 using UnityEngine;
 using UnityEngine.Tilemaps;
 public class Turning : MonoBehaviour
@@ -125,3 +130,5 @@ public class Turning : MonoBehaviour
         );
     }
 }
+
+*/

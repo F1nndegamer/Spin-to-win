@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +25,16 @@ public class GameManager : MonoBehaviour
     {
         Setup();
     }
+
+    private void Update()
+    {
+        if (levelStarted)
+        {
+            timeThisLevel += Time.unscaledDeltaTime;
+            totalTimePlayed += Time.unscaledDeltaTime;
+        }
+    }
+
     private void Setup()
     {
         if (_instance != null && _instance != this)
@@ -129,6 +141,8 @@ public class GameManager : MonoBehaviour
         while (!unload.isDone) yield return null;
         currentLevel = SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
         GameRegistry.Execute();
+        timeThisLevel = 0f;
+        movesThisLevel = 0;
         levelLoaded = true;
     }
 
@@ -155,6 +169,10 @@ public class GameManager : MonoBehaviour
     public static bool levelLoaded = false; // Level is initiated and GameAwake and GameReady have all been called
     public static bool levelReady = false; // The entry transition has been completed
     public static bool levelStarted = false; // The user has changed gravity at least once
+    public static int movesThisLevel = 0;
+    public static float timeThisLevel = 0f;
+    public static int totalMoves = 0;
+    public static float totalTimePlayed = 0f;
     public static List<Teleporter> teleporters = new List<Teleporter>();
 
     #endregion
