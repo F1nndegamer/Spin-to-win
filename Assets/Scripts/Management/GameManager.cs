@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
         levelLoaded = true;
         teleporters = new List<Teleporter>();
         level = 1;
+        movesThisLevel = 0; // idk why but it seems to carry over from last time i played,,, so ill fix it here ig -Sabrina
+        totalMoves = 0;
         
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)

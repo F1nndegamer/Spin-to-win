@@ -83,6 +83,9 @@ public class Level : GameBehaviour
     {
         if (GameManager.levelStarted)
         {
+            // prevent spam calling Rotate if we're not pressing a key for it
+            // this seems to fix randomly not being able to rotate - Sabrina
+            if(x == 0) { return; }
             Rotate(x);
         }
         else
@@ -121,8 +124,7 @@ public class Level : GameBehaviour
     {
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
-        Debug.Log(IsGrounded());
-        if (_rotating || (!IsGrounded() || allowMidairSwitch)) return;
+        if (_rotating || (!IsGrounded() && !allowMidairSwitch)) return;
         
         // Increment moves counter
         GameManager.movesThisLevel++;
