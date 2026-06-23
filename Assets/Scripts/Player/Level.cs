@@ -96,12 +96,14 @@ public class Level : GameBehaviour
 
     private void ManageMovement()
     {
+        // camera zoom:
+        camera.orthographicSize += moveInput.z; // this is our zoom factor
+
         float speed = 5; // uh todo: lets make this a variable in Controller.cs
         float speedMult = shiftMode ? 2f : 1f;
         Vector3 posAdd = (Vector3)moveInput * speed * speedMult * Time.unscaledDeltaTime; // unscaledDeltaTime since we call ManageMovement from LateUpdate
-
-        // camera zoom:
-        camera.orthographicSize += posAdd.z; // this is our zoom factor
+        
+        posAdd = camera.transform.TransformDirection(posAdd); // make sure our move directions are always the same no matter how the camera is rotated
         posAdd.z = 0; // make sure we dont actually move our in and our else we could go too far in and stop rendering the level
 
         camera.transform.position += posAdd;
