@@ -23,14 +23,39 @@ public class Controller : MonoBehaviour
             level.Rotate(1);
         }
 
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
+            
+        }
+
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             level.Pause();
         }
 
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            level.Confirm();
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             level.Restart();
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            
+        }
+
+        if (Input.GetKeyUp(KeyCode.RightShift))
+        {
+            
         }
     }
 }

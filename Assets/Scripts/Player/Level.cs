@@ -16,12 +16,23 @@ public class Level : GameBehaviour
     public float followSpeed = 0.5f;
     private int _unsyncedOffset = 0;
 
+    public Bounds bounds;
+
+    [System.Serializable]
+    public struct Bounds
+    {
+        public bool isSet;
+        public Vector2 topLeft;
+        public Vector2 bottomRight;
+    }
+
     [Header("Mechanic")]
     public bool allowMidairSwitch = false;
     public bool preserveMomentum = false;
 
     public static Level Instance;
     private Scene _levelScene;
+    private Vector2 moveInput = Vector2.zero;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -38,21 +49,57 @@ public class Level : GameBehaviour
         Instance = this;
         //CacheLevelScene();
     }
+
+    public override void GameStart()
+    {
+        bounds.isSet = true;
+        bounds.topLeft = GameManager.levelData.topLeftBound.position;
+        bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
+        // Set new boundary on Level load
+        // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
+    }
+
     private void LateUpdate()
     {
-        Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
-        transform.position = Vector3.Lerp(transform.position, target, lerpSpeed * Time.deltaTime);
         if (GameManager.levelStarted)
         {
             GameManager.timeThisLevel += Time.unscaledDeltaTime;
             GameManager.totalTimePlayed += Time.unscaledDeltaTime;
+            Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, target, lerpSpeed * Time.deltaTime);
         }
+        else
+        {
+            ManageMovement(); // Allow the pan and zoom kind of input method
+        }
+    }
+
+    public void PassDirectionalInput(int x, int y)
+    {
+        if (GameManager.levelStarted)
+        {
+            Rotate(x); 
+        }
+        else
+        {
+            moveInput = new Vector2(x, y);
+        }
+    }
+
+    private void ManageMovement()
+    {
+        
+    }
+
+    public void Confirm()
+    {
+        // this quits edit mode and enters game mode 
+        GameManager.levelStarted = true;
+        GameManager.inventory.gameObject?.SetActive(false);
     }
 
     public void Rotate(int dir)
     {
-        GameManager.levelStarted = true;
-        GameManager.inventory.gameObject?.SetActive(false);
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
         if (_rotating || (!IsGrounded() || allowMidairSwitch)) return;

@@ -4,6 +4,8 @@ public class LevelData : MonoBehaviour
 {
     //Here we will add things like Inventory etc.
     public Transform PlayerSpawnPos;
+
+    public Transform topLeftBound, bottomRightBound;
     // [SerializeField] private int level = -1; We no longer store level number
     void Awake()
     {
