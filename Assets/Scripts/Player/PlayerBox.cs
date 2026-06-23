@@ -90,10 +90,7 @@ public class PlayerBox : GameBehaviour
     {
         if (other.gameObject.tag == "Win")
         {
-            GetComponent<Rigidbody2D>().gravityScale = 0;
-            GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-            GetComponent<Rigidbody2D>().angularVelocity = 0;
-            GameManager.Instance.Win();
+            // i've made a win tile so ive moved the code from here to TilemapPlayerInterationHandler.cs
         }
     }
 
