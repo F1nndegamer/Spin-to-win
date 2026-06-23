@@ -9,11 +9,11 @@ public class Level : GameBehaviour
     public GravityHandler gravityHandler;
     public PlayerBox player;
     private bool _rotating = false;
-    public float gravity = 9.8f;
-    public float lerpSpeed = 3f;
+    public float gravity = 20f;
+    public float lerpSpeed = 4f;
     public int currentLevel = 0;
     [Range(0f, 1f)]
-    public float followSpeed = 0.5f;
+    public float followSpeed = 0.8f;
     private int _unsyncedOffset = 0;
 
     public Bounds bounds;
@@ -25,6 +25,10 @@ public class Level : GameBehaviour
         public Vector2 topLeft;
         public Vector2 bottomRight;
     }
+    // The camera position has to be limited within these bounds, set in the LevelData (access at GameManager.levelData) 
+    
+    private bool shiftMode = false; // For faster movement, hold shift
+    private Vector3Int moveInput = Vector3Int.zero; // Vector representation of movement input
 
     [Header("Mechanic")]
     public bool allowMidairSwitch = false;
@@ -32,11 +36,10 @@ public class Level : GameBehaviour
 
     public static Level Instance;
     private Scene _levelScene;
-    private Vector2 moveInput = Vector2.zero;
+    
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
-
         Down = 0,
         Right = 1,
         Up = 2,
@@ -74,15 +77,15 @@ public class Level : GameBehaviour
         }
     }
 
-    public void PassDirectionalInput(int x, int y)
+    public void PassDirectionalInput(int x, int y, int z) // Passed from Controller, based on WASD and Q E
     {
         if (GameManager.levelStarted)
         {
-            Rotate(x); 
+            Rotate(x);
         }
         else
         {
-            moveInput = new Vector2(x, y);
+            moveInput = new Vector3Int(x, y, z); // z is for zoom
         }
     }
 
@@ -91,9 +94,14 @@ public class Level : GameBehaviour
         
     }
 
+    public void ShiftMode(bool mode)
+    {
+        shiftMode = mode;
+    }
+
     public void Confirm()
     {
-        // this quits edit mode and enters game mode 
+        // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject?.SetActive(false);
     }

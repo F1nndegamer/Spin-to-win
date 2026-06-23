@@ -13,25 +13,38 @@ public class Controller : MonoBehaviour
     private void Update()
     {
         if (!GameManager.levelLoaded) return;
+        Vector3Int input = new Vector3Int(0, 0, 0);
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
-            level.Rotate(-1);
+            input += new Vector3Int(-1, 0, 0);
         }
 
         if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
         {
-            level.Rotate(1);
+            input += new Vector3Int(1, 0, 0);
         }
 
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
-            
+            input += new Vector3Int(0, 1, 0);
         }
 
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            
+            input += new Vector3Int(0, -1, 0);
         }
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            input += new Vector3Int(0, 0, -1);
+        }
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            input += new Vector3Int(0, 0, 1);
+        }
+        
+        level.PassDirectionalInput(input.x, input.y, input.z);
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -50,12 +63,12 @@ public class Controller : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            
+            level.ShiftMode(true);
         }
 
         if (Input.GetKeyUp(KeyCode.RightShift))
         {
-            
+            level.ShiftMode(false);
         }
     }
 }
