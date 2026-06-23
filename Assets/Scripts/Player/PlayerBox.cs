@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 // This script measures whether or not the player is currently grounded - Ali
@@ -13,11 +15,17 @@ public class PlayerBox : GameBehaviour
     [SerializeField] private string TeleportTag = "Teleport";
     [SerializeField] private float maxDistance = 50f;
     [SerializeField] private LayerMask checkLayer;
+    [SerializeField] private Transform transition;
+
+    private void Awake()
+    {
+        GameManager.player = this;
+        transition.localScale = Vector3.one * 50f;
+    }
 
     public override void GameStart()
     {
-        transform.position = GameManager.levelData.PlayerSpawnPos.transform.position;
-        GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after scene is loaded successfully
+        StartCoroutine(TransitionInCoroutine());
     }
 
     public bool WillTeleport(Level.Direction direction)
@@ -80,5 +88,32 @@ public class PlayerBox : GameBehaviour
             GetComponent<Rigidbody2D>().angularVelocity = 0;
             GameManager.Instance.Win();
         }
+    }
+
+    public IEnumerator TransitionCoroutine() // Called and awaited by GameManager in LoadLevel coroutine
+    {
+        float t = 0;
+        while (t < 50)
+        {
+            t += Time.unscaledDeltaTime * 30f;
+            transition.localScale = Vector3.one * t;
+            yield return null;
+        }
+        transition.localScale = Vector3.one * 50;
+    }
+
+    private IEnumerator TransitionInCoroutine() // Called on level start by player
+    {
+        transform.position = GameManager.levelData.PlayerSpawnPos.transform.position;
+        float t = 50;
+        while (t > 0)
+        {
+            t -= Time.unscaledDeltaTime * 30f;
+            transition.localScale = Vector3.one * t;
+            yield return null;
+        }
+        transition.localScale = Vector3.zero;
+        GameManager.levelReady = true;
+        GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after scene is loaded successfully
     }
 }

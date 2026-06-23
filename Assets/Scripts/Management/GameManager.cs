@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour
     
     private IEnumerator LoadSceneCoroutine (int sceneIndex, int additiveSceneIndex)
     {
+        levelLoaded = false;
         levelReady = false;
         levelStarted = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -89,7 +90,7 @@ public class GameManager : MonoBehaviour
         }
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex)); 
         GameRegistry.Execute();
-        levelReady = true;
+        levelLoaded = true;
     }
     #endregion
 
@@ -118,21 +119,24 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
     {
+        levelLoaded = false;
         levelReady = false;
+        levelStarted = false;
+        yield return StartCoroutine(player.TransitionCoroutine()); // Transition before loading level
         AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!nextLevel.isDone) yield return null;
         AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
         while (!unload.isDone) yield return null;
         currentLevel = SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
         GameRegistry.Execute();
-        levelReady = true;
+        levelLoaded = true;
     }
 
     public void Win()
     {
-        if (!levelReady) return; 
+        if (!levelLoaded) return; 
         // Dont win or oad the next scene twice
-        levelReady = false;
+        levelLoaded = false;
         levelStarted = false;
         teleporters = new List<Teleporter>(); // Flush teleporter list
         level++;
@@ -144,10 +148,12 @@ public class GameManager : MonoBehaviour
     #region State
 
     public static int level = -1;
+    public static PlayerBox player;
     public static Inventory inventory;
     public static LevelData levelData;
     public static Scene currentLevel;
-    public static bool levelReady = false; // Level is initiated and GameAwake and GameReady have all been called
+    public static bool levelLoaded = false; // Level is initiated and GameAwake and GameReady have all been called
+    public static bool levelReady = false; // The entry transition has been completed
     public static bool levelStarted = false; // The user has changed gravity at least once
     public static List<Teleporter> teleporters = new List<Teleporter>();
 

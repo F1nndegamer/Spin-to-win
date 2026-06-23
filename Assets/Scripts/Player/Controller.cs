@@ -12,7 +12,7 @@ public class Controller : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.levelReady) return;
+        if (!GameManager.levelLoaded) return;
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             level.Rotate(-1);
