@@ -6,6 +6,11 @@ public class LevelData : MonoBehaviour
     public Transform PlayerSpawnPos;
 
     public Transform topLeftBound, bottomRightBound;
+
+    [Header("Inventory")] 
+    public int solidBlocks = 0;
+    public Level.Direction[] teleportBlocks;
+    // Add more block types if levels use them 
     // [SerializeField] private int level = -1; We no longer store level number
     void Awake()
     {
