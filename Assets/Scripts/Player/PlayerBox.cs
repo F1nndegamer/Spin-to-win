@@ -157,6 +157,9 @@ public class PlayerBox : GameBehaviour
     {
         // Move the player to spawn while the box is covering the screen
         transform.position = GameManager.levelData.PlayerSpawnPos.transform.position;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
+        
         // Uncover the screen
         float t = 50;
         while (t > 0)

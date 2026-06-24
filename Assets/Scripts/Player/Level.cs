@@ -63,14 +63,15 @@ public class Level : GameBehaviour
         gravityHandler.setGravityDown(gravity);
         transform.rotation = Quaternion.Euler(Vector3.zero);
         _rotating = false;
-        targetPosition = new Vector3(GameManager.player.transform.position.x, GameManager.player.transform.position.y,
+        targetPosition = transform.position = new Vector3(GameManager.player.transform.position.x, GameManager.player.transform.position.y,
             targetPosition.z); // Center the camera on player anyways
         // Set new boundary on Level load
         // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
         if (!GameManager.levelData.editingNeeded)
         {
             // exit edit mode
-            Confirm();
+            // Confirm();
+            // Maybe allow the player to see the map before entering it - Ali
         }
     }
 
