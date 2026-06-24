@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,6 +47,7 @@ public class GameManager : MonoBehaviour
         level = 1;
         movesThisLevel = 0; // idk why but it seems to carry over from last time i played,,, so ill fix it here ig -Sabrina
         totalMoves = 0;
+        timeThisLevel = totalTimePlayed = 0f;
         
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -58,7 +57,7 @@ public class GameManager : MonoBehaviour
         else
         {
             // The scene was loaded indirectly, update level and currentLevel and unload the scene and execute GameRegistry
-            level = Int32.Parse(SceneManager.GetSceneAt(1).name.Replace("Level", ""));
+            level = System.Int32.Parse(SceneManager.GetSceneAt(1).name.Replace("Level", ""));
             currentLevel = SceneManager.GetSceneAt(1);
             SceneManager.UnloadSceneAsync(0); 
             GameRegistry.Execute();
@@ -163,11 +162,14 @@ public class GameManager : MonoBehaviour
 
     #region State
 
-    public static int level = 1; // Just go 1 to N, so we can reorder levels easily through build settings
     public static PlayerBox player;
     public static Inventory inventory;
     public static LevelData levelData;
     public static Scene currentLevel;
+    public static Controller controller;
+    public static List<Teleporter> teleporters = new List<Teleporter>();
+    
+    public static int level = 1; // Just go 1 to N, so we can reorder levels easily through build settings
     public static bool levelLoaded = false; // Level is initiated and GameAwake and GameReady have all been called
     public static bool levelReady = false; // The entry transition has been completed
     public static bool levelStarted = false; // The user has changed gravity at least once
@@ -175,7 +177,6 @@ public class GameManager : MonoBehaviour
     public static float timeThisLevel = 0f;
     public static int totalMoves = 0;
     public static float totalTimePlayed = 0f;
-    public static List<Teleporter> teleporters = new List<Teleporter>();
 
     #endregion
 }

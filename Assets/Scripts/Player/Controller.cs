@@ -3,9 +3,11 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     public Level level;
+    public float speed = 5;
 
     private void Awake()
     {
+        GameManager.controller = this;
         level = GetComponent<Level>();
         level.UpdateGravity(); // update the gravity immediately so we aren't floating as soon as we start -Sabrina
     }

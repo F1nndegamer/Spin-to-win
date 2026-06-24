@@ -1350,8 +1350,12 @@ MonoBehaviour:
   player: {fileID: 95512390}
   gravity: 20
   lerpSpeed: 4
-  currentLevel: 0
   followSpeed: 0.8
+  accelerativeLerpSpeed: 0.1
+  bounds:
+    isSet: 0
+    topLeft: {x: 0, y: 0}
+    bottomRight: {x: 0, y: 0}
   allowMidairSwitch: 0
   preserveMomentum: 0
 --- !u!114 &1464102698
@@ -1367,6 +1371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Controller
   level: {fileID: 1464102697}
+  speed: 5
 --- !u!81 &1464102699
 AudioListener:
   m_ObjectHideFlags: 0

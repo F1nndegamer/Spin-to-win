@@ -11,10 +11,11 @@ public class Level : GameBehaviour
     private bool _rotating = false;
     public float gravity = 20f;
     public float lerpSpeed = 4f;
-    public int currentLevel = 0;
     [Range(0f, 1f)]
     public float followSpeed = 0.8f;
     private int _unsyncedOffset = 0;
+    private Vector3 targetPosition;
+    public float accelerativeLerpSpeed = 0.9f;
 
     public Bounds bounds;
 
@@ -30,6 +31,7 @@ public class Level : GameBehaviour
     private bool shiftMode = false; // For faster movement, hold shift
     private Vector3Int moveInput = Vector3Int.zero; // Vector representation of movement input
     private float originalCameraSize = 7.89f;
+    private float _targetOrthoSize = 7.89f;
 
     [Header("Mechanic")]
     public bool allowMidairSwitch = false;
@@ -51,6 +53,7 @@ public class Level : GameBehaviour
     void Awake()
     {
         Instance = this;
+        targetPosition = camera.transform.position;
         //CacheLevelScene();
     }
 
@@ -59,7 +62,7 @@ public class Level : GameBehaviour
         bounds.isSet = true;
         bounds.topLeft = GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
-        originalCameraSize = camera.orthographicSize; // get this so we can restore it later
+        originalCameraSize = _targetOrthoSize = camera.orthographicSize; // get this so we can restore it later
         // Set new boundary on Level load
         // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
     }
@@ -97,16 +100,19 @@ public class Level : GameBehaviour
     private void ManageMovement()
     {
         // camera zoom:
-        camera.orthographicSize += moveInput.z; // this is our zoom factor
+        _targetOrthoSize -= moveInput.z * Time.unscaledDeltaTime * 5f;
+        _targetOrthoSize = Mathf.Clamp(_targetOrthoSize, 3f, 11f); // Clamp the zoom
+        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
 
-        float speed = 5; // uh todo: lets make this a variable in Controller.cs
-        float speedMult = shiftMode ? 2f : 1f;
+        float speed = GameManager.controller.speed;
+        float speedMult = shiftMode ? 3f : 1f;
         Vector3 posAdd = (Vector3)moveInput * speed * speedMult * Time.unscaledDeltaTime; // unscaledDeltaTime since we call ManageMovement from LateUpdate
         
         posAdd = camera.transform.TransformDirection(posAdd); // make sure our move directions are always the same no matter how the camera is rotated
         posAdd.z = 0; // make sure we dont actually move our in and our else we could go too far in and stop rendering the level
 
-        camera.transform.position += posAdd;
+        targetPosition += posAdd;
+        camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition, accelerativeLerpSpeed);
     }
 
     public void ShiftMode(bool mode)
@@ -273,7 +279,7 @@ public class Level : GameBehaviour
         TilemapPlayerInterationHandler.instance.tilemap = null;
         yield return null;
 
-        string sceneName = "Level" + currentLevel.ToString();
+        string sceneName = "Level" + GameManager.level.ToString();
 
         AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         loadOp.allowSceneActivation = true;
@@ -306,7 +312,8 @@ public class Level : GameBehaviour
     }
     public void NextLevel()
     {
-        currentLevel += 1;
-        Restart();
+        // GameManager now handles this
+        //currentLevel += 1;
+        //Restart();
     }
 }
