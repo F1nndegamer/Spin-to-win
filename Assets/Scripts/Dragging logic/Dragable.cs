@@ -14,7 +14,6 @@ public class DraggableItem : MonoBehaviour
 
     private Camera cam;
     private BoxCollider2D collider;
-    private GameObject PlacedParent;
 
     private void Awake()
     {
@@ -26,10 +25,6 @@ public class DraggableItem : MonoBehaviour
         }
         collider = GetComponent<BoxCollider2D>();
         cam = Camera.main;
-        if (PlacedParent == null)
-        {
-            PlacedParent = GameObject.Find("PlacedObjects");
-        }
     }
 
     public void OnMouseDown()
@@ -111,7 +106,7 @@ public class DraggableItem : MonoBehaviour
         currentCell = cell;
 
         transform.position = GridManager.Instance.CellToWorld(cell);
-        transform.parent = PlacedParent.transform;
+        transform.parent = GameManager.placedObjects;
         GridManager.Instance.Register(this, cell);
     }
 

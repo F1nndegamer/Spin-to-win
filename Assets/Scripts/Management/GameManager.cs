@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -145,10 +146,15 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
-        yield return
-            StartCoroutine(
-                player.TransitionCoroutine(level + 2 ==
-                                           sceneIndex)); // Transition is different for restarting and moving to next level
+        if (inventory.gameObject != null)
+        {
+            Destroy(inventory.gameObject);
+            // This will either crash or run once
+        }
+        //GameObject grid = GameObject.Find("Grid");
+        //if (grid != null)
+        //    Destroy(grid);
+        yield return StartCoroutine(player.TransitionCoroutine(level + 2 == sceneIndex)); // Transition is different for restarting and moving to next level
         AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         if (nextLevel != null)
         {
@@ -164,6 +170,7 @@ public class GameManager : MonoBehaviour
             level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
             timeThisLevel = 0f;
             movesThisLevel = 0;
+            placedObjects = GameObject.Find("PlacedObjects").transform;
             GameRegistry.Execute();
             levelLoaded = true;
         } else { Debug.LogError("Load failed"); }
@@ -178,7 +185,7 @@ public class GameManager : MonoBehaviour
         LoadLevel(level + 1);
     }
 
-    public void LoseAndRestart()
+    public void Lose()
     {
         if(levelReady){ // Only allow restart when level is fully loaded
             levelWon = false;
@@ -199,11 +206,11 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        if(levelReady){ // Only allow restart when level is fully loaded
-            levelWon = false;
-            retries++;
-           LoadLevel(level); // Load the current level again == Reload level
-        }
+        if (!levelReady) return;
+        // Only allow restart when level is fully loaded
+        levelWon = false;
+        retries++;
+        LoadLevel(level); // Load the current level again == Reload level
     }
 
     #endregion
@@ -216,6 +223,7 @@ public class GameManager : MonoBehaviour
     public static Scene currentLevel;
     public static Controller controller;
     public static List<Teleporter> teleporters = new List<Teleporter>();
+    public static Transform placedObjects;
     
     public static int level = 1; // Just go 1 to N, so we can reorder levels easily through build settings
     public static bool levelLoaded; // Level is initiated and GameAwake and GameReady have all been called
@@ -227,6 +235,6 @@ public class GameManager : MonoBehaviour
     public static float totalTimePlayed;
     public static int wins, retries, lost;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
-
+    
     #endregion
 }

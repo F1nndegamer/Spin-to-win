@@ -30,6 +30,7 @@ public class TilemapPlayerInterationHandler : GameBehaviour
 
     void Update()
     {
+        if (!GameManager.levelReady) return;
         if (tilemap == null) {
             findAndSetTilemap();
             return; // we can afford to skip this frame, and if the function didn't assign a tilemap then we have just saved ourselves from crashing

@@ -1,9 +1,11 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
+    // MWAAHAHHAHAH
     [SerializeField] private Button playButton;
     [SerializeField] private TextMeshProUGUI playButtonText;
     public Camera currentCamera;
@@ -12,7 +14,9 @@ public class Menu : MonoBehaviour
     {
         playButton.enabled = false;
         playButtonText.text = "Loading...";
+        Debug.Log("Meow");
         currentCamera.GetComponent<AudioListener>().enabled = false;
+        EventSystem.current.enabled = false; // Disable menu event system so we dont get that "2 event systems" bug
 
         GameManager.Instance.LoadScene(2, 3);
         // Remember that:
