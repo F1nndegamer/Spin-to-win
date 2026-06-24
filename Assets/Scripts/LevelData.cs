@@ -19,6 +19,14 @@ public class LevelData : MonoBehaviour
     [Header("Inventory")] 
     public int solidBlocks = 0;
     public Level.Direction[] teleportBlocks;
+    
+    [Header("Level Info")]
+    public string levelName;
+    [Tooltip("Minimum amount of moves needed to finish the level")]
+    public int minMoves = 1;
+    [Tooltip("Ideal amount of time in seconds to finish the level")]
+    public int minTime = 1;
+
     // Add more block types if levels use them 
     // [SerializeField] private int level = -1; We no longer store level number
     void Awake()
