@@ -59,11 +59,15 @@ public class Level : GameBehaviour
         //CacheLevelScene();
     }
 
-    public override void GameStart()
+    public override void GameAwake()
     {
         bounds.isSet = true;
         bounds.topLeft = (Vector2)GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = (Vector2)GameManager.levelData.bottomRightBound.position;
+        gravityDirection = Direction.Down;
+        gravityHandler.setGravityDown(gravity);
+        transform.rotation = Quaternion.Euler(Vector3.zero);
+        _rotating = false;
         targetPosition = new Vector3(GameManager.player.transform.position.x, GameManager.player.transform.position.y,
             targetPosition.z); // Center the camera on player anyways
         // Set new boundary on Level load
