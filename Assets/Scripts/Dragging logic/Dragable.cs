@@ -76,9 +76,9 @@ public class DraggableItem : MonoBehaviour
         if (!isDragging) return;
 
         Vector3 mouse = Input.mousePosition;
-        if(cam == null)
+        if (cam == null)
         {
-            cam = GameObject.FindGameObjectWithTag("Main Camera").GetComponent<Camera>();
+            cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
         mouse.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
 
