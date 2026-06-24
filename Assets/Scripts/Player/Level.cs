@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -251,9 +252,12 @@ public class Level : GameBehaviour
     public void Pause() { }
     public void Restart()
     {
-        StartCoroutine(RestartRoutine());
+        GameManager.Instance.LoadLevel(GameManager.level); // Load the current level again == Reload level
+        //StartCoroutine(RestartRoutine());
     }
-
+    
+    // We no longer use this, tho thanks sir F1nn for having a headache at midnight attempting to reset every little thing :salutecri: - Ali
+    [Obsolete]
     private IEnumerator RestartRoutine()
     {
         Debug.Log("Restarting...");
