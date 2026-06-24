@@ -54,15 +54,15 @@ public class Level : GameBehaviour
     {
         Instance = this;
         targetPosition = camera.transform.position;
+        originalCameraSize = _targetOrthoSize = camera.orthographicSize; // get this so we can restore it later
         //CacheLevelScene();
     }
 
     public override void GameStart()
     {
         bounds.isSet = true;
-        bounds.topLeft = GameManager.levelData.topLeftBound.position;
-        bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
-        originalCameraSize = _targetOrthoSize = camera.orthographicSize; // get this so we can restore it later
+        bounds.topLeft = (Vector2)GameManager.levelData.topLeftBound.position;
+        bounds.bottomRight = (Vector2)GameManager.levelData.bottomRightBound.position;
         // Set new boundary on Level load
         // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
     }
@@ -95,6 +95,8 @@ public class Level : GameBehaviour
         {
             moveInput = new Vector3Int(x, y, z); // z is for zoom
         }
+        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
+        // change it here so we can set _targetOrthoSize to anything to lerp to, even after the edit mode ends
     }
 
     private void ManageMovement()
@@ -102,7 +104,6 @@ public class Level : GameBehaviour
         // camera zoom:
         _targetOrthoSize -= moveInput.z * Time.unscaledDeltaTime * 5f;
         _targetOrthoSize = Mathf.Clamp(_targetOrthoSize, 3f, 11f); // Clamp the zoom
-        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
 
         float speed = GameManager.controller.speed;
         float speedMult = shiftMode ? 3f : 1f;
@@ -125,7 +126,7 @@ public class Level : GameBehaviour
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject?.SetActive(false);
-        camera.orthographicSize = originalCameraSize;
+        _targetOrthoSize = originalCameraSize;
     }
 
     public void Rotate(int dir)
