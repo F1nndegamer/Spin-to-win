@@ -85,25 +85,34 @@ public class GameManager : MonoBehaviour
         levelReady = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
-        while (!loadScene.isDone) yield return null;
-        if (additiveSceneIndex != -1) // Load extra scene only when needed
+        if (loadScene != null)
         {
-            // The current level scene
-            AsyncOperation loadAdditiveScene = SceneManager.LoadSceneAsync(additiveSceneIndex, LoadSceneMode.Additive);
-            while (!loadAdditiveScene.isDone) yield return null;
+            while (!loadScene.isDone) yield return null;
+            if (additiveSceneIndex != -1) // Load extra scene only when needed
+            {
+                // The current level scene
+                AsyncOperation loadAdditiveScene =
+                    SceneManager.LoadSceneAsync(additiveSceneIndex, LoadSceneMode.Additive);
+                if (loadAdditiveScene != null)
+                {
+                    while (!loadAdditiveScene.isDone) yield return null;
 
-            // set the current level AFTER we have loaded the scene because if we try to do so before it returns a Scene object that has empty fields!
-            if (additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
-        }
-        Scene baseScene = SceneManager.GetSceneByBuildIndex(sceneIndex);
-        if (baseScene.IsValid())
-        {
-            SceneManager.SetActiveScene(baseScene);
-        }
-        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex)); 
-        levelStarted = false; // Set this here coz yea
-        GameRegistry.Execute();
-        levelLoaded = true;
+                    // set the current level AFTER we have loaded the scene because if we try to do so before it returns a Scene object that has empty fields!
+                    if (additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
+                } else { Debug.LogError("Failed to load additive scene"); }
+            }
+
+            Scene baseScene = SceneManager.GetSceneByBuildIndex(sceneIndex);
+            if (baseScene.IsValid())
+            {
+                SceneManager.SetActiveScene(baseScene);
+            }
+
+            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex));
+            levelStarted = false; // Set this here coz yea
+            GameRegistry.Execute();
+            levelLoaded = true;
+        } else { Debug.LogError("Failed to load scene"); }
     }
     #endregion
 
@@ -131,22 +140,33 @@ public class GameManager : MonoBehaviour
         Debug.LogError("Next scene not found!");
     }
 
-    private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
+    private IEnumerator
+        LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
     {
         levelLoaded = false;
         levelReady = false;
-        yield return StartCoroutine(player.TransitionCoroutine(level + 2 == sceneIndex)); // Transition is different for restarting and moving to next level
+        yield return
+            StartCoroutine(
+                player.TransitionCoroutine(level + 2 ==
+                                           sceneIndex)); // Transition is different for restarting and moving to next level
         AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
-        while (!nextLevel.isDone) yield return null;
-        AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
-        while (!unload.isDone) yield return null;
-        currentLevel = SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
-        levelStarted = false;
-        level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
-        timeThisLevel = 0f;
-        movesThisLevel = 0;
-        GameRegistry.Execute();
-        levelLoaded = true;
+        if (nextLevel != null)
+        {
+            while (!nextLevel.isDone) yield return null;
+            AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
+            if (unload != null)
+            {
+                while (!unload.isDone) yield return null;
+            } else { Debug.LogWarning("Unload failed"); }
+            currentLevel =
+                SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
+            levelStarted = false;
+            level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
+            timeThisLevel = 0f;
+            movesThisLevel = 0;
+            GameRegistry.Execute();
+            levelLoaded = true;
+        } else { Debug.LogError("Load failed"); }
     }
 
     public void Win()
@@ -198,14 +218,14 @@ public class GameManager : MonoBehaviour
     public static List<Teleporter> teleporters = new List<Teleporter>();
     
     public static int level = 1; // Just go 1 to N, so we can reorder levels easily through build settings
-    public static bool levelLoaded = false; // Level is initiated and GameAwake and GameReady have all been called
-    public static bool levelReady = false; // The entry transition has been completed
-    public static bool levelStarted = false; // The user has changed gravity at least once
-    public static int movesThisLevel = 0;
-    public static float timeThisLevel = 0f;
-    public static int totalMoves = 0;
-    public static float totalTimePlayed = 0f;
-    public static int wins = 0, retries = 0, lost = 0;
+    public static bool levelLoaded; // Level is initiated and GameAwake and GameReady have all been called
+    public static bool levelReady; // The entry transition has been completed
+    public static bool levelStarted; // The user has changed gravity at least once
+    public static int movesThisLevel;
+    public static float timeThisLevel;
+    public static int totalMoves;
+    public static float totalTimePlayed;
+    public static int wins, retries, lost;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
 
     #endregion

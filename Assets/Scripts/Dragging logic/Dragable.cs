@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DraggableItem : MonoBehaviour
@@ -8,7 +7,6 @@ public class DraggableItem : MonoBehaviour
     private List<Vector2Int> shapeCells = new();
 
     private Vector3 startPos;
-    private Transform startParent;
 
     private bool isDragging;
     private bool placed;
@@ -53,7 +51,6 @@ public class DraggableItem : MonoBehaviour
     private void StartDrag()
     {
         startPos = transform.position;
-        startParent = transform.parent;
 
         collider.enabled = false;
         foreach (Transform child in transform)

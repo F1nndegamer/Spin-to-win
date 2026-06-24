@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,9 +9,9 @@ public class PlayerBox : GameBehaviour
 {
     public int threshold = 5; // Number of FixedUpdates that player collision stays until it is marked as grounded
     public float velocityThreshold = 0.05f; // Minimum velocity to count the object being at rest
-    private bool grounded = false;
-    private int sinceSwitch = 5;
-    private bool nextLevel = false;
+    private bool grounded;
+    private int sinceSwitch;
+    private bool nextLevel;
 
     [SerializeField] private string TeleportTag = "Teleport";
     [SerializeField] private float maxDistance = 50f;
@@ -80,7 +78,7 @@ public class PlayerBox : GameBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.CompareTag("Ground"))
         {
             grounded = true;
         }
@@ -88,7 +86,7 @@ public class PlayerBox : GameBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "Win")
+        if (other.gameObject.CompareTag("Win"))
         {
             // i've made a win tile so ive moved the code from here to TilemapPlayerInterationHandler.cs
         }

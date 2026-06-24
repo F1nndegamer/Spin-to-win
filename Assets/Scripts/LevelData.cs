@@ -17,7 +17,7 @@ public class LevelData : MonoBehaviour
     public Transform topLeftBound, bottomRightBound;
     
     [Header("Inventory")] 
-    public int solidBlocks = 0;
+    public int solidBlocks;
     public Level.Direction[] teleportBlocks;
     
     [Header("Level Info")]

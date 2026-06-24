@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 public class TilemapPlayerInterationHandler : GameBehaviour
 {
@@ -9,7 +8,7 @@ public class TilemapPlayerInterationHandler : GameBehaviour
     public GameObject player; // or just a general interactee
     public static TilemapPlayerInterationHandler instance;
 
-    private bool readyForUpdate = false;
+    private bool readyForUpdate;
     // List of tiles for handling and stuff
     List<Vector3Int> fragileTilesToDestroy = new List<Vector3Int>();
 

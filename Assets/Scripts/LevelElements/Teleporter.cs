@@ -69,11 +69,10 @@ public class Teleporter : GameBehaviour
                         break;
                     }
             }
-            ;
 
             AnnoyingLog("tpdirection set!!");
             player.transform.position = tp.transform.parent.position + (Vector3)offset;
-            Vector2 newVelocity = velocity;
+            Vector2 newVelocity;
             if (rb != null)
             {
                 float speed = velocity.magnitude;
@@ -89,7 +88,7 @@ public class Teleporter : GameBehaviour
                 rb.linearVelocity = newVelocity;
             }
             Level level = Level.Instance;
-            level.Rotate((Level.Direction)tp.direction);
+            level.Rotate(tp.direction);
             tp.StartCoroutine(tp.TeleportCooldown(player));
 
             break;
