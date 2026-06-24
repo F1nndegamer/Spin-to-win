@@ -64,6 +64,8 @@ public class Level : GameBehaviour
         bounds.isSet = true;
         bounds.topLeft = (Vector2)GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = (Vector2)GameManager.levelData.bottomRightBound.position;
+        targetPosition = new Vector3(GameManager.player.transform.position.x, GameManager.player.transform.position.y,
+            targetPosition.z); // Center the camera on player anyways
         // Set new boundary on Level load
         // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
     }
@@ -108,12 +110,18 @@ public class Level : GameBehaviour
 
         float speed = GameManager.controller.speed;
         float speedMult = shiftMode ? 3f : 1f;
-        Vector3 posAdd = (Vector3)moveInput * speed * speedMult * Time.unscaledDeltaTime; // unscaledDeltaTime since we call ManageMovement from LateUpdate
+        Vector3 posAdd = (Vector3)moveInput * (speed * speedMult * Time.unscaledDeltaTime); // unscaledDeltaTime since we call ManageMovement from LateUpdate
         
         posAdd = camera.transform.TransformDirection(posAdd); // make sure our move directions are always the same no matter how the camera is rotated
-        posAdd.z = 0; // make sure we dont actually move our in and our else we could go too far in and stop rendering the level
-
+        
+        posAdd.z = 0; // make sure we dont actually move our in and our else we could go too far in and stop rendering the level - Sabrina
+        // I think what that means is that we dont let the camera move in the z axis because it would not affect anything apart from borking the clipping and maybe hiding everything from view - Ali 
+        
+        // clamp position after adding input
         targetPosition += posAdd;
+        targetPosition.x = Mathf.Clamp(targetPosition.x, bounds.topLeft.x, bounds.bottomRight.x);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, bounds.topLeft.y, bounds.bottomRight.y);
+        
         camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition, accelerativeLerpSpeed);
     }
 
@@ -252,8 +260,10 @@ public class Level : GameBehaviour
     public void Pause() { }
     public void Restart()
     {
-        GameManager.Instance.LoadLevel(GameManager.level); // Load the current level again == Reload level
-        //StartCoroutine(RestartRoutine());
+        if(GameManager.levelReady){ // Only allow restart when level is fully loaded
+            GameManager.Instance.LoadLevel(GameManager.level); // Load the current level again == Reload level
+            //StartCoroutine(RestartRoutine());
+        }
     }
     
     // We no longer use this, tho thanks sir F1nn for having a headache at midnight attempting to reset every little thing :salutecri: - Ali
