@@ -7,7 +7,7 @@ public class Teleporter : GameBehaviour
     public Level.Direction direction;
     public bool showAnnoyingLogs;
 
-    public void AnnoyingLog(string text)
+    private void AnnoyingLog(string text)
     {
         if (!showAnnoyingLogs) return;
         Debug.Log(text);
@@ -72,12 +72,10 @@ public class Teleporter : GameBehaviour
 
             AnnoyingLog("tpdirection set!!");
             player.transform.position = tp.transform.parent.position + (Vector3)offset;
-            Vector2 newVelocity;
             if (rb != null)
             {
                 float speed = velocity.magnitude;
-
-                newVelocity = tp.direction switch
+                Vector2 newVelocity = tp.direction switch
                 {
                     Level.Direction.Left => Vector2.left * speed,
                     Level.Direction.Right => Vector2.right * speed,

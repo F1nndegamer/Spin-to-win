@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class GravityHandler : MonoBehaviour
 {
-    private Vector2 gravityDown = new Vector2(0, -1f);
-    private Vector2 gravityUp = new Vector2(0, 1f);
-
-    private Vector2 gravityLeft = new Vector2(-1f, 0);
-    private Vector2 gravityRight = new Vector2(1f, 0);
+    readonly Vector2 gravityDown = new Vector2(0, -1f);
+    readonly Vector2 gravityUp = new Vector2(0, 1f);
+    readonly Vector2 gravityLeft = new Vector2(-1f, 0);
+    readonly Vector2 gravityRight = new Vector2(1f, 0);
 
     public void setGravityAngle(float angleDegrees, float magnitude)
     {

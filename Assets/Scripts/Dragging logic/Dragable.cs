@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class DraggableItem : MonoBehaviour
 {
-    private Vector2Int size = Vector2Int.one;
-    private List<Vector2Int> shapeCells = new();
+    readonly Vector2Int size = Vector2Int.one;
+    readonly List<Vector2Int> shapeCells = new();
 
     private Vector3 startPos;
 
@@ -117,7 +117,7 @@ public class DraggableItem : MonoBehaviour
 
     public IEnumerable<Vector2Int> GetOccupiedCells()
     {
-        if (shapeCells != null && shapeCells.Count > 0)
+        if (shapeCells is { Count: > 0 }) // same as (shapeCells != null && shapeCells.Count > 0) - Ali
         {
             return shapeCells;
         }

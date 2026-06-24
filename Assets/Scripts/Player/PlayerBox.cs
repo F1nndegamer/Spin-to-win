@@ -92,7 +92,7 @@ public class PlayerBox : GameBehaviour
         }
     }
 
-    public static string FormatTime(float s) // Utiliy function so we can convert float amount of seconds to string
+    private string FormatTime(float s) // Utiliy function so we can convert float amount of seconds to string
     {
         return s >= 3600 ? $"{(int)s / 3600}h {(int)s / 60 % 60}m {(int)s % 60}s" :
             (s >= 60 ? $"{(int)s / 60}m {(int)s % 60}s" :

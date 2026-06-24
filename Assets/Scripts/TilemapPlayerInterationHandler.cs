@@ -10,7 +10,7 @@ public class TilemapPlayerInterationHandler : GameBehaviour
 
     private bool readyForUpdate;
     // List of tiles for handling and stuff
-    List<Vector3Int> fragileTilesToDestroy = new List<Vector3Int>();
+    readonly List<Vector3Int> fragileTilesToDestroy = new List<Vector3Int>();
 
     private void Awake()
     {
@@ -90,9 +90,8 @@ public class TilemapPlayerInterationHandler : GameBehaviour
             i--;
         }
 
-        for (int i = 0; i < adjacentTilePositions.Count; i++)
+        foreach (Vector3Int tilePos in adjacentTilePositions)
         {
-            Vector3Int tilePos = adjacentTilePositions[i];
             if ((getTileAtPosition(tilePos) is FragileWall) == false) { continue; } // not a fragiel wall, don't care about it
             if (fragileTilesToDestroy.Contains(tilePos)) { continue; } // we've already queued for it's destruction
             fragileTilesToDestroy.Add(tilePos);

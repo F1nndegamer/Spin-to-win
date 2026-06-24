@@ -18,9 +18,8 @@ public class Level : GameBehaviour
 
     private Bounds bounds;
 
-    public struct Bounds
+    private struct Bounds
     {
-        public bool isSet;
         public Vector2 topLeft;
         public Vector2 bottomRight;
     }
@@ -58,7 +57,6 @@ public class Level : GameBehaviour
 
     public override void GameAwake()
     {
-        bounds.isSet = true;
         bounds.topLeft = GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
         gravityDirection = Direction.Down;

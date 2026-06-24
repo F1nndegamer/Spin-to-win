@@ -7,7 +7,7 @@ public class GridManager : MonoBehaviour
     public float cellSize = 1f;
     public Vector2 gridOffset = new Vector2(0.5f, 0.5f);
     public Tilemap blockingTilemap;
-    private Dictionary<Vector2Int, DraggableItem> occupied = new();
+    readonly Dictionary<Vector2Int, DraggableItem> occupied = new();
     private void Awake()
     {
         Instance = this;
