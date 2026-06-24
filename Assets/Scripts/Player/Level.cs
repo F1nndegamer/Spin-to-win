@@ -84,6 +84,8 @@ public class Level : GameBehaviour
 
     public void PassDirectionalInput(int x, int y, int z) // Passed from Controller, based on WASD and Q E
     {
+        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
+        // change it here so we can set _targetOrthoSize to anything to lerp to, even after the edit mode ends
         if (GameManager.levelStarted)
         {
             // prevent spam calling Rotate if we're not pressing a key for it
@@ -95,8 +97,6 @@ public class Level : GameBehaviour
         {
             moveInput = new Vector3Int(x, y, z); // z is for zoom
         }
-        camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
-        // change it here so we can set _targetOrthoSize to anything to lerp to, even after the edit mode ends
     }
 
     private void ManageMovement()
@@ -127,6 +127,7 @@ public class Level : GameBehaviour
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject?.SetActive(false);
         _targetOrthoSize = originalCameraSize;
+        Debug.Log("Exiting edit mode!");
     }
 
     public void Rotate(int dir)

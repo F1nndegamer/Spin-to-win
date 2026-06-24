@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
-        levelStarted = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!loadScene.isDone) yield return null;
@@ -102,6 +101,7 @@ public class GameManager : MonoBehaviour
             SceneManager.SetActiveScene(baseScene);
         }
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex)); 
+        levelStarted = false; // Set this here coz yea
         GameRegistry.Execute();
         levelLoaded = true;
     }
@@ -134,13 +134,13 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
-        levelStarted = false;
         yield return StartCoroutine(player.TransitionCoroutine()); // Transition before loading level
         AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!nextLevel.isDone) yield return null;
         AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
         while (!unload.isDone) yield return null;
         currentLevel = SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
+        levelStarted = false;
         GameRegistry.Execute();
         timeThisLevel = 0f;
         movesThisLevel = 0;
@@ -149,10 +149,8 @@ public class GameManager : MonoBehaviour
 
     public void Win()
     {
-        if (!levelLoaded) return; 
+        if (!levelLoaded) return;
         // Dont win or oad the next scene twice
-        levelLoaded = false;
-        levelStarted = false;
         teleporters = new List<Teleporter>(); // Flush teleporter list
         level++;
         LoadLevel(level);
