@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator LastLevelComplete(int sceneIndex)
     {
         yield return StartCoroutine(player.TransitionCoroutine(false));
-        EventSystem.current.enabled = false;
+        EventSystem.current.enabled = false; // todo: fix, throws error when going to credits scene; "Object reference not set to an instance of an object"
         Level.Instance.GetComponent<AudioListener>().enabled = false;
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1)); // Unload level scene before doing anything
         LoadScene(sceneIndex);

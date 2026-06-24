@@ -290,6 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225090d1b77c8f214b1bcb4e1f764584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
+  CloneAmount: 1
 --- !u!1001 &479203379
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2048,7 +2049,7 @@ MonoBehaviour:
   PlayerSpawnPos: {fileID: 465812272}
   topLeftBound: {fileID: 2010887798}
   bottomRightBound: {fileID: 1354832195}
-  solidBlocks: 0
+  solidBlocks: 1
   teleportBlocks: 01000000
   levelName: 
   minMoves: 1
