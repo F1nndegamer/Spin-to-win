@@ -133,12 +133,21 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                LoadScene(sceneIndex); // The next scene is probably a credits scene or smth, load it
+                StartCoroutine(LastLevelComplete(sceneIndex)); // The next scene is probably a credits scene or smth, load it
             }
             return;
         }
 
         Debug.LogError("Next scene not found!");
+    }
+
+    private IEnumerator LastLevelComplete(int sceneIndex)
+    {
+        yield return StartCoroutine(player.TransitionCoroutine(false));
+        EventSystem.current.enabled = false;
+        Level.Instance.GetComponent<AudioListener>().enabled = false;
+        SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1)); // Unload level scene before doing anything
+        LoadScene(sceneIndex);
     }
 
     private IEnumerator
