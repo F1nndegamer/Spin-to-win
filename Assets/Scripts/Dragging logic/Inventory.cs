@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,9 +21,10 @@ public class Inventory : GameBehaviour
         Level level = Level.Instance;
         if (data.solidBlocks != 0)
         {
-            GameObject obj = Instantiate(level.normalObject, level.normalObjectPosition, Quaternion.identity);
+            GameObject obj = Instantiate(level.normalObject, level.normalObjectPosition.transform.position, Quaternion.identity);
             obj.transform.SetParent(transform);
             obj.GetComponent<DraggableItem>().CloneAmount = data.solidBlocks;
+            obj.GetComponent<DraggableItem>().text = level.normalObjectPosition.GetComponentInChildren<TextMeshPro>();
         }
         if (data.teleportBlocks.Length != 0)
         {
@@ -57,30 +59,34 @@ public class Inventory : GameBehaviour
             }
             if (ups != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionUp, Quaternion.identity);
-                obj.GetComponent<Teleporter>().direction = Level.Direction.Up;
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionUp.transform.position, Quaternion.identity);
+                obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Up;
                 obj.GetComponent<DraggableItem>().CloneAmount = ups;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(transform);
             }
             if (rights != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionRight, Quaternion.Euler(0, 0, 90));
-                obj.GetComponent<Teleporter>().direction = Level.Direction.Right;
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionRight.transform.position, Quaternion.Euler(0, 0, 90));
+                obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Right;
                 obj.GetComponent<DraggableItem>().CloneAmount = rights;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(transform);
             }
             if (lefts != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionLeft, Quaternion.Euler(0, 0, -90));
-                obj.GetComponent<Teleporter>().direction = Level.Direction.Left;
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionLeft.transform.position, Quaternion.Euler(0, 0, -90));
+                obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Left;
                 obj.GetComponent<DraggableItem>().CloneAmount = lefts;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(transform);
             }
             if (downs != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionDown, Quaternion.Euler(0, 0, 180));
-                obj.GetComponent<Teleporter>().direction = Level.Direction.Down;
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionDown.transform.position, Quaternion.Euler(0, 0, 180));
+                obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Down;
                 obj.GetComponent<DraggableItem>().CloneAmount = downs;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(transform);
             }
         }

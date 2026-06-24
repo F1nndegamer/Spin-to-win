@@ -132,7 +132,8 @@ public class GameManager : MonoBehaviour
             levelStarted = false; // Set this here coz yea
             GameRegistry.Execute();
             levelLoaded = true;
-        } else { if(logLevel >= LogLevel.Error) Debug.LogError("Failed to load scene"); }
+        }
+        else { if (logLevel >= LogLevel.Error) Debug.LogError("Failed to load scene"); }
     }
     #endregion
 
@@ -174,11 +175,6 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
-        if (inventory.gameObject != null)
-        {
-            Destroy(inventory.gameObject);
-            // This will either crash or run once
-        }
         //GameObject grid = GameObject.Find("Grid");
         //if (grid != null)
         //    Destroy(grid);
@@ -198,7 +194,6 @@ public class GameManager : MonoBehaviour
             level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
             timeThisLevel = 0f;
             movesThisLevel = 0;
-            placedObjects = GameObject.Find("PlacedObjects").transform;
             GameRegistry.Execute();
             levelLoaded = true;
         } else { if(logLevel >= LogLevel.Error) Debug.LogError("Load failed"); }
@@ -266,9 +261,9 @@ public class GameManager : MonoBehaviour
     public static float totalTimePlayed;
     public static int wins, retries, lost;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
-    
+
     #endregion
-    
+
     #region Logging 
     public enum LogLevel
     {

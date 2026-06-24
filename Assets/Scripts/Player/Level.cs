@@ -39,11 +39,12 @@ public class Level : GameBehaviour
 
     public GameObject teleportObject;
     public GameObject normalObject;
-    public Vector3 normalObjectPosition;
-    public Vector3 teleporObjectPositionDown;
-    public Vector3 teleporObjectPositionRight;
-    public Vector3 teleporObjectPositionUp;
-    public Vector3 teleporObjectPositionLeft;
+    public GameObject Inventory;
+    [HideInInspector] public GameObject normalObjectPosition;
+    [HideInInspector] public GameObject teleporObjectPositionDown;
+    [HideInInspector] public GameObject teleporObjectPositionRight;
+    [HideInInspector] public GameObject teleporObjectPositionUp;
+    [HideInInspector] public GameObject teleporObjectPositionLeft;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -60,6 +61,11 @@ public class Level : GameBehaviour
         targetPosition = camera.transform.position;
         originalCameraSize = _targetOrthoSize = camera.orthographicSize; // get this so we can restore it later
         //CacheLevelScene();
+        normalObjectPosition = Inventory.transform.Find("Square").gameObject;
+        teleporObjectPositionDown = Inventory.transform.Find("Down").gameObject;
+        teleporObjectPositionRight = Inventory.transform.Find("Right").gameObject;
+        teleporObjectPositionUp = Inventory.transform.Find("Up").gameObject;
+        teleporObjectPositionLeft = Inventory.transform.Find("Left").gameObject;
     }
 
     public override void GameAwake()
