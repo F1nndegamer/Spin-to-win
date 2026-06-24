@@ -92,7 +92,7 @@ public class TilemapPlayerInterationHandler : GameBehaviour
 
         foreach (Vector3Int tilePos in adjacentTilePositions)
         {
-            if ((getTileAtPosition(tilePos) is FragileWall) == false) { continue; } // not a fragiel wall, don't care about it
+            if (getTileAtPosition(tilePos) is not FragileWall) { continue; } // not a fragiel wall, don't care about it
             if (fragileTilesToDestroy.Contains(tilePos)) { continue; } // we've already queued for it's destruction
             fragileTilesToDestroy.Add(tilePos);
         }
