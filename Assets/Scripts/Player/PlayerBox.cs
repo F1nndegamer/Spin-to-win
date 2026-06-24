@@ -106,47 +106,53 @@ public class PlayerBox : GameBehaviour
         nextLevel = true;
     }
 
-    public IEnumerator TransitionCoroutine() // Called and awaited by GameManager in LoadLevel coroutine
+    public IEnumerator TransitionCoroutine(bool RestartMode) // Called and awaited by GameManager in LoadLevel coroutine
     {
         // Transition the box to cover the whole screen
         float t = 0;
         while (t < 50)
         {
-            t += Time.unscaledDeltaTime * 30f;
+            t += Time.unscaledDeltaTime * 30f * (RestartMode ? 5f : 1f);
             transition.localScale = Vector3.one * t;
             yield return null;
         }
         transition.localScale = Vector3.one * 50;
-        
-        // Transition in the levelCompletePanel and show stats
-        levelCompletePanel.gameObject.SetActive(true);
-        t = 0;
-        while (t < 1)
+
+        if (!RestartMode)
         {
-            t += Time.unscaledDeltaTime;
-            levelCompletePanel.alpha = t;
-            movesText.text = $"Moves: {Mathf.CeilToInt(Mathf.Lerp(0, GameManager.movesThisLevel, t))}";
-            timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel * t)}";
-            yield return null;
+            // Deal with the levelCompletePanel only when moving to next level
+            // Transition in the levelCompletePanel and show stats
+            levelCompletePanel.gameObject.SetActive(true);
+            t = 0;
+            while (t < 1)
+            {
+                t += Time.unscaledDeltaTime;
+                levelCompletePanel.alpha = t;
+                movesText.text = $"Moves: {Mathf.CeilToInt(Mathf.Lerp(0, GameManager.movesThisLevel, t))}";
+                timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel * t)}";
+                yield return null;
+            }
+
+            levelCompletePanel.alpha = 1;
+            movesText.text = $"Moves: {GameManager.movesThisLevel}";
+            timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
+
+            // THen we wait until the next level button is pressed
+            yield return new WaitUntil(() => nextLevel);
+
+            // Quickly hide the level complete panel
+            t = 1;
+            while (t > 0)
+            {
+                t -= Time.unscaledDeltaTime * 5;
+                levelCompletePanel.alpha = t;
+                yield return null;
+            }
+
+            levelCompletePanel.alpha = 0;
+            movesText.text = timeText.text = "";
+            levelCompletePanel.gameObject.SetActive(false);
         }
-        levelCompletePanel.alpha = 1;
-        movesText.text = $"Moves: {GameManager.movesThisLevel}";
-        timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
-         
-        // THen we wait until the next level button is pressed
-        yield return new WaitUntil(() => nextLevel);
-        
-        // Quickly hide the level complete panel
-        t = 1;
-        while (t > 0)
-        {
-            t -= Time.unscaledDeltaTime * 5;
-            levelCompletePanel.alpha = t;
-            yield return null;
-        }
-        levelCompletePanel.alpha = 0;
-        movesText.text = timeText.text = "";
-        levelCompletePanel.gameObject.SetActive(false);
     }
 
     private IEnumerator TransitionInCoroutine() // Called on level start by player
@@ -157,7 +163,7 @@ public class PlayerBox : GameBehaviour
         float t = 50;
         while (t > 0)
         {
-            t -= Time.unscaledDeltaTime * 30f;
+            t -= Time.unscaledDeltaTime * 30f * (GameManager.levelWon ? 1f : 5f); // Transition is slower for moving to next level, faster for restarting a level
             transition.localScale = Vector3.one * t;
             yield return null;
         }

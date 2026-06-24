@@ -135,11 +135,7 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
-        if (level + 2 != sceneIndex)
-        {
-            yield return StartCoroutine(player.TransitionCoroutine()); // Transition before "next" loading level
-        }
-
+        yield return StartCoroutine(player.TransitionCoroutine(level + 2 == sceneIndex)); // Transition is different for restarting and moving to next level
         AsyncOperation nextLevel = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         while (!nextLevel.isDone) yield return null;
         AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
@@ -157,7 +153,37 @@ public class GameManager : MonoBehaviour
     {
         if (!levelLoaded) return;
         // Dont win or oad the next scene twice
+        levelWon = true;
+        wins++;
         LoadLevel(level + 1);
+    }
+
+    public void LoseAndRestart()
+    {
+        if(levelReady){ // Only allow restart when level is fully loaded
+            levelWon = false;
+            lost++;
+            LoadLevel(level); // Load the current level again == Reload level
+        }
+        else
+        {
+            Debug.LogError("Just");
+            Debug.LogWarning("how");
+            Debug.LogWarning("did");
+            Debug.LogWarning("we");
+            Debug.LogWarning("get");
+            Debug.LogWarning("here?");
+            // - Ali
+        }
+    }
+
+    public void Restart()
+    {
+        if(levelReady){ // Only allow restart when level is fully loaded
+            levelWon = false;
+            retries++;
+           LoadLevel(level); // Load the current level again == Reload level
+        }
     }
 
     #endregion
@@ -179,6 +205,8 @@ public class GameManager : MonoBehaviour
     public static float timeThisLevel = 0f;
     public static int totalMoves = 0;
     public static float totalTimePlayed = 0f;
+    public static int wins = 0, retries = 0, lost = 0;
+    public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
 
     #endregion
 }

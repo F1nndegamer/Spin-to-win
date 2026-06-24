@@ -179,7 +179,7 @@ GameObject:
   m_Layer: 0
   m_Name: Spawn
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -192,7 +192,7 @@ Transform:
   m_GameObject: {fileID: 506443114}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 2.25, z: 0}
+  m_LocalPosition: {x: 0.5, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -796,7 +796,7 @@ GameObject:
   m_Layer: 0
   m_Name: TopLeft
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -809,7 +809,7 @@ Transform:
   m_GameObject: {fileID: 837754006}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 6, z: 0}
+  m_LocalPosition: {x: -3, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -827,7 +827,7 @@ GameObject:
   m_Layer: 0
   m_Name: BottomRight
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -840,7 +840,7 @@ Transform:
   m_GameObject: {fileID: 1089794315}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: -6, z: 0}
+  m_LocalPosition: {x: 5, y: -3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -926,6 +926,8 @@ MonoBehaviour:
   PlayerSpawnPos: {fileID: 506443115}
   topLeftBound: {fileID: 837754007}
   bottomRightBound: {fileID: 1089794316}
+  solidBlocks: 0
+  teleportBlocks: 
 --- !u!1 &1754279555
 GameObject:
   m_ObjectHideFlags: 0

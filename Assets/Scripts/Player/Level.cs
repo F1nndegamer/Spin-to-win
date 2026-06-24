@@ -68,6 +68,11 @@ public class Level : GameBehaviour
             targetPosition.z); // Center the camera on player anyways
         // Set new boundary on Level load
         // Note that LevelData instance is set in GameManager in Awake(), and GameStart runs after all Awake() calls have been run
+        if (!GameManager.levelData.editingNeeded)
+        {
+            // exit edit mode
+            Confirm();
+        }
     }
 
     private void LateUpdate()
@@ -111,32 +116,14 @@ public class Level : GameBehaviour
         float speed = GameManager.controller.speed;
         float speedMult = shiftMode ? 3f : 1f;
         Vector3 posAdd = (Vector3)moveInput * (speed * speedMult * Time.unscaledDeltaTime); // unscaledDeltaTime since we call ManageMovement from LateUpdate
-        
         posAdd = camera.transform.TransformDirection(posAdd); // make sure our move directions are always the same no matter how the camera is rotated
-        
         posAdd.z = 0; // make sure we dont actually move our in and our else we could go too far in and stop rendering the level - Sabrina
         // I think what that means is that we dont let the camera move in the z axis because it would not affect anything apart from borking the clipping and maybe hiding everything from view - Ali 
-        
-        // clamp position after adding input
         targetPosition += posAdd;
         targetPosition.x = Mathf.Clamp(targetPosition.x, bounds.topLeft.x, bounds.bottomRight.x);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, bounds.topLeft.y, bounds.bottomRight.y);
+        targetPosition.y = Mathf.Clamp(targetPosition.y, bounds.bottomRight.y, bounds.topLeft.y);
         
         camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition, accelerativeLerpSpeed);
-    }
-
-    public void ShiftMode(bool mode)
-    {
-        shiftMode = mode;
-    }
-
-    public void Confirm()
-    {
-        // this quits edit mode and enters game mode
-        GameManager.levelStarted = true;
-        GameManager.inventory.gameObject?.SetActive(false);
-        _targetOrthoSize = originalCameraSize;
-        Debug.Log("Exiting edit mode!");
     }
 
     public void Rotate(int dir)
@@ -151,6 +138,20 @@ public class Level : GameBehaviour
 
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
         StartCoroutine(RotateRoutine(dir));
+    }
+
+    public void ShiftMode(bool mode)
+    {
+        shiftMode = mode;
+    }
+
+    public void Confirm()
+    {
+        // this quits edit mode and enters game mode
+        GameManager.levelStarted = true;
+        GameManager.inventory.gameObject?.SetActive(false);
+        _targetOrthoSize = originalCameraSize;
+        Debug.Log("Exiting edit mode!");
     }
 
     public void Rotate(Direction targetDirection)
@@ -260,10 +261,7 @@ public class Level : GameBehaviour
     public void Pause() { }
     public void Restart()
     {
-        if(GameManager.levelReady){ // Only allow restart when level is fully loaded
-            GameManager.Instance.LoadLevel(GameManager.level); // Load the current level again == Reload level
-            //StartCoroutine(RestartRoutine());
-        }
+        GameManager.Instance.Restart();
     }
     
     // We no longer use this, tho thanks sir F1nn for having a headache at midnight attempting to reset every little thing :salutecri: - Ali

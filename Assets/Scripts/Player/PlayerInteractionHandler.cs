@@ -5,11 +5,12 @@ public class PlayerInteractionHandler : MonoBehaviour
 
     public void onSpikeInteration()
     {
-        // todo: trigger game over
+        GameManager.Instance.LoseAndRestart();
     }
 
     public void onHoleInteration()
     {
-        // also todo: trigger game over, unless a hole will do something else or we just don't use it
+        GameManager.Instance.LoseAndRestart();
+        // trigger game over, unless a hole will do something else or we just don't use it
     }
 }
