@@ -1351,7 +1351,7 @@ MonoBehaviour:
   gravity: 20
   lerpSpeed: 4
   followSpeed: 0.8
-  accelerativeLerpSpeed: 0.1
+  accelerativeLerpSpeed: 0.2
   bounds:
     isSet: 0
     topLeft: {x: 0, y: 0}
