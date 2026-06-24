@@ -10,7 +10,7 @@ public class Teleporter : GameBehaviour
     private void AnnoyingLog(string text)
     {
         if (!showAnnoyingLogs) return;
-        Debug.Log(text);
+        if(GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log(text);
     }
 
     public override void GameAwake() // Use GameAwake instead of Awake so that we dont crash out when game is started without loading from menu

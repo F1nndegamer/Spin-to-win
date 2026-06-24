@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
     {
         playButton.enabled = false;
         playButtonText.text = "Loading...";
-        Debug.Log("Meow");
+        if(GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Meow");
         currentCamera.GetComponent<AudioListener>().enabled = false;
         EventSystem.current.enabled = false; // Disable menu event system so we dont get that "2 event systems" bug
 

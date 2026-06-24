@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     {
         if (_instance != null && _instance != this)
         {
-            Debug.LogWarning("The GameManager was reinitialized due to multiple instances being present");
+            if(logLevel >= LogLevel.Warn) Debug.LogWarning("The GameManager was reinitialized due to multiple instances being present");
             Destroy(this.gameObject);
             return;
         }
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
                     // set the current level AFTER we have loaded the scene because if we try to do so before it returns a Scene object that has empty fields!
                     if (additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
-                } else { Debug.LogError("Failed to load additive scene"); }
+                } else { if(logLevel >= LogLevel.Error) Debug.LogError("Failed to load additive scene"); }
             }
 
             Scene baseScene = SceneManager.GetSceneByBuildIndex(sceneIndex);
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
             levelStarted = false; // Set this here coz yea
             GameRegistry.Execute();
             levelLoaded = true;
-        } else { Debug.LogError("Failed to load scene"); }
+        } else { if(logLevel >= LogLevel.Error) Debug.LogError("Failed to load scene"); }
     }
     #endregion
 
@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.LogError("Next scene not found!");
+        if(logLevel >= LogLevel.Error) Debug.LogError("Next scene not found!");
     }
 
     private IEnumerator LastLevelComplete(int sceneIndex)
@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
             if (unload != null)
             {
                 while (!unload.isDone) yield return null;
-            } else { Debug.LogWarning("Unload failed"); }
+            } else { if(logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed"); }
             currentLevel =
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
             levelStarted = false;
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
             placedObjects = GameObject.Find("PlacedObjects").transform;
             GameRegistry.Execute();
             levelLoaded = true;
-        } else { Debug.LogError("Load failed"); }
+        } else { if(logLevel >= LogLevel.Error) Debug.LogError("Load failed"); }
     }
 
     public void Win()
@@ -203,13 +203,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Just");
-            Debug.LogWarning("how");
-            Debug.LogWarning("did");
-            Debug.LogWarning("we");
-            Debug.LogWarning("get");
-            Debug.LogWarning("here?");
-            // - Ali
+            if(logLevel >= LogLevel.Error) Debug.LogError("Just");
+            if (logLevel >= LogLevel.Warn)
+            {
+                Debug.LogWarning("how");
+                Debug.LogWarning("did");
+                Debug.LogWarning("we");
+                Debug.LogWarning("get");
+                Debug.LogWarning("here?");
+                // - Ali
+            }
         }
     }
 
@@ -245,5 +248,17 @@ public class GameManager : MonoBehaviour
     public static int wins, retries, lost;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
     
+    #endregion
+    
+    #region Logging 
+    public enum LogLevel
+    {
+        None = 0,
+        Error = 1,
+        Warn = 2,
+        Info = 3
+    }
+
+    public static LogLevel logLevel = LogLevel.Info;
     #endregion
 }

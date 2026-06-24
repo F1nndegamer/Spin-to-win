@@ -151,7 +151,7 @@ public class Level : GameBehaviour
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject.SetActive(false);
         _targetOrthoSize = originalCameraSize;
-        Debug.Log("Exiting edit mode!");
+        if(GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Exiting edit mode!");
     }
 
     public void Rotate(Direction targetDirection)

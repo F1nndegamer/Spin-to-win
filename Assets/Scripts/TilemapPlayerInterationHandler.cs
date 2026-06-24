@@ -53,7 +53,7 @@ public class TilemapPlayerInterationHandler : GameBehaviour
     {
         TileBase tile = getTileAtPosition(playerPos);
         PlayerInteractionHandler playerInteractionHandler = player.GetComponent<PlayerInteractionHandler>();
-        if (playerInteractionHandler == null) Debug.Log("wtf, why!!");
+        if (playerInteractionHandler == null && GameManager.logLevel >= GameManager.LogLevel.Error) Debug.LogError("wtf, why!!");
         // this switch statement is equivilent to `tile is SpikeTile`, it just looks cleaner like this imo -Sabrina
         switch (tile)
         {
@@ -62,11 +62,11 @@ public class TilemapPlayerInterationHandler : GameBehaviour
                 break;
             case HoleTile:
                 playerInteractionHandler.onHoleInteration();
-                Debug.Log("hole tile touched!");
+                if(GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("hole tile touched!");
                 break;
             case FragileWall:
                 // this shouldn't happen... it should have a solid collider!
-                Debug.Log("I shouldn't have been able to collide w/ FragileWall!");
+                if(GameManager.logLevel >= GameManager.LogLevel.Warn) Debug.LogWarning("I shouldn't have been able to collide w/ FragileWall!");
                 tilemap.SetTile(playerPos, null); // might as well destroy it now to free our player
                 break;
             case WinTile:
