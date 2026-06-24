@@ -162,7 +162,14 @@ public class Level : GameBehaviour
     {
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
+
+        if(GameManager.inventory == null)
+        {
+            Debug.Log("Temp maybe permanent fix");
+            GameManager.inventory = Inventory.GetComponent<Inventory>();
+        }
         GameManager.inventory.gameObject.SetActive(false);
+
         _targetOrthoSize = originalCameraSize;
         if (GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Exiting edit mode!");
     }

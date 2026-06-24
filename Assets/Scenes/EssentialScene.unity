@@ -518,6 +518,7 @@ GameObject:
   - component: {fileID: 322388486}
   - component: {fileID: 322388488}
   - component: {fileID: 322388487}
+  - component: {fileID: 322388489}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -587,6 +588,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 322388485}
   m_CullTransparentMesh: 1
+--- !u!114 &322388489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322388485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30c50f68edacf8b3c8c4be154c492592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Inventory
 --- !u!1 &327346800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2368,6 +2381,7 @@ MonoBehaviour:
   preserveMomentum: 0
   teleportObject: {fileID: 1037863956667121131, guid: 52d1636362086ce6192ffb503b3c6298, type: 3}
   normalObject: {fileID: 6685881993940279495, guid: 1738dbc87e10d056fba502cb0276b41d, type: 3}
+  Inventory: {fileID: 322388485}
   normalObjectPosition: {fileID: 1902203522}
   teleporObjectPositionDown: {fileID: 1094888008}
   teleporObjectPositionRight: {fileID: 1409762657}
