@@ -1,26 +1,23 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 
 public class Level : GameBehaviour
 {
     public Camera camera;
     public GravityHandler gravityHandler;
     public PlayerBox player;
-    private bool _rotating = false;
+    private bool _rotating;
     public float gravity = 20f;
     public float lerpSpeed = 4f;
     [Range(0f, 1f)]
     public float followSpeed = 0.8f;
-    private int _unsyncedOffset = 0;
+    private int _unsyncedOffset;
     private Vector3 targetPosition;
     public float accelerativeLerpSpeed = 0.9f;
 
-    public Bounds bounds;
+    private Bounds bounds;
 
-    [System.Serializable]
     public struct Bounds
     {
         public bool isSet;
@@ -29,14 +26,14 @@ public class Level : GameBehaviour
     }
     // The camera position has to be limited within these bounds, set in the LevelData (access at GameManager.levelData) 
     
-    private bool shiftMode = false; // For faster movement, hold shift
+    private bool shiftMode; // For faster movement, hold shift
     private Vector3Int moveInput = Vector3Int.zero; // Vector representation of movement input
     private float originalCameraSize = 7.89f;
     private float _targetOrthoSize = 7.89f;
 
     [Header("Mechanic")]
-    public bool allowMidairSwitch = false;
-    public bool preserveMomentum = false;
+    public bool allowMidairSwitch;
+    public bool preserveMomentum;
 
     public static Level Instance;
     private Scene _levelScene;
@@ -62,8 +59,8 @@ public class Level : GameBehaviour
     public override void GameAwake()
     {
         bounds.isSet = true;
-        bounds.topLeft = (Vector2)GameManager.levelData.topLeftBound.position;
-        bounds.bottomRight = (Vector2)GameManager.levelData.bottomRightBound.position;
+        bounds.topLeft = GameManager.levelData.topLeftBound.position;
+        bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
         gravityDirection = Direction.Down;
         gravityHandler.setGravityDown(gravity);
         transform.rotation = Quaternion.Euler(Vector3.zero);
@@ -153,7 +150,7 @@ public class Level : GameBehaviour
     {
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
-        GameManager.inventory.gameObject?.SetActive(false);
+        GameManager.inventory.gameObject.SetActive(false);
         _targetOrthoSize = originalCameraSize;
         Debug.Log("Exiting edit mode!");
     }
@@ -239,11 +236,13 @@ public class Level : GameBehaviour
         return player.IsGrounded();
     }
 
-    private void SetPhysicsEnabled(bool enabled)
+    private void SetPhysicsEnabled(bool en)
     {
-        SimulationMode2D mode = enabled ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
+        SimulationMode2D mode = en ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
         Physics2D.simulationMode = mode;
     }
+    
+    /* DEPRACATED - Ali
     private void CacheLevelScene()
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -259,7 +258,7 @@ public class Level : GameBehaviour
         }
 
         Debug.LogWarning("No level scene found at startup!");
-    }
+    }*/
 
     // Implement later after the rest of game is setup
     public void Pause() { }
@@ -268,7 +267,7 @@ public class Level : GameBehaviour
         GameManager.Instance.Restart();
     }
     
-    // We no longer use this, tho thanks sir F1nn for having a headache at midnight attempting to reset every little thing :salutecri: - Ali
+    /* We no longer use this, tho thanks sir F1nn for having a headache at midnight attempting to reset every little thing :salutecri: - Ali
     [Obsolete]
     private IEnumerator RestartRoutine()
     {
@@ -333,5 +332,5 @@ public class Level : GameBehaviour
         // GameManager now handles this
         //currentLevel += 1;
         //Restart();
-    }
+    }*/
 }
