@@ -57,9 +57,28 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // we gonna do something silly here, here goes:
             // The scene was loaded indirectly, update level and currentLevel and unload the scene and execute GameRegistry
-            level = System.Int32.Parse(SceneManager.GetSceneAt(1).name.Replace("Level", ""));
+            // We cannot use GetActiveScene, as it is almost always the EssentialScene, not any Level* scene.
+            // Level* scenes will be loaded after the EssentialScene, thereby at index 1.
+            // If the Level* scene is not at index 1, try find the scene in all loaded scenes
+            // and if none of the scenes is a level scene, not a very sensible man has pulled this repo to test
+            Scene levelScene = SceneManager.GetSceneAt(1);
+            if (!levelScene.name.StartsWith("Level"))
+            {
+                int t = SceneManager.loadedSceneCount;
+                for (int i = 0; i < t; i++)
+                {
+                    if (i == 1) continue;
+                    levelScene = SceneManager.GetSceneAt(i);
+                    if (levelScene.name.StartsWith("Level")) goto SetLevel;
+                }
+                if(logLevel >= LogLevel.Error) Debug.LogError("Either because of you or the player, no level scene was found. We are now officially cooked.");
+            }
+            SetLevel: // Labels are awesome. - Ali
+            level = System.Int32.Parse(levelScene.name.Replace("Level", "")); // Parse level number from current scene's name
             currentLevel = SceneManager.GetSceneAt(1);
+
             SceneManager.UnloadSceneAsync(0); 
             GameRegistry.Execute();
         }
