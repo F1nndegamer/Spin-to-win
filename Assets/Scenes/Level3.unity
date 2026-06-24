@@ -154,7 +154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.9, y: 3.5}
+  m_AnchoredPosition: {x: -11.42, y: 9.04}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &25634989
@@ -1872,6 +1872,9 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1311121185}
   solidBlocks: 2
   teleportBlocks: 
+  levelName: 
+  minMoves: 1
+  minTime: 1
 --- !u!1 &1311121184
 GameObject:
   m_ObjectHideFlags: 0
