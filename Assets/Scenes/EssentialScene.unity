@@ -1354,6 +1354,13 @@ MonoBehaviour:
   accelerativeLerpSpeed: 0.2
   allowMidairSwitch: 0
   preserveMomentum: 0
+  teleportObject: {fileID: 1037863956667121131, guid: adca468ab0e481436b71c804dd11149e, type: 3}
+  normalObject: {fileID: 6685881993940279495, guid: 1738dbc87e10d056fba502cb0276b41d, type: 3}
+  normalObjectPosition: {x: -10, y: 5, z: 0}
+  teleporObjectPositionDown: {x: -10, y: 3, z: 0}
+  teleporObjectPositionRight: {x: -10, y: 1, z: 0}
+  teleporObjectPositionUp: {x: -10, y: -1, z: 0}
+  teleporObjectPositionLeft: {x: -10, y: 3, z: 0}
 --- !u!114 &1464102698
 MonoBehaviour:
   m_ObjectHideFlags: 0

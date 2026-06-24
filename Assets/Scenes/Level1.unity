@@ -926,8 +926,11 @@ MonoBehaviour:
   PlayerSpawnPos: {fileID: 506443115}
   topLeftBound: {fileID: 837754007}
   bottomRightBound: {fileID: 1089794316}
-  solidBlocks: 0
+  solidBlocks: 5
   teleportBlocks: 
+  levelName: 
+  minMoves: 1
+  minTime: 1
 --- !u!1 &1754279555
 GameObject:
   m_ObjectHideFlags: 0

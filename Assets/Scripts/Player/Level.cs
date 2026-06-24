@@ -24,7 +24,7 @@ public class Level : GameBehaviour
         public Vector2 bottomRight;
     }
     // The camera position has to be limited within these bounds, set in the LevelData (access at GameManager.levelData) 
-    
+
     private bool shiftMode; // For faster movement, hold shift
     private Vector3Int moveInput = Vector3Int.zero; // Vector representation of movement input
     private float originalCameraSize = 7.89f;
@@ -36,7 +36,14 @@ public class Level : GameBehaviour
 
     public static Level Instance;
     private Scene _levelScene;
-    
+
+    public GameObject teleportObject;
+    public GameObject normalObject;
+    public Vector3 normalObjectPosition;
+    public Vector3 teleporObjectPositionDown;
+    public Vector3 teleporObjectPositionRight;
+    public Vector3 teleporObjectPositionUp;
+    public Vector3 teleporObjectPositionLeft;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -98,7 +105,7 @@ public class Level : GameBehaviour
         {
             // prevent spam calling Rotate if we're not pressing a key for it
             // this seems to fix randomly not being able to rotate - Sabrina
-            if(x == 0) { return; }
+            if (x == 0) { return; }
             Rotate(x);
         }
         else
@@ -122,7 +129,7 @@ public class Level : GameBehaviour
         targetPosition += posAdd;
         targetPosition.x = Mathf.Clamp(targetPosition.x, bounds.topLeft.x, bounds.bottomRight.x);
         targetPosition.y = Mathf.Clamp(targetPosition.y, bounds.bottomRight.y, bounds.topLeft.y);
-        
+
         camera.transform.position = Vector3.Lerp(camera.transform.position, targetPosition, accelerativeLerpSpeed);
     }
 
@@ -131,7 +138,7 @@ public class Level : GameBehaviour
         // Only rotate once the player is settled, this adds more flexibility to puzzle and level design - Ali
         // Or does it? - VSauce, Michael
         if (_rotating || (!IsGrounded() && !allowMidairSwitch)) return;
-        
+
         // Increment moves counter
         GameManager.movesThisLevel++;
         GameManager.totalMoves++;
@@ -151,7 +158,7 @@ public class Level : GameBehaviour
         GameManager.levelStarted = true;
         GameManager.inventory.gameObject.SetActive(false);
         _targetOrthoSize = originalCameraSize;
-        if(GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Exiting edit mode!");
+        if (GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Exiting edit mode!");
     }
 
     public void Rotate(Direction targetDirection)
@@ -240,7 +247,7 @@ public class Level : GameBehaviour
         SimulationMode2D mode = en ? SimulationMode2D.FixedUpdate : SimulationMode2D.Script;
         Physics2D.simulationMode = mode;
     }
-    
+
     /* DEPRACATED - Ali
     private void CacheLevelScene()
     {
@@ -265,7 +272,7 @@ public class Level : GameBehaviour
     {
         GameManager.Instance.Restart();
     }
-    
+
     /* We no longer use this, tho thanks sir F1nn for having a headache at midnight attempting to reset every little thing :salutecri: - Ali
     [Obsolete]
     private IEnumerator RestartRoutine()

@@ -11,7 +11,7 @@ public class DraggableItem : MonoBehaviour
     private bool isDragging;
     private bool placed;
     private Vector2Int currentCell;
-
+    [HideInInspector] public int CloneAmount = 1;
     private Camera cam;
     private BoxCollider2D collider;
 
@@ -20,7 +20,7 @@ public class DraggableItem : MonoBehaviour
         shapeCells.Add(new Vector2Int(0, 0));
         foreach (Transform child in transform)
         {
-            if(!child.GetComponent<DragChild>()) continue;
+            if (!child.GetComponent<DragChild>()) continue;
             shapeCells.Add(Vector2Int.RoundToInt(child.transform.localPosition));
         }
         collider = GetComponent<BoxCollider2D>();
@@ -45,6 +45,13 @@ public class DraggableItem : MonoBehaviour
 
     private void StartDrag()
     {
+        if (CloneAmount != 1)
+        {
+            GameObject obj = Instantiate(gameObject, transform.position, transform.rotation);
+            obj.GetComponent<DraggableItem>().CloneAmount--;
+            obj.transform.SetParent(GameManager.inventory.transform);
+        }
+        CloneAmount = 1;
         startPos = transform.position;
 
         collider.enabled = false;
@@ -69,6 +76,10 @@ public class DraggableItem : MonoBehaviour
         if (!isDragging) return;
 
         Vector3 mouse = Input.mousePosition;
+        if(cam == null)
+        {
+            cam = GameObject.FindGameObjectWithTag("Main Camera").GetComponent<Camera>();
+        }
         mouse.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
 
         Vector3 world = cam.ScreenToWorldPoint(mouse);
