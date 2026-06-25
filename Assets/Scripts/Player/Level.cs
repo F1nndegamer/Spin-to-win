@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -41,7 +42,7 @@ public class Level : GameBehaviour
     public GameObject teleportObject;
     public GameObject normalObject;
     public GameObject Inventory;
-     public GameObject normalObjectPosition;
+    public GameObject normalObjectPosition;
     [HideInInspector] public GameObject teleporObjectPositionDown;
     [HideInInspector] public GameObject teleporObjectPositionRight;
     [HideInInspector] public GameObject teleporObjectPositionUp;
@@ -89,6 +90,11 @@ public class Level : GameBehaviour
             // Confirm();
             // Maybe allow the player to see the map before entering it - Ali
         }
+        teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>().text = "";
+        teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>().text = "";
+        teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>().text = "";
+        teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>().text = "";
+        normalObjectPosition.GetComponentInChildren<TextMeshPro>().text = "";
     }
 
     private void LateUpdate()
@@ -166,7 +172,7 @@ public class Level : GameBehaviour
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
 
-        if(GameManager.inventory == null)
+        if (GameManager.inventory == null)
         {
             Debug.Log("Temp maybe permanent fix");
             GameManager.inventory = Inventory.GetComponent<Inventory>();
