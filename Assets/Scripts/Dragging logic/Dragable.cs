@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class DraggableItem : MonoBehaviour
 {
@@ -14,6 +17,7 @@ public class DraggableItem : MonoBehaviour
     [HideInInspector] public int CloneAmount = 1;
     private Camera cam;
     private BoxCollider2D collider;
+    [HideInInspector] public TextMeshPro text;
 
     private void Awake()
     {
@@ -26,7 +30,15 @@ public class DraggableItem : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
         cam = Camera.main;
     }
-
+    void Start()
+    {
+        SetText();
+    }
+    void SetText()
+    {
+        if (CloneAmount != 1) text.text = CloneAmount.ToString();
+        if (CloneAmount == 1) text.text = "";
+    }
     public void OnMouseDown()
     {
         StartDrag();
@@ -49,7 +61,9 @@ public class DraggableItem : MonoBehaviour
         {
             GameObject obj = Instantiate(gameObject, transform.position, transform.rotation);
             obj.GetComponent<DraggableItem>().CloneAmount--;
-            obj.transform.SetParent(GameManager.inventory.transform);
+            obj.transform.SetParent(GameManager.inventory.transform, false);
+            obj.transform.position = transform.position;
+            SetText();
         }
         CloneAmount = 1;
         startPos = transform.position;
@@ -62,6 +76,7 @@ public class DraggableItem : MonoBehaviour
                 childCollider.enabled = false;
             }
         }
+        if (GameManager.placedObjects == null) GameManager.placedObjects = GameObject.Find("PlacedObjects").transform;
         isDragging = true;
 
         if (placed)
@@ -78,7 +93,7 @@ public class DraggableItem : MonoBehaviour
         Vector3 mouse = Input.mousePosition;
         if (cam == null)
         {
-            cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            cam = Level.Instance.camera;
         }
         mouse.z = Mathf.Abs(cam.transform.position.z - transform.position.z);
 
