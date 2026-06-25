@@ -140,6 +140,7 @@ public class PlayerBox : GameBehaviour
 
             yield return new WaitForSecondsRealtime(0.15f);
         }
+        
     }
     public bool WillTeleport(Level.Direction direction)
     {
@@ -270,6 +271,7 @@ public class PlayerBox : GameBehaviour
             timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
 
             yield return AnimateStars(stars);
+            Debug.Log("Finished star animation");
             // THen we wait until the next level button is pressed
             yield return new WaitUntil(() => nextLevel);
 
