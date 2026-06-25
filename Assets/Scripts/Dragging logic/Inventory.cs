@@ -72,27 +72,23 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = ups;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
-                obj.transform.localPosition = Vector3.right * 2;
             }
             if (rights != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionRight.transform.position, Quaternion.Euler(0, 0, 90));
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionRight.transform.position, Quaternion.Euler(0, 0, -90));
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Right;
                 obj.GetComponent<DraggableItem>().CloneAmount = rights;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>();
-
                 obj.transform.SetParent(objectParent);
-                obj.transform.localPosition = Vector3.right * 2; // spawn it under our solid blocks, even if we dont have any
             }
             if (lefts != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionLeft.transform.position, Quaternion.Euler(0, 0, -90));
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionLeft.transform.position, Quaternion.Euler(0, 0, 90));
 
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Left;
                 obj.GetComponent<DraggableItem>().CloneAmount = lefts;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
-                obj.transform.localPosition = Vector3.right * 2;
             }
             if (downs != 0)
             {
@@ -101,7 +97,6 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = downs;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
-                obj.transform.localPosition = Vector3.right * 2;
             }
         }
     }
