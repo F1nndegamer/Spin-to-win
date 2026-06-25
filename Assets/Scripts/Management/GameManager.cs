@@ -327,6 +327,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadState()
     {
+        Initialize:
         if (!PlayerPrefs.HasKey("state"))
         {
             state = new Save
@@ -337,9 +338,21 @@ public class GameManager : MonoBehaviour
                 levelMoves = new int[_totalLevels], levelTimes = new int[_totalLevels], levelStars = new int[_totalLevels]
             };
             // Initially, fill with 0, false, or default values
+            StateToVars();
+            stateLoaded = true;
+            return;
         }
         string json = PlayerPrefs.GetString("state");
-        state = JsonUtility.FromJson<Save>(json);
+        try
+        {
+            state = JsonUtility.FromJson<Save>(json);
+        }
+        catch (System.Exception)
+        {
+            PlayerPrefs.DeleteKey("state"); // If the JSON is corrupted, clear it out and start fresh
+            goto Initialize;
+        }
+
         StateToVars();
         stateLoaded = true;
     }
