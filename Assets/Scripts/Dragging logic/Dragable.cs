@@ -133,6 +133,14 @@ public class DraggableItem : MonoBehaviour
 
         transform.position = GridManager.Instance.CellToWorld(cell);
         transform.parent = GameManager.placedObjects;
+        Teleporter t = GetComponent<Teleporter>();
+        if(t != null)
+        {
+            if (!GameManager.teleporters.Contains(t))
+            {
+                GameManager.teleporters.Add(t);
+            }
+        }
         GridManager.Instance.Register(this, cell);
     }
 
