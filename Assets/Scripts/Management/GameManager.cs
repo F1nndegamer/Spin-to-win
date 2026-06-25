@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if(_instance == null)  { _instance = FindAnyObjectByType<GameManager>(); }
+            if (_instance == null) { _instance = FindAnyObjectByType<GameManager>(); }
             return _instance;
         }
     }
@@ -31,12 +32,12 @@ public class GameManager : MonoBehaviour
     {
         if (_instance != null && _instance != this)
         {
-            if(logLevel >= LogLevel.Warn) Debug.LogWarning("The GameManager was reinitialized due to multiple instances being present");
+            if (logLevel >= LogLevel.Warn) Debug.LogWarning("The GameManager was reinitialized due to multiple instances being present");
             Destroy(this.gameObject);
             return;
         }
         _instance = this;
-        if(transform.parent != null) transform.SetParent(null); // Make sure we are root hehe
+        if (transform.parent != null) transform.SetParent(null); // Make sure we are root hehe
         Object.DontDestroyOnLoad(gameObject);
     }
 
@@ -60,10 +61,10 @@ public class GameManager : MonoBehaviour
         level = 1;
         movesThisLevel = 0; // idk why but it seems to carry over from last time i played,,, so ill fix it here ig -Sabrina
         timeThisLevel = 0f;
-        
+
         LoadState(); // This is where we load state! Its shrimple as loading like that
         InvokeRepeating(nameof(SaveState), 1f, 10f); // 1 second after this, save the state every 10 seconds
-        
+
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
@@ -92,9 +93,9 @@ public class GameManager : MonoBehaviour
                         goto SetLevel;
                     }
                 }
-                if(logLevel >= LogLevel.Warn) Debug.LogWarning("Menu?");
+                if (logLevel >= LogLevel.Warn) Debug.LogWarning("Menu?");
             }
-            SetLevel: // Labels are awesome. - Ali
+        SetLevel: // Labels are awesome. - Ali
             if (foundLevel)
             {
                 level = System.Int32.Parse(levelScene.name.Replace("Level",
@@ -107,7 +108,7 @@ public class GameManager : MonoBehaviour
                 level = 1; //  We prolly in the menu! lol
             }
 
-            SceneManager.UnloadSceneAsync(0); 
+            SceneManager.UnloadSceneAsync(0);
             GameRegistry.Execute();
         }
     }
@@ -120,14 +121,14 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene(int sceneIndex, int additiveSceneIndex)
     { StartCoroutine(LoadSceneCoroutine(sceneIndex, additiveSceneIndex)); }
-    
-    public void LoadScene(string sceneName) 
+
+    public void LoadScene(string sceneName)
     { StartCoroutine(LoadSceneCoroutine(SceneManager.GetSceneByName(sceneName).buildIndex, -1)); }
-    
-    public void LoadScene(string sceneName, string additiveSceneName) 
+
+    public void LoadScene(string sceneName, string additiveSceneName)
     { StartCoroutine(LoadSceneCoroutine(SceneManager.GetSceneByName(sceneName).buildIndex, SceneManager.GetSceneByName(additiveSceneName).buildIndex)); }
-    
-    private IEnumerator LoadSceneCoroutine (int sceneIndex, int additiveSceneIndex)
+
+    private IEnumerator LoadSceneCoroutine(int sceneIndex, int additiveSceneIndex)
     {
         levelLoaded = false;
         levelReady = false;
@@ -147,7 +148,8 @@ public class GameManager : MonoBehaviour
 
                     // set the current level AFTER we have loaded the scene because if we try to do so before it returns a Scene object that has empty fields!
                     if (additiveSceneIndex >= 3) currentLevel = SceneManager.GetSceneByBuildIndex(additiveSceneIndex);
-                } else { if(logLevel >= LogLevel.Error) Debug.LogError("Failed to load additive scene"); }
+                }
+                else { if (logLevel >= LogLevel.Error) Debug.LogError("Failed to load additive scene"); }
             }
 
             Scene baseScene = SceneManager.GetSceneByBuildIndex(sceneIndex);
@@ -186,7 +188,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if(logLevel >= LogLevel.Error) Debug.LogError("Next scene not found!");
+        if (logLevel >= LogLevel.Error) Debug.LogError("Next scene not found!");
     }
 
     private IEnumerator LastLevelCompleted(int sceneIndex) // This loads them credits
@@ -213,20 +215,25 @@ public class GameManager : MonoBehaviour
             if (unload != null)
             {
                 while (!unload.isDone) yield return null;
-            } else { if(logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed"); }
+            }
+            else { if (logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed"); }
             currentLevel =
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
             inventory.gameObject.SetActive(true);
+            player.Star1.GetComponent<Image>().sprite = player.HollowStar;
+            player.Star2.GetComponent<Image>().sprite = player.HollowStar;
+            player.Star3.GetComponent<Image>().sprite = player.HollowStar;
             levelStarted = false;
             level = sceneIndex - 2;
             // update level at the end here, for various reasons - Ali
             if (level < 1) level = 1;
-            
+
             timeThisLevel = 0f;
             movesThisLevel = 0;
             GameRegistry.Execute();
             levelLoaded = true;
-        } else { if(logLevel >= LogLevel.Error) Debug.LogError("Load failed"); }
+        }
+        else { if (logLevel >= LogLevel.Error) Debug.LogError("Load failed"); }
     }
 
     public void Win()
@@ -247,14 +254,15 @@ public class GameManager : MonoBehaviour
 
     public void Lose()
     {
-        if(levelReady){ // Only allow restart when level is fully loaded
+        if (levelReady)
+        { // Only allow restart when level is fully loaded
             levelWon = false;
             state.lost++;
             LoadLevel(level); // Load the current level again == Reload level
         }
         else
         {
-            if(logLevel >= LogLevel.Error) Debug.LogError("Just");
+            if (logLevel >= LogLevel.Error) Debug.LogError("Just");
             if (logLevel >= LogLevel.Warn)
             {
                 Debug.LogWarning("how");
@@ -286,7 +294,7 @@ public class GameManager : MonoBehaviour
     {
         get => Instance.totalLevels;
     }
-    
+
     public static PlayerBox player;
     public static Inventory inventory;
     public static LevelData levelData;
@@ -297,7 +305,7 @@ public class GameManager : MonoBehaviour
 
     public static int level = 1;
     // Just go 1 to N, so we can reorder levels easily through build settings
-    
+
     public static bool levelLoaded; // Level is initiated and GameAwake and GameReady have all been called
     public static bool levelReady; // The entry transition has been completed
     public static bool levelStarted; // The user has changed gravity at least once
@@ -307,7 +315,7 @@ public class GameManager : MonoBehaviour
     public static bool stateLoaded = false;
 
     public static Save state;
-    
+
     [System.Serializable]
     public struct Save
     {
@@ -350,15 +358,26 @@ public class GameManager : MonoBehaviour
 
     public void LoadState()
     {
-        Initialize:
+    Initialize:
         if (!PlayerPrefs.HasKey("state"))
         {
             state = new Save
             {
-                postProcessing = true, volume = 1f, nextLevel = 1, totalMoves = 0, totalTime = 0f, username = "Player1", 
-                wins = 0, retries = 0, lost = 0, firstPlayedTicks = DateTime.Now.Ticks,
-                lastPlayed = DateTime.Now, levelAttempts = new int[_totalLevels],
-                levelMoves = new int[_totalLevels], levelTimes = new float[_totalLevels], levelStars = new int[_totalLevels]
+                postProcessing = true,
+                volume = 1f,
+                nextLevel = 1,
+                totalMoves = 0,
+                totalTime = 0f,
+                username = "Player1",
+                wins = 0,
+                retries = 0,
+                lost = 0,
+                firstPlayedTicks = DateTime.Now.Ticks,
+                lastPlayed = DateTime.Now,
+                levelAttempts = new int[_totalLevels],
+                levelMoves = new int[_totalLevels],
+                levelTimes = new float[_totalLevels],
+                levelStars = new int[_totalLevels]
             };
             // Initially, fill with 0, false, or default values
             StateToVars();
@@ -369,6 +388,9 @@ public class GameManager : MonoBehaviour
         try
         {
             state = JsonUtility.FromJson<Save>(json);
+            EnsureSaveArrays();
+
+            StateToVars();
         }
         catch (System.Exception)
         {
@@ -379,11 +401,24 @@ public class GameManager : MonoBehaviour
         StateToVars();
         stateLoaded = true;
     }
+    private void EnsureSaveArrays()
+    {
+        if (state.levelStars == null || state.levelStars.Length != _totalLevels)
+            Array.Resize(ref state.levelStars, _totalLevels);
 
+        if (state.levelMoves == null || state.levelMoves.Length != _totalLevels)
+            Array.Resize(ref state.levelMoves, _totalLevels);
+
+        if (state.levelTimes == null || state.levelTimes.Length != _totalLevels)
+            Array.Resize(ref state.levelTimes, _totalLevels);
+
+        if (state.levelAttempts == null || state.levelAttempts.Length != _totalLevels)
+            Array.Resize(ref state.levelAttempts, _totalLevels);
+    }
     private void StateToVars()
     {
         level = state.nextLevel;
-        
+
         if (level < 1) state.nextLevel = level = 1;
     }
 
