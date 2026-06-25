@@ -20,6 +20,7 @@ public class PlayerBox : GameBehaviour
     [SerializeField] private CanvasGroup levelCompletePanel;
     [SerializeField] private TextMeshProUGUI movesText, timeText;
     [SerializeField] private Button nextLevelButton;
+    [SerializeField] private GameObject HitGroundVFX_Prefab;
 
     private Transform _particleThing;
 
@@ -108,9 +109,20 @@ public class PlayerBox : GameBehaviour
         return false;
     }
 
+    private bool lastFrameGrounded = false;
     private void FixedUpdate()
     {
         if (sinceSwitch < 5) sinceSwitch++;
+
+        // make hit ground vfx
+        bool isOnGround = IsGrounded();
+        if (isOnGround)
+        {
+            grounded = true;
+            sinceSwitch = 5;
+            if (lastFrameGrounded == false) Instantiate(HitGroundVFX_Prefab, transform.position, Level.Instance.camera.transform.rotation, transform);
+        }
+        lastFrameGrounded = isOnGround;
     }
 
     private void OnCollisionStay2D(Collision2D other)
