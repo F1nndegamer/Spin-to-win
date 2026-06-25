@@ -13,7 +13,11 @@ public class ThisScriptLoadsTheGameManagerInCaseYouLoadAnySceneOtherThanSceneInd
         }
         
         Debug.Log("[Loading GameManager from within scene]");
-        SceneManager.LoadScene("EntryPoint");
+        if(SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            SceneManager.LoadScene(0);
+        }
+        SceneManager.LoadScene(0, LoadSceneMode.Additive);
         Destroy(gameObject);
     }
 }
