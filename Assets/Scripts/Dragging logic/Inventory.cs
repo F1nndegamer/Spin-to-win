@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Inventory : GameBehaviour
 {
+    [HideInInspector] public Transform objectParent;
     void Awake()
     {
         GameManager.inventory = this;
@@ -17,12 +18,17 @@ public class Inventory : GameBehaviour
     }
     public void SpawnInventory()
     {
+        objectParent = transform.Find("Objects");
+        foreach (Transform c in objectParent)
+        {
+            Destroy(c.gameObject);
+        }
         LevelData data = GameManager.levelData;
         Level level = Level.Instance;
         if (data.solidBlocks != 0)
         {
             GameObject obj = Instantiate(level.normalObject, level.normalObjectPosition.transform.position, Quaternion.identity);
-            obj.transform.SetParent(transform);
+            obj.transform.SetParent(objectParent);
             obj.GetComponent<DraggableItem>().CloneAmount = data.solidBlocks;
             obj.GetComponent<DraggableItem>().text = level.normalObjectPosition.GetComponentInChildren<TextMeshPro>();
 
@@ -61,12 +67,12 @@ public class Inventory : GameBehaviour
             }
             if (ups != 0)
             {
-                                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionUp.transform.position, Quaternion.identity);
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionUp.transform.position, Quaternion.identity);
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Up;
                 obj.GetComponent<DraggableItem>().CloneAmount = ups;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>();
-                obj.transform.SetParent(transform);
-		        obj.transform.localPosition = Vector3.right * 2;
+                obj.transform.SetParent(objectParent);
+                obj.transform.localPosition = Vector3.right * 2;
             }
             if (rights != 0)
             {
@@ -75,7 +81,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = rights;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>();
 
-                obj.transform.SetParent(transform);
+                obj.transform.SetParent(objectParent);
                 obj.transform.localPosition = Vector3.right * 2; // spawn it under our solid blocks, even if we dont have any
             }
             if (lefts != 0)
@@ -85,8 +91,8 @@ public class Inventory : GameBehaviour
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Left;
                 obj.GetComponent<DraggableItem>().CloneAmount = lefts;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>();
-                obj.transform.SetParent(transform);
-		        obj.transform.localPosition = Vector3.right * 2;
+                obj.transform.SetParent(objectParent);
+                obj.transform.localPosition = Vector3.right * 2;
             }
             if (downs != 0)
             {
@@ -94,8 +100,8 @@ public class Inventory : GameBehaviour
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Down;
                 obj.GetComponent<DraggableItem>().CloneAmount = downs;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>();
-                obj.transform.SetParent(transform);
-		        obj.transform.localPosition = Vector3.right * 2;
+                obj.transform.SetParent(objectParent);
+                obj.transform.localPosition = Vector3.right * 2;
             }
         }
     }
