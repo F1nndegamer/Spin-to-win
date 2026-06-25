@@ -13,6 +13,7 @@ public static class GameRegistry
 
     public static void Execute()
     {
+        if (!GameManager.stateLoaded) GameManager.Instance.LoadState();
         List<GameBehaviour> objectsToProcess = new List<GameBehaviour>(ActiveObjects);
 
         foreach (GameBehaviour obj in objectsToProcess)
