@@ -287,15 +287,8 @@ public class GameManager : MonoBehaviour
     public static float timeThisLevel;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
     public static bool stateLoaded = false;
-    
-    public static Save state = new Save
-    {
-        postProcessing = true, volume = 1f, nextLevel = 1, totalMoves = 0, totalTime = 0f, username = "Player1", 
-        wins = 0, retries = 0, lost = 0,
-        lastPlayed = DateTime.Now, levelsCompleted = new bool[_totalLevels], levelAttempts = new int[_totalLevels],
-        levelMoves = new int[_totalLevels], levelTimes = new int[_totalLevels], levelStars = new int[_totalLevels]
-    };
-    // Initially, fill with 0, false, or default values
+
+    public static Save state;
     
     [System.Serializable]
     public struct Save
@@ -334,7 +327,17 @@ public class GameManager : MonoBehaviour
 
     public void LoadState()
     {
-        if (!PlayerPrefs.HasKey("state")) return;
+        if (!PlayerPrefs.HasKey("state"))
+        {
+            state = new Save
+            {
+                postProcessing = true, volume = 1f, nextLevel = 1, totalMoves = 0, totalTime = 0f, username = "Player1", 
+                wins = 0, retries = 0, lost = 0,
+                lastPlayed = DateTime.Now, levelsCompleted = new bool[_totalLevels], levelAttempts = new int[_totalLevels],
+                levelMoves = new int[_totalLevels], levelTimes = new int[_totalLevels], levelStars = new int[_totalLevels]
+            };
+            // Initially, fill with 0, false, or default values
+        }
         string json = PlayerPrefs.GetString("state");
         state = JsonUtility.FromJson<Save>(json);
         StateToVars();
