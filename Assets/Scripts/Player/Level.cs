@@ -176,6 +176,7 @@ public class Level : GameBehaviour
     {
         helpPlayMode.SetActive(true);
         helpEditMode.SetActive(false);
+        if (GameManager.levelStarted) return;
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
 

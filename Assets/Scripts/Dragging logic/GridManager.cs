@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-public class GridManager : MonoBehaviour
+public class GridManager : GameBehaviour
 {
     public static GridManager Instance;
     public float cellSize = 1f;
@@ -12,6 +12,12 @@ public class GridManager : MonoBehaviour
     {
         Instance = this;
     }
+
+    public override void GameStart()
+    {
+        occupied.Clear(); 
+    }
+
     public Vector2Int WorldToCell(Vector3 worldPos)
     {
         return new Vector2Int(Mathf.FloorToInt(worldPos.x / cellSize), Mathf.FloorToInt(worldPos.y / cellSize));
