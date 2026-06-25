@@ -12,15 +12,11 @@ public class Inventory : GameBehaviour
     public override void GameStart()
     {
         GameObject mainCamera = Level.Instance.gameObject;
-        transform.SetParent(mainCamera.transform);
         
         // make sure the inventory object isn't too far away from the screen - Sabrina
         float z = transform.position.z;
         transform.position = Level.Instance.camera.ViewportToWorldPoint(new Vector3(0.20f, 0.5f, Mathf.Abs(Camera.main.transform.position.z)));
         transform.position = new Vector3(transform.position.x, transform.position.y, z);
-
-        // remove all children of the inventory, since we should be empty before filling it up, right? - Sabrina
-        foreach (Transform t in transform) { Destroy(t.gameObject); }
 
         SpawnInventory();
     }
@@ -32,7 +28,6 @@ public class Inventory : GameBehaviour
         {
             GameObject obj = Instantiate(level.normalObject, level.normalObjectPosition.transform.position, Quaternion.identity);
             obj.transform.SetParent(transform);
-            obj.transform.localPosition = Vector3.zero; // make sure we dont spawn the block outside of our camera's range - Sabrina
             obj.GetComponent<DraggableItem>().CloneAmount = data.solidBlocks;
             obj.GetComponent<DraggableItem>().text = level.normalObjectPosition.GetComponentInChildren<TextMeshPro>();
 

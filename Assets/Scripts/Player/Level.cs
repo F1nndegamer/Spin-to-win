@@ -40,7 +40,7 @@ public class Level : GameBehaviour
     public GameObject teleportObject;
     public GameObject normalObject;
     public GameObject Inventory;
-    [HideInInspector] public GameObject normalObjectPosition;
+     public GameObject normalObjectPosition;
     [HideInInspector] public GameObject teleporObjectPositionDown;
     [HideInInspector] public GameObject teleporObjectPositionRight;
     [HideInInspector] public GameObject teleporObjectPositionUp;
