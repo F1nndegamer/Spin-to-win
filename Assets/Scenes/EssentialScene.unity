@@ -345,6 +345,7 @@ MonoBehaviour:
   movesText: {fileID: 2018656137}
   timeText: {fileID: 1632000108}
   nextLevelButton: {fileID: 1825377981}
+  HitGroundVFX_Prefab: {fileID: 529652125453798017, guid: e0e07504521e07f48b88f5f6e6708591, type: 3}
 --- !u!61 &95512391
 BoxCollider2D:
   m_ObjectHideFlags: 0
