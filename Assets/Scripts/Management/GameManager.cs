@@ -186,8 +186,7 @@ public class GameManager : MonoBehaviour
         LoadScene(sceneIndex);
     }
 
-    private IEnumerator
-        LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
+    private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
     {
         levelLoaded = false;
         levelReady = false;
@@ -206,6 +205,7 @@ public class GameManager : MonoBehaviour
             } else { if(logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed"); }
             currentLevel =
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
+            inventory.gameObject.SetActive(true);
             levelStarted = false;
             level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
             timeThisLevel = 0f;
