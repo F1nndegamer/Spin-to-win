@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(LastLevelComplete(sceneIndex)); // The next scene is probably a credits scene or smth, load it
+                StartCoroutine(LastLevelCompleted(sceneIndex)); // The next scene is probably a credits scene or smth, load it
             }
             return;
         }
@@ -161,11 +161,10 @@ public class GameManager : MonoBehaviour
         if(logLevel >= LogLevel.Error) Debug.LogError("Next scene not found!");
     }
 
-    private IEnumerator LastLevelComplete(int sceneIndex)
+    private IEnumerator LastLevelCompleted(int sceneIndex) // This loads them credits
     {
         yield return StartCoroutine(player.TransitionCoroutine(false));
-        EventSystem.current.enabled = false;
-        Level.Instance.GetComponent<AudioListener>().enabled = false;
+        Level.Instance.GetComponent<AudioListener>().enabled = false; // Only disable the AudioListener, there is no EventSystem in credits scene
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1)); // Unload level scene before doing anything
         LoadScene(sceneIndex);
     }
@@ -273,6 +272,14 @@ public class GameManager : MonoBehaviour
         Info = 3
     }
 
-    public static LogLevel logLevel = LogLevel.Info;
+    public static LogLevel logLevel
+    {
+        get
+        {
+            return Instance._logLevel;
+        }
+    }
+    public LogLevel _logLevel = LogLevel.Info;
+
     #endregion
 }
