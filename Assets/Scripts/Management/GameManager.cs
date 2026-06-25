@@ -40,6 +40,11 @@ public class GameManager : MonoBehaviour
         Object.DontDestroyOnLoad(gameObject);
     }
 
+    private void LoadMenu()
+    {
+        LoadScene(1);
+    }
+
     private void Start()
     {
         // For ppl who like to disable "Reload domain" on play
@@ -57,7 +62,7 @@ public class GameManager : MonoBehaviour
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            LoadScene(1);
+            Invoke(nameof(LoadMenu), 4.2f);
         }
         else
         {
