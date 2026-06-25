@@ -17,7 +17,28 @@ public class Teleporter : GameBehaviour
     {
         GameManager.teleporters.Add(this);
     }
-
+     void Awake()
+    {
+        Vector3 targetpos = direction switch
+        {
+            Level.Direction.Right => Vector3.left,
+            Level.Direction.Left => Vector3.right,
+            Level.Direction.Up => Vector3.down,
+            Level.Direction.Down => Vector3.up,
+            _ => Vector3.zero
+        };
+        DraggableItem item = transform.parent.GetComponent<DraggableItem>();
+        if (item == null)
+        {
+            Debug.Log("uhhhhh");
+        }
+        else
+        {
+            Debug.Log("ahh");
+            Debug.Log(Vector2Int.RoundToInt(targetpos));
+        }
+        transform.parent.GetComponent<DraggableItem>()?.shapeCells.Add(Vector2Int.RoundToInt(targetpos));
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!GameManager.levelStarted)

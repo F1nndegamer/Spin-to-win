@@ -15,7 +15,7 @@ public class GridManager : GameBehaviour
 
     public override void GameStart()
     {
-        occupied.Clear(); 
+        occupied.Clear();
     }
 
     public Vector2Int WorldToCell(Vector3 worldPos)
@@ -37,6 +37,8 @@ public class GridManager : GameBehaviour
             Vector2Int cell = origin + offset;
             if (occupied.ContainsKey(cell))
                 return false;
+            if (blockingTilemap == null)
+                blockingTilemap = FindAnyObjectByType<Tilemap>();
             if (blockingTilemap != null)
             {
                 if (blockingTilemap.HasTile(new Vector3Int(cell.x, cell.y, 0)))
