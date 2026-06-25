@@ -1,8 +1,10 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : GameBehaviour
 {
+    [HideInInspector] public Transform objectParent;
     void Awake()
     {
         GameManager.inventory = this;
@@ -11,28 +13,25 @@ public class Inventory : GameBehaviour
     public override void GameStart()
     {
         GameObject mainCamera = Level.Instance.gameObject;
-        transform.SetParent(mainCamera.transform);
-        
-        // make sure the inventory object isn't too far away from the screen - Sabrina
-        float z = transform.position.z;
-        transform.position = Level.Instance.camera.ViewportToWorldPoint(new Vector3(0.20f, 0.5f, Mathf.Abs(Camera.main.transform.position.z)));
-        transform.position = new Vector3(transform.position.x, transform.position.y, z);
-
-        // remove all children of the inventory, since we should be empty before filling it up, right? - Sabrina
-        foreach (Transform t in transform) { Destroy(t.gameObject); }
 
         SpawnInventory();
     }
     public void SpawnInventory()
     {
+        objectParent = transform.Find("Objects");
+        foreach (Transform c in objectParent)
+        {
+            Destroy(c.gameObject);
+        }
         LevelData data = GameManager.levelData;
         Level level = Level.Instance;
         if (data.solidBlocks != 0)
         {
-            GameObject obj = Instantiate(level.normalObject, level.normalObjectPosition, Quaternion.identity);
-            obj.transform.SetParent(transform);
-            obj.transform.localPosition = Vector3.zero; // make sure we dont spawn the block outside of our camera's range - Sabrina
+            GameObject obj = Instantiate(level.normalObject, level.normalObjectPosition.transform.position, Quaternion.identity);
+            obj.transform.SetParent(objectParent);
             obj.GetComponent<DraggableItem>().CloneAmount = data.solidBlocks;
+            obj.GetComponent<DraggableItem>().text = level.normalObjectPosition.GetComponentInChildren<TextMeshPro>();
+
             obj.name = $"SolidBlocks_{data.solidBlocks}";
         }
         if (data.teleportBlocks.Length != 0)
@@ -68,35 +67,36 @@ public class Inventory : GameBehaviour
             }
             if (ups != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionUp, Quaternion.identity);
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionUp.transform.position, Quaternion.identity);
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Up;
                 obj.GetComponent<DraggableItem>().CloneAmount = ups;
-                obj.transform.SetParent(transform);
-		        obj.transform.localPosition = Vector3.right * 2;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>();
+                obj.transform.SetParent(objectParent);
             }
             if (rights != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionRight, Quaternion.Euler(0, 0, 90));
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionRight.transform.position, Quaternion.Euler(0, 0, -90));
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Right;
-                obj.AddComponent<DraggableItem>().CloneAmount = rights;
-                obj.transform.SetParent(transform);
-                obj.transform.localPosition = Vector3.right * 2; // spawn it under our solid blocks, even if we dont have any
+                obj.GetComponent<DraggableItem>().CloneAmount = rights;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>();
+                obj.transform.SetParent(objectParent);
             }
             if (lefts != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionLeft, Quaternion.Euler(0, 0, -90));
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionLeft.transform.position, Quaternion.Euler(0, 0, 90));
+
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Left;
                 obj.GetComponent<DraggableItem>().CloneAmount = lefts;
-                obj.transform.SetParent(transform);
-		        obj.transform.localPosition = Vector3.right * 2;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>();
+                obj.transform.SetParent(objectParent);
             }
             if (downs != 0)
             {
-                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionDown, Quaternion.Euler(0, 0, 180));
+                GameObject obj = Instantiate(level.teleportObject, level.teleporObjectPositionDown.transform.position, Quaternion.Euler(0, 0, 180));
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Down;
                 obj.GetComponent<DraggableItem>().CloneAmount = downs;
-                obj.transform.SetParent(transform);
-		        obj.transform.localPosition = Vector3.right * 2;
+                obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>();
+                obj.transform.SetParent(objectParent);
             }
         }
     }

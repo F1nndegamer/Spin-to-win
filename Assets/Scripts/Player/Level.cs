@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -40,11 +41,12 @@ public class Level : GameBehaviour
 
     public GameObject teleportObject;
     public GameObject normalObject;
-    public Vector3 normalObjectPosition;
-    public Vector3 teleporObjectPositionDown;
-    public Vector3 teleporObjectPositionRight;
-    public Vector3 teleporObjectPositionUp;
-    public Vector3 teleporObjectPositionLeft;
+    public GameObject Inventory;
+    public GameObject normalObjectPosition;
+    [HideInInspector] public GameObject teleporObjectPositionDown;
+    [HideInInspector] public GameObject teleporObjectPositionRight;
+    [HideInInspector] public GameObject teleporObjectPositionUp;
+    [HideInInspector] public GameObject teleporObjectPositionLeft;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -61,6 +63,11 @@ public class Level : GameBehaviour
         targetPosition = camera.transform.position;
         originalCameraSize = _targetOrthoSize = camera.orthographicSize; // get this so we can restore it later
         //CacheLevelScene();
+        normalObjectPosition = Inventory.transform.Find("Square").gameObject;
+        teleporObjectPositionDown = Inventory.transform.Find("Down").gameObject;
+        teleporObjectPositionRight = Inventory.transform.Find("Right").gameObject;
+        teleporObjectPositionUp = Inventory.transform.Find("Up").gameObject;
+        teleporObjectPositionLeft = Inventory.transform.Find("Left").gameObject;
     }
 
     public override void GameStart()
@@ -83,6 +90,11 @@ public class Level : GameBehaviour
             // Confirm();
             // Maybe allow the player to see the map before entering it - Ali
         }
+        teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>().text = "";
+        teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>().text = "";
+        teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>().text = "";
+        teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>().text = "";
+        normalObjectPosition.GetComponentInChildren<TextMeshPro>().text = "";
     }
 
     private void LateUpdate()
@@ -159,7 +171,14 @@ public class Level : GameBehaviour
     {
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
+
+        if (GameManager.inventory == null)
+        {
+            Debug.Log("Temp maybe permanent fix");
+            GameManager.inventory = Inventory.GetComponent<Inventory>();
+        }
         GameManager.inventory.gameObject.SetActive(false);
+
         _targetOrthoSize = originalCameraSize;
         if (GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Exiting edit mode!");
         GameManager.player.Confirm(); // Fade in the player

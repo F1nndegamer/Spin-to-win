@@ -154,7 +154,8 @@ public class GameManager : MonoBehaviour
             levelStarted = false; // Set this here coz yea
             GameRegistry.Execute();
             levelLoaded = true;
-        } else { if(logLevel >= LogLevel.Error) Debug.LogError("Failed to load scene"); }
+        }
+        else { if (logLevel >= LogLevel.Error) Debug.LogError("Failed to load scene"); }
     }
     #endregion
 
@@ -190,16 +191,10 @@ public class GameManager : MonoBehaviour
         LoadScene(sceneIndex);
     }
 
-    private IEnumerator
-        LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
+    private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
     {
         levelLoaded = false;
         levelReady = false;
-        if (inventory.gameObject != null)
-        {
-            Destroy(inventory.gameObject);
-            // This will either crash or run once
-        }
         //GameObject grid = GameObject.Find("Grid");
         //if (grid != null)
         //    Destroy(grid);
@@ -215,11 +210,11 @@ public class GameManager : MonoBehaviour
             } else { if(logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed"); }
             currentLevel =
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
+            inventory.gameObject.SetActive(true);
             levelStarted = false;
             level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
             timeThisLevel = 0f;
             movesThisLevel = 0;
-            placedObjects = GameObject.Find("PlacedObjects").transform;
             GameRegistry.Execute();
             levelLoaded = true;
         } else { if(logLevel >= LogLevel.Error) Debug.LogError("Load failed"); }
@@ -367,9 +362,9 @@ public class GameManager : MonoBehaviour
         level = state.nextLevel;
         
     }
-    
+
     #endregion
-    
+
     #region Logging 
     public enum LogLevel
     {

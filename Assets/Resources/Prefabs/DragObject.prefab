@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
   CloneAmount: 1
+  text: {fileID: 0}
 --- !u!212 &743784358555259044
 SpriteRenderer:
   serializedVersion: 3
