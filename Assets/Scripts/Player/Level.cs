@@ -47,6 +47,9 @@ public class Level : GameBehaviour
     [HideInInspector] public GameObject teleporObjectPositionRight;
     [HideInInspector] public GameObject teleporObjectPositionUp;
     [HideInInspector] public GameObject teleporObjectPositionLeft;
+
+    [SerializeField] private GameObject helpPlayMode;
+    [SerializeField] private GameObject helpEditMode;
     public enum Direction
     {
         Underflow = -1, // for some weird reason `-1 % 4 = -1` So i'll just add a case for this and manually correct it -Sabrina
@@ -80,6 +83,8 @@ public class Level : GameBehaviour
         gravityHandler.setGravityDown(gravity);
         transform.rotation = Quaternion.Euler(Vector3.zero);
         _rotating = false;
+        helpPlayMode.SetActive(false);
+        helpEditMode.SetActive(true);
         targetPosition = transform.position = new Vector3(GameManager.player.transform.position.x, GameManager.player.transform.position.y,
             targetPosition.z); // Center the camera on player anyways
         // Set new boundary on Level load
@@ -169,6 +174,8 @@ public class Level : GameBehaviour
 
     public void Confirm()
     {
+        helpPlayMode.SetActive(true);
+        helpEditMode.SetActive(false);
         // this quits edit mode and enters game mode
         GameManager.levelStarted = true;
 
