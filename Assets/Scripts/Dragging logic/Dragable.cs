@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DraggableItem : MonoBehaviour
 {
     readonly Vector2Int size = Vector2Int.one;
-    readonly List<Vector2Int> shapeCells = new();
+    public /* readonly */ List<Vector2Int> shapeCells = new(); // non-readonly since Teleporter.cs:40 tries to add to it apparently
 
     private Vector3 startPos;
 
