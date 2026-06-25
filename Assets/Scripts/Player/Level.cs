@@ -62,7 +62,7 @@ public class Level : GameBehaviour
         //CacheLevelScene();
     }
 
-    public override void GameAwake()
+    public override void GameStart()
     {
         bounds.topLeft = GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
@@ -159,6 +159,7 @@ public class Level : GameBehaviour
         GameManager.inventory.gameObject.SetActive(false);
         _targetOrthoSize = originalCameraSize;
         if (GameManager.logLevel >= GameManager.LogLevel.Info) Debug.Log("Exiting edit mode!");
+        GameManager.player.Confirm(); // Fade in the player
     }
 
     public void Rotate(Direction targetDirection)

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,16 +22,50 @@ public class PlayerBox : GameBehaviour
     [SerializeField] private TextMeshProUGUI movesText, timeText;
     [SerializeField] private Button nextLevelButton;
 
+    private Transform _particleThing;
+
     private void Awake()
     {
         GameManager.player = this;
         transition.localScale = Vector3.one * 50f;
     }
 
-    public override void GameStart()
+    public override void GameAwake()
     {
+        // Move the player to spawn while the box is covering the screen
+        transform.position = GameManager.levelData.PlayerSpawnPos.position;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        GetComponent<SpriteRenderer>().color = Color.clear;
+        GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
+        GetComponent<BoxCollider2D>().enabled = false;
+        
+        // Definitely not me forgetting the instantiation syntax :sob: - Ali
+        _particleThing = GameObject.Instantiate<GameObject>(Resources.Load("Prefabs/SpawnGlow") as GameObject, GameManager.levelData.PlayerSpawnPos).transform;
+        
         StartCoroutine(TransitionInCoroutine());
         nextLevel = false;
+    }
+
+    public void Confirm() // Called when Level.Confirm is called, exits edit mode, enters play mode
+    {
+        StartCoroutine(AlphaIn());
+    }
+
+    private IEnumerator AlphaIn() // Fade in the player opacity on level start (start == entering play mode)
+    {
+        float t = 0;
+        _particleThing.GetComponent<ParticleSystem>().Stop();
+        while (t < 1)
+        {
+            t += Time.unscaledDeltaTime * 3f; // Takes 0.333 s for the loop to complete
+            _particleThing.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, t);
+            yield return null;
+        }
+        GetComponent<SpriteRenderer>().color = Color.white;
+        GetComponent<BoxCollider2D>().enabled = true;
+        GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after level is started
+        yield return new WaitForSecondsRealtime(0.7f); // Wait an extra 0.7 seconds to ensure all particles have disentegrated
+        Destroy(_particleThing);
     }
 
     public bool WillTeleport(Level.Direction direction)
@@ -155,11 +190,6 @@ public class PlayerBox : GameBehaviour
 
     private IEnumerator TransitionInCoroutine() // Called on level start by player
     {
-        // Move the player to spawn while the box is covering the screen
-        transform.position = GameManager.levelData.PlayerSpawnPos.transform.position;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-        GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
-        
         // Uncover the screen
         float t = 50;
         while (t > 0)
@@ -170,6 +200,5 @@ public class PlayerBox : GameBehaviour
         }
         transition.localScale = Vector3.zero;
         GameManager.levelReady = true;
-        GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after everything is ready
     }
 }
