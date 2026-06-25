@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -39,6 +38,11 @@ public class GameManager : MonoBehaviour
         _instance = this;
         if(transform.parent != null) transform.SetParent(null); // Make sure we are root hehe
         Object.DontDestroyOnLoad(gameObject);
+    }
+
+    private int IAmAlive()
+    {
+        return 0;
     }
 
     private void LoadMenu()
