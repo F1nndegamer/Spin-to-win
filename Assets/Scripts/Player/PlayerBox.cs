@@ -231,7 +231,6 @@ public class PlayerBox : GameBehaviour
         int stars = 1; // todo: @F1nn display these stars!
         if (GameManager.movesThisLevel <= GameManager.levelData.minMoves) stars++;
         if (GameManager.timeThisLevel <= GameManager.levelData.minTime) stars++;
-        stars++;
         Debug.Log($"Level: {GameManager.level}");
         Debug.Log($"Stars length: {GameManager.state.levelStars.Length}");
         Debug.Log($"Moves length: {GameManager.state.levelMoves.Length}");
