@@ -63,9 +63,9 @@ public class DraggableItem : MonoBehaviour
             obj.GetComponent<DraggableItem>().CloneAmount--;
             obj.transform.SetParent(GameManager.inventory.transform, false);
             obj.transform.position = transform.position;
+            SetText();
         }
         CloneAmount = 1;
-        SetText();
         startPos = transform.position;
 
         collider.enabled = false;
