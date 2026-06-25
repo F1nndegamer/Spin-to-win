@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class GameManager : MonoBehaviour
 {
@@ -47,8 +49,10 @@ public class GameManager : MonoBehaviour
         teleporters = new List<Teleporter>();
         level = 1;
         movesThisLevel = 0; // idk why but it seems to carry over from last time i played,,, so ill fix it here ig -Sabrina
-        totalMoves = 0;
-        timeThisLevel = totalTimePlayed = 0f;
+        timeThisLevel = 0f;
+        
+        LoadState(); // This is where we load state! Its shrimple as loading like that
+        InvokeRepeating(nameof(SaveState), 1f, 10f); // 1 second after this, save the state every 10 seconds
         
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
@@ -64,6 +68,7 @@ public class GameManager : MonoBehaviour
             // If the Level* scene is not at index 1, try find the scene in all loaded scenes
             // and if none of the scenes is a level scene, not a very sensible man has pulled this repo to test
             Scene levelScene = SceneManager.GetSceneAt(1);
+            bool foundLevel = false;
             if (!levelScene.name.StartsWith("Level"))
             {
                 int t = SceneManager.loadedSceneCount;
@@ -71,13 +76,25 @@ public class GameManager : MonoBehaviour
                 {
                     if (i == 1) continue;
                     levelScene = SceneManager.GetSceneAt(i);
-                    if (levelScene.name.StartsWith("Level")) goto SetLevel;
+                    if (levelScene.name.StartsWith("Level"))
+                    {
+                        foundLevel = true;
+                        goto SetLevel;
+                    }
                 }
-                if(logLevel >= LogLevel.Error) Debug.LogError("Either because of you or the player, no level scene was found. We are now officially cooked.");
+                if(logLevel >= LogLevel.Warn) Debug.LogWarning("Menu?");
             }
             SetLevel: // Labels are awesome. - Ali
-            level = System.Int32.Parse(levelScene.name.Replace("Level", "")); // Parse level number from current scene's name
-            currentLevel = SceneManager.GetSceneAt(1);
+            if (foundLevel)
+            {
+                level = System.Int32.Parse(levelScene.name.Replace("Level",
+                    "")); // Parse level number from current scene's name
+                currentLevel = levelScene;
+            }
+            else
+            {
+                level = -1; //  We prolly in the menu! lol
+            }
 
             SceneManager.UnloadSceneAsync(0); 
             GameRegistry.Execute();
@@ -208,7 +225,7 @@ public class GameManager : MonoBehaviour
         if (!levelLoaded) return;
         // Dont win or oad the next scene twice
         levelWon = true;
-        wins++;
+        state.wins++;
         LoadLevel(level + 1);
     }
 
@@ -216,7 +233,7 @@ public class GameManager : MonoBehaviour
     {
         if(levelReady){ // Only allow restart when level is fully loaded
             levelWon = false;
-            lost++;
+            state.lost++;
             LoadLevel(level); // Load the current level again == Reload level
         }
         else
@@ -239,7 +256,7 @@ public class GameManager : MonoBehaviour
         if (!levelReady) return;
         // Only allow restart when level is fully loaded
         levelWon = false;
-        retries++;
+        state.retries++;
         LoadLevel(level); // Load the current level again == Reload level
     }
 
@@ -247,6 +264,13 @@ public class GameManager : MonoBehaviour
 
     #region State
 
+    public int totalLevels = 10;
+
+    private static int _totalLevels
+    {
+        get => Instance.totalLevels;
+    }
+    
     public static PlayerBox player;
     public static Inventory inventory;
     public static LevelData levelData;
@@ -261,10 +285,67 @@ public class GameManager : MonoBehaviour
     public static bool levelStarted; // The user has changed gravity at least once
     public static int movesThisLevel;
     public static float timeThisLevel;
-    public static int totalMoves;
-    public static float totalTimePlayed;
-    public static int wins, retries, lost;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
+    public static bool stateLoaded = false;
+    
+    public static Save state = new Save
+    {
+        postProcessing = true, volume = 1f, nextLevel = 1, totalMoves = 0, totalTime = 0f, username = "Player1", 
+        wins = 0, retries = 0, lost = 0,
+        lastPlayed = DateTime.Now, levelsCompleted = new bool[_totalLevels], levelAttempts = new int[_totalLevels],
+        levelMoves = new int[_totalLevels], levelTimes = new int[_totalLevels], levelStars = new int[_totalLevels]
+    };
+    // Initially, fill with 0, false, or default values
+    
+    [System.Serializable]
+    public struct Save
+    {
+        public bool postProcessing;
+        public float volume;
+
+        public int nextLevel;
+        public float totalTime;
+        public int totalMoves;
+        public int wins, retries, lost;
+        public string username;
+        [SerializeField] private long lastPlayedTicks;
+        // Save lastPlayed as a long, return it as a DateTime
+        public DateTime lastPlayed
+        {
+            get => new DateTime(lastPlayedTicks);
+            set => lastPlayedTicks = value.Ticks;
+        }
+
+        public bool[] levelsCompleted;
+        public int[] levelMoves;
+        public int[] levelTimes;
+        public int[] levelStars;
+        public int[] levelAttempts;
+    }
+
+    private void SaveState()
+    {
+        state.lastPlayed = DateTime.Now;
+        string stateJson = JsonUtility.ToJson(state);
+        if (PlayerPrefs.GetString("state") == stateJson) return; // We do this to avoid certain crash situations, at the cost of mild performance
+        PlayerPrefs.SetString("state", stateJson);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadState()
+    {
+        if (!PlayerPrefs.HasKey("state")) return;
+        string json = PlayerPrefs.GetString("state");
+        state = JsonUtility.FromJson<Save>(json);
+        StateToVars();
+        stateLoaded = true;
+    }
+
+    private void StateToVars()
+    {
+        level = state.nextLevel;
+        
+    }
     
     #endregion
     

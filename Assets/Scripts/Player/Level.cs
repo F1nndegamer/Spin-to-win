@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class Level : GameBehaviour
@@ -64,6 +65,8 @@ public class Level : GameBehaviour
 
     public override void GameStart()
     {
+        camera.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = GameManager.state.postProcessing;
+        AudioListener.volume = GameManager.state.volume;
         bounds.topLeft = GameManager.levelData.topLeftBound.position;
         bounds.bottomRight = GameManager.levelData.bottomRightBound.position;
         gravityDirection = Direction.Down;
@@ -87,7 +90,7 @@ public class Level : GameBehaviour
         if (GameManager.levelStarted)
         {
             GameManager.timeThisLevel += Time.unscaledDeltaTime;
-            GameManager.totalTimePlayed += Time.unscaledDeltaTime;
+            GameManager.state.totalTime += Time.unscaledDeltaTime;
             Vector3 target = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
             transform.position = Vector3.Lerp(transform.position, target, lerpSpeed * Time.deltaTime);
         }
@@ -141,7 +144,7 @@ public class Level : GameBehaviour
 
         // Increment moves counter
         GameManager.movesThisLevel++;
-        GameManager.totalMoves++;
+        GameManager.state.totalMoves++;
 
         // Using a coroutine for rotating the camera, otherwise the gravity switches while the camera is rotating; we cant wait for a coroutine to finish in a function -Sabrina
         StartCoroutine(RotateRoutine(dir));
