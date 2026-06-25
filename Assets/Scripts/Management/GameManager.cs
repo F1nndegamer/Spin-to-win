@@ -277,6 +277,14 @@ public class GameManager : MonoBehaviour
         Info = 3
     }
 
-    public static LogLevel logLevel = LogLevel.Info;
+    public static LogLevel logLevel
+    {
+        get
+        {
+            return Instance._logLevel;
+        }
+    }
+    public LogLevel _logLevel = LogLevel.Info;
+
     #endregion
 }

@@ -37,6 +37,7 @@ public class PlayerBox : GameBehaviour
         transform.rotation = Quaternion.Euler(0, 0, 0);
         GetComponent<SpriteRenderer>().color = Color.clear;
         GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
+        GetComponent<Rigidbody2D>().gravityScale = 0;
         GetComponent<BoxCollider2D>().enabled = false;
         
         // Definitely not me forgetting the instantiation syntax :sob: - Ali

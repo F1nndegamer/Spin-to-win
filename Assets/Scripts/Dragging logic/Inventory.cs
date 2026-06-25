@@ -72,7 +72,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Up;
                 obj.GetComponent<DraggableItem>().CloneAmount = ups;
                 obj.transform.SetParent(transform);
-		obj.transform.localPosition = Vector3.right * 2;
+		        obj.transform.localPosition = Vector3.right * 2;
             }
             if (rights != 0)
             {
@@ -88,7 +88,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Left;
                 obj.GetComponent<DraggableItem>().CloneAmount = lefts;
                 obj.transform.SetParent(transform);
-		obj.transform.localPosition = Vector3.right * 2;
+		        obj.transform.localPosition = Vector3.right * 2;
             }
             if (downs != 0)
             {
@@ -96,7 +96,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponentInChildren<Teleporter>().direction = Level.Direction.Down;
                 obj.GetComponent<DraggableItem>().CloneAmount = downs;
                 obj.transform.SetParent(transform);
-		obj.transform.localPosition = Vector3.right * 2;
+		        obj.transform.localPosition = Vector3.right * 2;
             }
         }
     }
