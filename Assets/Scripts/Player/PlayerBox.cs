@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,7 +40,7 @@ public class PlayerBox : GameBehaviour
         GetComponent<BoxCollider2D>().enabled = false;
         
         // Definitely not me forgetting the instantiation syntax :sob: - Ali
-        _particleThing = GameObject.Instantiate<GameObject>(Resources.Load("Prefabs/SpawnGlow") as GameObject, GameManager.levelData.PlayerSpawnPos).transform;
+        _particleThing = GameObject.Instantiate(Resources.Load("Prefabs/SpawnGlow") as GameObject, GameManager.levelData.PlayerSpawnPos).transform;
         
         StartCoroutine(TransitionInCoroutine());
         nextLevel = false;
@@ -144,6 +143,15 @@ public class PlayerBox : GameBehaviour
 
     public IEnumerator TransitionCoroutine(bool RestartMode) // Called and awaited by GameManager in LoadLevel coroutine
     {
+        int stars = 1; // todo: @F1nn display these stars!
+        if (GameManager.movesThisLevel <= GameManager.levelData.minMoves) stars++;
+        if (GameManager.timeThisLevel <= GameManager.levelData.minTime) stars++;
+
+        GameManager.state.levelStars[GameManager.level - 1] = stars;
+        GameManager.state.levelMoves[GameManager.level - 1] = GameManager.movesThisLevel;
+        GameManager.state.levelTimes[GameManager.level - 1] = GameManager.timeThisLevel;
+        // I have no idea why we didnt set this in game manager itself-Ali
+        
         // Transition the box to cover the whole screen
         float t = 0;
         while (t < 50)

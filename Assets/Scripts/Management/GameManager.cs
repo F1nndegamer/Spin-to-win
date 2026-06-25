@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -94,11 +95,12 @@ public class GameManager : MonoBehaviour
             {
                 level = System.Int32.Parse(levelScene.name.Replace("Level",
                     "")); // Parse level number from current scene's name
+                if (level < 1) level = 1;
                 currentLevel = levelScene;
             }
             else
             {
-                level = -1; //  We prolly in the menu! lol
+                level = 1; //  We prolly in the menu! lol
             }
 
             SceneManager.UnloadSceneAsync(0); 
@@ -212,7 +214,10 @@ public class GameManager : MonoBehaviour
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
             inventory.gameObject.SetActive(true);
             levelStarted = false;
-            level = sceneIndex - 2; // update level at the end here, for various reasons - Ali
+            level = sceneIndex - 2;
+            // update level at the end here, for various reasons - Ali
+            if (level < 1) level = 1;
+            
             timeThisLevel = 0f;
             movesThisLevel = 0;
             GameRegistry.Execute();
@@ -226,7 +231,14 @@ public class GameManager : MonoBehaviour
         // Dont win or oad the next scene twice
         levelWon = true;
         state.wins++;
-        LoadLevel(level + 1);
+        if (level + 1 <= state.levelsUnlocked)
+        {
+            LoadLevel(level + 1);
+        }
+        else
+        {
+            StartCoroutine(LastLevelCompleted(1));
+        }
     }
 
     public void Lose()
@@ -278,8 +290,10 @@ public class GameManager : MonoBehaviour
     public static Controller controller;
     public static List<Teleporter> teleporters = new List<Teleporter>();
     public static Transform placedObjects;
+
+    public static int level = 1;
+    // Just go 1 to N, so we can reorder levels easily through build settings
     
-    public static int level = 1; // Just go 1 to N, so we can reorder levels easily through build settings
     public static bool levelLoaded; // Level is initiated and GameAwake and GameReady have all been called
     public static bool levelReady; // The entry transition has been completed
     public static bool levelStarted; // The user has changed gravity at least once
@@ -301,17 +315,22 @@ public class GameManager : MonoBehaviour
         public int totalMoves;
         public int wins, retries, lost;
         public string username;
+        public long firstPlayedTicks;
         [SerializeField] private long lastPlayedTicks;
         // Save lastPlayed as a long, return it as a DateTime
+        [HideInInspector]
         public DateTime lastPlayed
         {
             get => new DateTime(lastPlayedTicks);
             set => lastPlayedTicks = value.Ticks;
         }
 
-        public bool[] levelsCompleted;
+        public int levelsUnlocked
+        {
+            get => (levelStars.Sum() / 10 + 1) * 5; // For every 10 stars, unlock the next 5 levels
+        }
         public int[] levelMoves;
-        public int[] levelTimes;
+        public float[] levelTimes;
         public int[] levelStars;
         public int[] levelAttempts;
     }
@@ -333,9 +352,9 @@ public class GameManager : MonoBehaviour
             state = new Save
             {
                 postProcessing = true, volume = 1f, nextLevel = 1, totalMoves = 0, totalTime = 0f, username = "Player1", 
-                wins = 0, retries = 0, lost = 0,
-                lastPlayed = DateTime.Now, levelsCompleted = new bool[_totalLevels], levelAttempts = new int[_totalLevels],
-                levelMoves = new int[_totalLevels], levelTimes = new int[_totalLevels], levelStars = new int[_totalLevels]
+                wins = 0, retries = 0, lost = 0, firstPlayedTicks = DateTime.Now.Ticks,
+                lastPlayed = DateTime.Now, levelAttempts = new int[_totalLevels],
+                levelMoves = new int[_totalLevels], levelTimes = new float[_totalLevels], levelStars = new int[_totalLevels]
             };
             // Initially, fill with 0, false, or default values
             StateToVars();
@@ -361,6 +380,7 @@ public class GameManager : MonoBehaviour
     {
         level = state.nextLevel;
         
+        if (level < 1) state.nextLevel = level = 1;
     }
 
     #endregion
