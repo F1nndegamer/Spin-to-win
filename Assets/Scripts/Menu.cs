@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +12,26 @@ public class Menu : GameBehaviour
     public Camera currentCamera;
     public Slider volume;
     public Toggle postProcessing;
+    public Image fade;
+
+    private void Awake()
+    {
+        StartCoroutine(Fade());
+    }
+
+    private IEnumerator Fade()
+    {
+        float t = 1f;
+        while (t > 0f)
+        {
+            t -= Time.deltaTime * 2;
+            fade.color = new Color(fade.color.r, fade.color.g, fade.color.b, t);
+            yield return null;
+            
+        }
+        fade.color = Color.clear;
+        fade.gameObject.SetActive(false);
+    }
     
     public void OnPlay()
     {
