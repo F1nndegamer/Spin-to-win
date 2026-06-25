@@ -58,14 +58,16 @@ public class PlayerBox : GameBehaviour
         while (t < 1)
         {
             t += Time.unscaledDeltaTime * 3f; // Takes 0.333 s for the loop to complete
-            _particleThing.GetComponent<SpriteRenderer>().color = GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, t);
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, t);
+            _particleThing.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f - t);
             yield return null;
         }
         GetComponent<SpriteRenderer>().color = Color.white;
+        _particleThing.GetComponent<SpriteRenderer>().color = Color.clear;
         GetComponent<BoxCollider2D>().enabled = true;
         GetComponent<Rigidbody2D>().gravityScale = 1; // Enable gravity only after level is started
         yield return new WaitForSecondsRealtime(0.7f); // Wait an extra 0.7 seconds to ensure all particles have disentegrated
-        Destroy(_particleThing);
+        Destroy(_particleThing.gameObject);
     }
 
     public bool WillTeleport(Level.Direction direction)
