@@ -264,13 +264,13 @@ public class PlayerBox : GameBehaviour
                 levelCompletePanel.alpha = t;
                 movesText.text = $"Moves: {Mathf.CeilToInt(Mathf.Lerp(0, GameManager.movesThisLevel, t))}";
                 timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel * t)}";
-                yield return AnimateStars(stars);
             }
 
             levelCompletePanel.alpha = 1;
             movesText.text = $"Moves: {GameManager.movesThisLevel}";
             timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
 
+            yield return AnimateStars(stars);
             // THen we wait until the next level button is pressed
             yield return new WaitUntil(() => nextLevel);
 
