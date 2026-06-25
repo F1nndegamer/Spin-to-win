@@ -12,11 +12,6 @@ public class Inventory : GameBehaviour
     public override void GameStart()
     {
         GameObject mainCamera = Level.Instance.gameObject;
-        
-        // make sure the inventory object isn't too far away from the screen - Sabrina
-        float z = transform.position.z;
-        transform.position = Level.Instance.camera.ViewportToWorldPoint(new Vector3(0.20f, 0.5f, Mathf.Abs(Camera.main.transform.position.z)));
-        transform.position = new Vector3(transform.position.x, transform.position.y, z);
 
         SpawnInventory();
     }
