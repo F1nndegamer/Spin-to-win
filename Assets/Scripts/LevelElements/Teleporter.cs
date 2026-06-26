@@ -19,6 +19,7 @@ public class Teleporter : GameBehaviour
     }
     private void Start()
     {
+        if(!GameManager.teleporters.Contains(this)) GameManager.teleporters.Add(this); // This teleporter was initiated mid-game, register it at GameManager
         Vector3 targetpos = direction switch
         {
             Level.Direction.Right => Vector3.left,
@@ -57,7 +58,7 @@ public class Teleporter : GameBehaviour
     private void Teleport(Collider2D player)
     {
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-
+        AnnoyingLog(GameManager.teleporters.Count.ToString() + " teleporters available");
         foreach (Teleporter tp in GameManager.teleporters) // Use gamemanager to keep track of teleporters
         {
             if (tp == this)
