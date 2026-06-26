@@ -124,6 +124,8 @@ public class Menu : GameBehaviour
     public void LevelSelect()
     {
         LevelPanel.transform.parent.gameObject.SetActive(true);
+        if(LevelPanel.transform.childCount == 0)
+            return;
         for (int i = 0; i < GameManager.Instance.totalLevels; i++)
         {
             GameObject child = Instantiate(LevelPrefab);
