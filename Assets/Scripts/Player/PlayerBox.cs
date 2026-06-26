@@ -253,6 +253,7 @@ public class PlayerBox : GameBehaviour
             levelCompletePanel.gameObject.SetActive(true);
             // Dont Start the stars coroutine in parallel
             //StartCoroutine(SubTransitionCoroutine(stars));
+            StartCoroutine(AnimateStars(stars));
             t = 0;
             while (t < 1)
             {
@@ -267,7 +268,6 @@ public class PlayerBox : GameBehaviour
             movesText.text = $"Moves: {GameManager.movesThisLevel}";
             timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
 
-            yield return AnimateStars(stars);
             Debug.Log("Finished star animation");
             // THen we wait until the next level button is pressed
             yield return new WaitUntil(() => nextLevel);
