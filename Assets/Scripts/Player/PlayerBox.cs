@@ -291,10 +291,6 @@ public class PlayerBox : GameBehaviour
 
             levelCompletePanel.alpha = 0;
             movesText.text = timeText.text = "";
-            foreach (Image starImage in starImages)
-            {
-                starImage.color = new Color(1, 1, 1, t);
-            }
             levelCompletePanel.gameObject.SetActive(false);
         }
     }
