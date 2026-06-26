@@ -23,6 +23,11 @@ public class PlayerBox : GameBehaviour
     [SerializeField] private Image[] starImages;
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private GameObject HitGroundVFX_Prefab;
+    [SerializeField] public GameObject Star1;
+    [SerializeField] public GameObject Star2;
+    [SerializeField] public GameObject Star3;
+    public Sprite HollowStar;
+    public Sprite FilledStar;
 
     private Transform _particleThing;
 
@@ -41,10 +46,10 @@ public class PlayerBox : GameBehaviour
         GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
         GetComponent<Rigidbody2D>().gravityScale = 0;
         GetComponent<BoxCollider2D>().enabled = false;
-        
+
         // Definitely not me forgetting the instantiation syntax :sob: - Ali
         _particleThing = GameObject.Instantiate(Resources.Load("Prefabs/SpawnGlow") as GameObject, GameManager.levelData.PlayerSpawnPos).transform;
-        
+
         StartCoroutine(TransitionInCoroutine());
         nextLevel = false;
     }
@@ -72,7 +77,73 @@ public class PlayerBox : GameBehaviour
         yield return new WaitForSecondsRealtime(0.7f); // Wait an extra 0.7 seconds to ensure all particles have disentegrated
         Destroy(_particleThing.gameObject);
     }
+    private IEnumerator AnimateStars(int stars)
+    {
+        Image[] starImages =
+        {
+        Star1.GetComponent<Image>(),
+        Star2.GetComponent<Image>(),
+        Star3.GetComponent<Image>()
+    };
 
+        Transform[] starTransforms =
+        {
+        Star1.transform,
+        Star2.transform,
+        Star3.transform
+    };
+
+        for (int i = 0; i < 3; i++)
+        {
+            starImages[i].sprite = HollowStar;
+            starTransforms[i].localScale = Vector3.zero;
+        }
+
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        for (int i = 0; i < 3; i++)
+        {
+            bool earned = i < stars;
+
+            if (earned)
+                starImages[i].sprite = FilledStar;
+
+            float t = 0;
+
+            while (t < 1)
+            {
+                t += Time.unscaledDeltaTime * 8f;
+
+                float scale = Mathf.LerpUnclamped(
+                    0f,
+                    1f,
+                    Mathf.Sin(t * Mathf.PI * 0.5f) * 1.25f
+                );
+
+                starTransforms[i].localScale = Vector3.one * scale;
+
+                yield return null;
+            }
+
+            // lil boingg
+            t = 0;
+            while (t < 1)
+            {
+                t += Time.unscaledDeltaTime * 10f;
+
+                float scale = Mathf.Lerp(1.25f, 1f, t);
+
+                starTransforms[i].localScale = Vector3.one * scale;
+
+                yield return null;
+            }
+
+            starTransforms[i].localScale = Vector3.one;
+
+            yield return new WaitForSecondsRealtime(0.15f);
+        }
+        
+    }
     public bool WillTeleport(Level.Direction direction)
     {
         Vector2 origin = transform.position;
@@ -92,7 +163,7 @@ public class PlayerBox : GameBehaviour
                 dir = Vector2.down;
                 break;
         }
-        
+
         RaycastHit2D hit = Physics2D.Raycast(origin, dir, maxDistance, checkLayer);
         if (hit.collider != null)
         {
@@ -106,8 +177,11 @@ public class PlayerBox : GameBehaviour
 
     public bool IsGrounded()
     {
-        if(grounded && sinceSwitch == 5 && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold)) { grounded = false;
-            sinceSwitch = 0; return true; }
+        if (grounded && sinceSwitch == 5 && (GetComponent<Rigidbody2D>().linearVelocity.magnitude < velocityThreshold))
+        {
+            grounded = false;
+            sinceSwitch = 0; return true;
+        }
         return false;
     }
 
@@ -181,12 +255,16 @@ public class PlayerBox : GameBehaviour
         int stars = 1; // todo: @F1nn display these stars!
         if (GameManager.movesThisLevel <= GameManager.levelData.minMoves) stars++;
         if (GameManager.timeThisLevel <= GameManager.levelData.minTime) stars++;
+        Debug.Log($"Level: {GameManager.level}");
+        Debug.Log($"Stars length: {GameManager.state.levelStars.Length}");
+        Debug.Log($"Moves length: {GameManager.state.levelMoves.Length}");
+        Debug.Log($"Times length: {GameManager.state.levelTimes.Length}");
 
         GameManager.state.levelStars[GameManager.level - 1] = stars;
         GameManager.state.levelMoves[GameManager.level - 1] = GameManager.movesThisLevel;
         GameManager.state.levelTimes[GameManager.level - 1] = GameManager.timeThisLevel;
         // I have no idea why we didnt set this in game manager itself-Ali
-        
+
         // Transition the box to cover the whole screen
         float t = 0;
         while (t < 50)
@@ -211,13 +289,14 @@ public class PlayerBox : GameBehaviour
                 levelCompletePanel.alpha = t;
                 movesText.text = $"Moves: {Mathf.CeilToInt(Mathf.Lerp(0, GameManager.movesThisLevel, t))}";
                 timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel * t)}";
-                yield return null;
             }
 
             levelCompletePanel.alpha = 1;
             movesText.text = $"Moves: {GameManager.movesThisLevel}";
             timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel)}";
 
+            yield return AnimateStars(stars);
+            Debug.Log("Finished star animation");
             // THen we wait until the next level button is pressed
             yield return new WaitUntil(() => nextLevel);
 
