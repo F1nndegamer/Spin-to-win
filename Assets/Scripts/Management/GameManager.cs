@@ -199,8 +199,8 @@ public class GameManager : MonoBehaviour
     {
         yield return StartCoroutine(player.TransitionCoroutine(false));
         Level.Instance.GetComponent<AudioListener>().enabled = false; // Only disable the AudioListener, there is no EventSystem in credits scene
-        SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(1)); // Unload level scene before doing anything
-        LoadScene(sceneIndex);
+        SaveState(); // Make sure to not lose data, as GameManager will probably be destroyed now
+        SceneManager.LoadScene("Credits"); // Just unload EVERYTHING and load credits
     }
 
     private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene

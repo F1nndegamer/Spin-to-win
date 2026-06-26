@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Menu : GameBehaviour
@@ -28,7 +29,10 @@ public class Menu : GameBehaviour
         {
             bottomText.text = "Optimized. Does it work on potatoes? Maybe let the results speak...";
         }
-
+        if (GameManager.state.volume == 0.67f)
+        {
+            bottomText.text = "The level of precision- :skulk:";
+        }
         if (GameManager.state.lost > 100)
         {
             bottomText.text = "Consistent!";
@@ -108,5 +112,10 @@ public class Menu : GameBehaviour
         volume.value = GameManager.state.volume;
         postProcessing.isOn = GameManager.state.postProcessing;
         StartCoroutine(IAmAlive());
+    }
+
+    public void Credits()
+    {
+        SceneManager.LoadScene("Credits");
     }
 }
