@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,6 +29,7 @@ public class PlayerBox : GameBehaviour
     {
         GameManager.player = this;
         transition.localScale = Vector3.one * 50f;
+        InvokeRepeating(nameof(_randomCheck), 1f, 2f);
     }
 
     public override void GameAwake()
@@ -47,6 +47,15 @@ public class PlayerBox : GameBehaviour
 
         StartCoroutine(TransitionInCoroutine());
         nextLevel = false;
+    }
+
+    private void _randomCheck()
+    {
+        if (transform.position.magnitude > 1000f)
+        {
+            GameManager.state.secretThing = true;
+            // This occurs when the player gets too far from the intended playarea
+        }
     }
 
     public void Confirm() // Called when Level.Confirm is called, exits edit mode, enters play mode
