@@ -220,9 +220,6 @@ public class GameManager : MonoBehaviour
             currentLevel =
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
             inventory.gameObject.SetActive(true);
-            player.Star1.GetComponent<Image>().sprite = player.HollowStar;
-            player.Star2.GetComponent<Image>().sprite = player.HollowStar;
-            player.Star3.GetComponent<Image>().sprite = player.HollowStar;
             levelStarted = false;
             level = sceneIndex - 2;
             // update level at the end here, for various reasons - Ali

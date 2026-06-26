@@ -23,11 +23,6 @@ public class PlayerBox : GameBehaviour
     [SerializeField] private Image[] starImages;
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private GameObject HitGroundVFX_Prefab;
-    [SerializeField] public GameObject Star1;
-    [SerializeField] public GameObject Star2;
-    [SerializeField] public GameObject Star3;
-    public Sprite HollowStar;
-    public Sprite FilledStar;
 
     private Transform _particleThing;
 
@@ -79,24 +74,9 @@ public class PlayerBox : GameBehaviour
     }
     private IEnumerator AnimateStars(int stars)
     {
-        Image[] starImages =
-        {
-        Star1.GetComponent<Image>(),
-        Star2.GetComponent<Image>(),
-        Star3.GetComponent<Image>()
-    };
-
-        Transform[] starTransforms =
-        {
-        Star1.transform,
-        Star2.transform,
-        Star3.transform
-    };
-
         for (int i = 0; i < 3; i++)
         {
-            starImages[i].sprite = HollowStar;
-            starTransforms[i].localScale = Vector3.zero;
+            starImages[i].transform.localScale = Vector3.zero;
         }
 
         yield return new WaitForSecondsRealtime(0.25f);
@@ -104,9 +84,6 @@ public class PlayerBox : GameBehaviour
         for (int i = 0; i < 3; i++)
         {
             bool earned = i < stars;
-
-            if (earned)
-                starImages[i].sprite = FilledStar;
 
             float t = 0;
 
@@ -120,12 +97,13 @@ public class PlayerBox : GameBehaviour
                     Mathf.Sin(t * Mathf.PI * 0.5f) * 1.25f
                 );
 
-                starTransforms[i].localScale = Vector3.one * scale;
+                starImages[i].transform.localScale = Vector3.one * scale;
 
                 yield return null;
             }
 
             // lil boingg
+            // hmmmmmmmmmmmmmmmmm - Villager #4
             t = 0;
             while (t < 1)
             {
@@ -133,12 +111,12 @@ public class PlayerBox : GameBehaviour
 
                 float scale = Mathf.Lerp(1.25f, 1f, t);
 
-                starTransforms[i].localScale = Vector3.one * scale;
+                starImages[i].transform.localScale = Vector3.one * scale;
 
                 yield return null;
             }
 
-            starTransforms[i].localScale = Vector3.one;
+            starImages[i].transform.localScale = Vector3.one;
 
             yield return new WaitForSecondsRealtime(0.15f);
         }
@@ -229,6 +207,7 @@ public class PlayerBox : GameBehaviour
         nextLevel = true;
     }
 
+    /* This one got deprecated coz finn made a better one i guess
     private IEnumerator SubTransitionCoroutine(int _stars)
     {
         // This is to display stars, while the rest of the counters are displaying in parallel
@@ -248,7 +227,7 @@ public class PlayerBox : GameBehaviour
             starImages[c].color = Color.white;
             c++; // wait, did someone say C++? - Ali
         }
-    }
+    }*/
 
     public IEnumerator TransitionCoroutine(bool RestartMode) // Called and awaited by GameManager in LoadLevel coroutine
     {
@@ -280,8 +259,8 @@ public class PlayerBox : GameBehaviour
             // Deal with the levelCompletePanel only when moving to next level
             // Transition in the levelCompletePanel and show stats
             levelCompletePanel.gameObject.SetActive(true);
-            // Start the stars coroutine in parallel
-            StartCoroutine(SubTransitionCoroutine(stars));
+            // Dont Start the stars coroutine in parallel
+            //StartCoroutine(SubTransitionCoroutine(stars));
             t = 0;
             while (t < 1)
             {
