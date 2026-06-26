@@ -14,7 +14,7 @@ public class Controller : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.levelLoaded) return;
+        if (!GameManager.levelLoaded || !GameManager.levelReady) return;
 
         Vector3Int input = new Vector3Int(0, 0, 0);
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -69,7 +69,7 @@ public class Controller : MonoBehaviour
             level.ShiftMode(true);
         }
 
-        if (Input.GetKeyUp(KeyCode.RightShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             level.ShiftMode(false);
         }

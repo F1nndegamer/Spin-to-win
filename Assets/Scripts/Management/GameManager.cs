@@ -81,28 +81,19 @@ public class GameManager : MonoBehaviour
             // If the Level* scene is not at index 1, try find the scene in all loaded scenes
             // and if none of the scenes is a level scene, not a very sensible man has pulled this repo to test
             GameRegistry.executed = false;
-            Scene levelScene = SceneManager.GetSceneAt(1);
+            Scene levelScene = default;
             bool foundLevel = false;
-            if (!levelScene.name.StartsWith("Level"))
+            for (int i = 0; i < SceneManager.sceneCount; i++)
             {
-                int t = SceneManager.loadedSceneCount;
-                for (int i = 0; i < t; i++)
-                {
-                    if (i == 1) continue;
-                    levelScene = SceneManager.GetSceneAt(i);
-                    if (levelScene.name.StartsWith("Level"))
-                    {
-                        foundLevel = true;
-                        goto SetLevel;
-                    }
-                }
-                if (logLevel >= LogLevel.Warn) Debug.LogWarning("Menu?");
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (!scene.name.StartsWith("Level")) continue;
+                levelScene = scene;
+                foundLevel = true;
+                break;
             }
-        SetLevel: // Labels are awesome. - Ali
             if (foundLevel)
             {
-                level = Int32.Parse(levelScene.name.Replace("Level",
-                    "")); // Parse level number from current scene's name
+                level = Int32.Parse(levelScene.name.Replace("Level", ""));
                 if (level < 1) level = 1;
                 currentLevel = levelScene;
             }
@@ -111,7 +102,12 @@ public class GameManager : MonoBehaviour
                 level = 1; //  We prolly in the menu! lol
             }
 
-            SceneManager.UnloadSceneAsync(0);
+            Scene bootstrap = SceneManager.GetSceneByBuildIndex(0);
+            if (bootstrap.IsValid() && bootstrap.isLoaded && bootstrap != currentLevel)
+                SceneManager.UnloadSceneAsync(bootstrap);
+            levelLoaded = false;
+            levelReady = false;
+            levelEnding = false;
             GameRegistry.Execute();
         }
     }
@@ -135,6 +131,9 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
+        levelEnding = false;
+        teleporters = new List<Teleporter>();
+        placedObjects = null;
         GameRegistry.executed = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
@@ -162,7 +161,9 @@ public class GameManager : MonoBehaviour
                 SceneManager.SetActiveScene(baseScene);
             }
 
-            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex));
+            AsyncOperation unload = SceneManager.UnloadSceneAsync(SceneManager.GetSceneByBuildIndex(activeSceneIndex));
+            if (unload != null)
+                while (!unload.isDone) yield return null;
             levelStarted = false; // Set this here coz yea
             GameRegistry.Execute();
             levelLoaded = true;
@@ -207,6 +208,9 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
+        levelEnding = false;
+        teleporters = new List<Teleporter>();
+        placedObjects = null;
         GameRegistry.executed = false;
         //GameObject grid = GameObject.Find("Grid");
         //if (grid != null)
@@ -229,8 +233,8 @@ public class GameManager : MonoBehaviour
                 }
             }
 
-            currentLevel =
-                SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
+            currentLevel = SceneManager.GetSceneByBuildIndex(sceneIndex);
+            SceneManager.SetActiveScene(currentLevel);
             inventory.gameObject.SetActive(true);
             levelStarted = false;
             level = sceneIndex - 2;
@@ -247,9 +251,10 @@ public class GameManager : MonoBehaviour
 
     public void Win()
     {
-        if (!levelLoaded) return;
-        // Dont win or oad the next scene twice
+        if (!levelLoaded || !levelReady || !levelStarted || levelEnding) return;
+        levelEnding = true;
         levelWon = true;
+        state.nextLevel = Mathf.Max(state.nextLevel, level + 1);
         state.wins++;
         if (level + 1 <= state.levelsUnlocked)
         {
@@ -263,8 +268,9 @@ public class GameManager : MonoBehaviour
 
     public void Lose()
     {
-        if (levelReady)
-        { // Only allow restart when level is fully loaded
+        if (levelReady && levelStarted && !levelEnding)
+        {
+            levelEnding = true;
             levelWon = false;
             state.lost++;
             LoadLevel(level); // Load the current level again == Reload level
@@ -286,8 +292,8 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        if (!levelReady) return;
-        // Only allow restart when level is fully loaded
+        if (!levelReady || levelEnding) return;
+        levelEnding = true;
         levelWon = false;
         state.retries++;
         LoadLevel(level); // Load the current level again == Reload level
@@ -321,6 +327,7 @@ public class GameManager : MonoBehaviour
     public static int movesThisLevel;
     public static float timeThisLevel;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
+    public static bool levelEnding;
     public static bool stateLoaded;
 
     public static Save state;
@@ -355,7 +362,7 @@ public class GameManager : MonoBehaviour
         public int[] levelAttempts;
     }
 
-    private void SaveState()
+    public void SaveState()
     {
         state.lastPlayed = DateTime.Now;
         string stateJson = JsonUtility.ToJson(state, true);

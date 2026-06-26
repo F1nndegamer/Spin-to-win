@@ -16,6 +16,7 @@ public class GridManager : GameBehaviour
     public override void GameStart()
     {
         occupied.Clear();
+        blockingTilemap = null;
     }
 
     public Vector2Int WorldToCell(Vector3 worldPos)

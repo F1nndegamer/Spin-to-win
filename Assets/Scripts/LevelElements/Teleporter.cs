@@ -19,7 +19,9 @@ public class Teleporter : GameBehaviour
     }
     private void Start()
     {
-        if(!GameManager.teleporters.Contains(this)) GameManager.teleporters.Add(this); // This teleporter was initiated mid-game, register it at GameManager
+        // This teleporter was initiated mid-game, register it
+        if (!GameManager.teleporters.Contains(this))
+            GameManager.teleporters.Add(this);
         Vector3 targetpos = direction switch
         {
             Level.Direction.Right => Vector3.left,
@@ -29,18 +31,7 @@ public class Teleporter : GameBehaviour
             _ => Vector3.zero
         };
         DraggableItem item = transform.parent.GetComponent<DraggableItem>();
-        if (item == null)
-        {
-            Debug.Log("uhhhhh");
-        }
-        else
-        {
-            Debug.Log("ahh");
-            Debug.Log(direction);
-            Debug.Log(targetpos);
-            Debug.Log(Vector2Int.RoundToInt(targetpos));
-        }
-        transform.parent.GetComponent<DraggableItem>()?.shapeCells.Add(Vector2Int.RoundToInt(-targetpos));
+        item.shapeCells.Add(Vector2Int.RoundToInt(-targetpos));
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
