@@ -2639,7 +2639,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 280019572}
         m_TargetAssemblyTypeName: Menu, Assembly-CSharp
-        m_MethodName: OnPlay
+        m_MethodName: Credits
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
