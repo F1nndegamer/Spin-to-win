@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -19,12 +20,27 @@ public class Menu : GameBehaviour
     private void Awake()
     {
         StartCoroutine(Fade());
-        StartCoroutine(IAmAlive());
     }
 
     private IEnumerator IAmAlive()
     {
-        
+        if (GameManager.state.postProcessing)
+        {
+            bottomText.text = "Optimized. Does it work on potatoes? Maybe let the results speak...";
+        }
+
+        if (GameManager.state.lost > 100)
+        {
+            bottomText.text = "Consistent!";
+        }
+        if (DateTime.Now.Ticks - GameManager.state.firstPlayedTicks > new DateTime(1, 0, 0).Ticks)
+        {
+            bottomText.text = "Nostalgic";
+        }
+        if (DateTime.Now.Ticks - GameManager.state.lastPlayed.Ticks > new DateTime(0, 3, 0).Ticks)
+        {
+            bottomText.text = "Long time no see!";
+        }
         using (UnityWebRequest webRequest = UnityWebRequest.Get("https://live.alimad.co/ping?app=spin-to-win"))
         {
             yield return webRequest.SendWebRequest();
@@ -35,7 +51,7 @@ public class Menu : GameBehaviour
                 if (t > 1)
                 {
                     if(bottomText.text == "")
-                        bottomText.text = t.ToString() + " users are playing this game rn!";
+                        bottomText.text = t.ToString() + " pplz are playing this game rn!";
                 }
             }
         }
@@ -91,5 +107,6 @@ public class Menu : GameBehaviour
     {
         volume.value = GameManager.state.volume;
         postProcessing.isOn = GameManager.state.postProcessing;
+        StartCoroutine(IAmAlive());
     }
 }
