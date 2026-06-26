@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
@@ -14,6 +13,7 @@ public class GameManager : MonoBehaviour
     // The GameManager must always exist!!
     // Always use GameManager.LoadScene instead of SceneManager
     // - Ali
+    [SerializeField] private bool _skip = false;
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -68,7 +68,14 @@ public class GameManager : MonoBehaviour
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            Invoke(nameof(LoadMenu), 5.6f);
+            if (_skip)
+            {
+                LoadMenu();
+            }
+            else
+            {
+                Invoke(nameof(LoadMenu), 5.6f);
+            }
         }
         else
         {
