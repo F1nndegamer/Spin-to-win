@@ -527,7 +527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _skip: 0
   _clearStorage: 0
-  totalLevels: 11
+  totalLevels: 15
   _logLevel: 4
 --- !u!1 &1515508851
 GameObject:

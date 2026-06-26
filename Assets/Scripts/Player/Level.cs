@@ -18,6 +18,9 @@ public class Level : GameBehaviour
     private Vector3 targetPosition;
     public float accelerativeLerpSpeed = 0.9f;
 
+    public TextMeshProUGUI tutorialText;
+    public GameObject tutorialObj;
+
     private Bounds bounds;
 
     private struct Bounds
@@ -58,6 +61,23 @@ public class Level : GameBehaviour
         Up = 2,
         Left = 3
     };
+
+    public void ShowTutorial(string text)
+    {
+        tutorialObj.SetActive(true);
+        tutorialText.text = text;
+    }
+
+    public void ShowTutorial(string text, float autoDismissTime)
+    {
+        ShowTutorial(text);
+        Invoke(nameof(DismissTutorial), autoDismissTime);
+    }
+
+    private void DismissTutorial()
+    {
+        tutorialObj.SetActive(false);
+    }
 
     private Direction gravityDirection;
     void Awake()
@@ -298,7 +318,13 @@ public class Level : GameBehaviour
     }*/
 
     // Implement later after the rest of game is setup
-    public void Pause() { }
+    public void Pause()
+    {
+        // Instead of just pausing, quit the level and go back to main menu
+        GameManager.Instance.SaveState();
+        Destroy(GameManager.Instance.gameObject);
+        SceneManager.LoadSceneAsync(0);
+    }
     public void Restart()
     {
         GameManager.Instance.Restart();
