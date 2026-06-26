@@ -242,7 +242,7 @@ public class PlayerBox : GameBehaviour
         GameManager.state.levelStars[GameManager.level - 1] = stars;
         GameManager.state.levelMoves[GameManager.level - 1] = GameManager.movesThisLevel;
         GameManager.state.levelTimes[GameManager.level - 1] = GameManager.timeThisLevel;
-        // I have no idea why we didnt set this in game manager itself-Ali
+        // I have no idea why we didnt set this in game manager itself - Ali
 
         // Transition the box to cover the whole screen
         float t = 0;
@@ -268,6 +268,7 @@ public class PlayerBox : GameBehaviour
                 levelCompletePanel.alpha = t;
                 movesText.text = $"Moves: {Mathf.CeilToInt(Mathf.Lerp(0, GameManager.movesThisLevel, t))}";
                 timeText.text = $"Time taken: {FormatTime(GameManager.timeThisLevel * t)}";
+                yield return null; // !!
             }
 
             levelCompletePanel.alpha = 1;
