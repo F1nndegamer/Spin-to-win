@@ -4707,7 +4707,7 @@ MonoBehaviour:
   bottomRightBound: {fileID: 0}
   solidBlocks: 4
   teleportBlocks: 01000000
-  levelName: 
+  levelName: Mirror Realm
   minMoves: 68
   minTime: 53
 --- !u!1 &1754279555
