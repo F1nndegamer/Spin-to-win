@@ -880,7 +880,7 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1089794316}
   solidBlocks: 0
   teleportBlocks: 
-  levelName: Well, theres always a starting point
+  levelName: Everything has a start
   minMoves: 2
   minTime: 6
 --- !u!1 &1754279555

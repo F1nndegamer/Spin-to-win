@@ -1858,7 +1858,7 @@ MonoBehaviour:
   bottomRightBound: {fileID: 894994374}
   solidBlocks: 0
   teleportBlocks: 
-  levelName: 
+  levelName: Hollow Earth
   minMoves: 11
   minTime: 13
 --- !u!1 &1470767644

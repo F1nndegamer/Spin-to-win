@@ -1751,7 +1751,7 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1311121185}
   solidBlocks: 2
   teleportBlocks: 
-  levelName: Floors Down
+  levelName: Many Floors Down
   minMoves: 4
   minTime: 8
 --- !u!1 &1311121184
