@@ -313,6 +313,9 @@ public class PlayerBox : GameBehaviour
         if (GameManager.level == 1)
         {
             Level.Instance.ShowTutorial(0);
+        } else if (GameManager.level == 3)
+        {
+            Level.Instance.ShowTutorial(5, 5f);
         }
     }
 }

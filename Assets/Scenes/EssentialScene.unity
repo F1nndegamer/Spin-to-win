@@ -2877,6 +2877,7 @@ MonoBehaviour:
   - You are now in play mode! Use A/D or Right/Left arrow keys to switch gravity
     direction
   - Find an exit to the level!
+  - You can place blocks from the inventory while in preview mode
   currentTutorial: -1
   tutorialText: {fileID: 2123684575}
   tutorialObj: {fileID: 342607522}
