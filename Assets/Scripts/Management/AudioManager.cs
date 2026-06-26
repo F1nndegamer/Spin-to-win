@@ -44,15 +44,25 @@ public class AudioManager : MonoBehaviour
     public void playFragileBlockBreakSFX() { spawnAudioPrefab(fragileBlockBreakSFXPrefab); }
     public void playPlaceBlockSFX() { spawnAudioPrefab(placeBlockSFXPrefab); }
 
-
+    public void playMusic() { spawnAudioPrefab(musicPrefab); }
 
     private void Awake()
     {
         Object.DontDestroyOnLoad(gameObject); // keep this alive
     }
 
+    private bool hasStartedMusic = false;
     private void FixedUpdate()
     {
+        if(hasStartedMusic == false)
+        {
+            // prevent a million evil messages from when we transition from entryPoint to MainMenu
+            AudioListener listener = GameObject.FindAnyObjectByType<AudioListener>();
+            if(listener == null) { return; }
+            playMusic();
+            hasStartedMusic = true;
+        }
+
         for(int i=0; i<musicList.Count; i++)
         {
             AudioSource audio = musicList[i];

@@ -911,7 +911,7 @@ MonoBehaviour:
   rotateSFXPrefab: {fileID: 0}
   fragileBlockBreakSFXPrefab: {fileID: 0}
   placeBlockSFXPrefab: {fileID: 0}
-  musicPrefab: {fileID: 0}
+  musicPrefab: {fileID: 7944716250104351455, guid: a9431a4f8a1a39748a01c2b8e9a488df, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
