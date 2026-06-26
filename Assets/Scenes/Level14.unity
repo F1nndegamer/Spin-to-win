@@ -5506,11 +5506,11 @@ MonoBehaviour:
   PlayerSpawnPos: {fileID: 762106995}
   topLeftBound: {fileID: 910720737}
   bottomRightBound: {fileID: 1308550331}
-  solidBlocks: 0
+  solidBlocks: 5
   teleportBlocks: 
   levelName: Tuff
-  minMoves: 21
-  minTime: 29
+  minMoves: 12
+  minTime: 12
 --- !u!1 &1308550330
 GameObject:
   m_ObjectHideFlags: 0
