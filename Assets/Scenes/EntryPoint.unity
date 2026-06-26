@@ -526,7 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _skip: 0
-  _clearStorage: 0
+  _clearStorage: 1
   totalLevels: 17
   _logLevel: 4
 --- !u!1 &1515508851

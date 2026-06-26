@@ -331,7 +331,7 @@ public class GameManager : MonoBehaviour
     public static bool stateLoaded;
 
     public static Save state;
-    
+
     public struct Save
     {
         public bool postProcessing;
@@ -367,7 +367,7 @@ public class GameManager : MonoBehaviour
         state.lastPlayed = DateTime.Now;
         string stateJson = JsonUtility.ToJson(state, true);
         if (PlayerPrefs.GetString("state") == stateJson) return; // We do this to avoid certain crash situations, at the cost of mild performance
-        if(logLevel >= LogLevel.Saves) Debug.Log("Saving: " + stateJson);
+        if (logLevel >= LogLevel.Saves) Debug.Log("Saving: " + stateJson);
         PlayerPrefs.SetString("state", stateJson);
         PlayerPrefs.Save();
     }
@@ -394,15 +394,19 @@ public class GameManager : MonoBehaviour
                 levelAttempts = new int[_totalLevels],
                 levelMoves = new int[_totalLevels],
                 levelTimes = new float[_totalLevels],
-                levelStars = new int[_totalLevels]
+                levelStars = new int[_totalLevels],
+
             };
+            if (state.levelStars.Length > 0) state.levelStars[0] = 3;
+            if (state.levelStars.Length > 1) state.levelStars[1] = 2;
+            if (state.levelStars.Length > 2) state.levelStars[2] = 1;
             // Initially, fill with 0, false, or default values
             StateToVars();
             stateLoaded = true;
             return;
         }
         string json = PlayerPrefs.GetString("state");
-        if(logLevel >= LogLevel.Info) Debug.Log("Loaded: " + json);
+        if (logLevel >= LogLevel.Info) Debug.Log("Loaded: " + json);
         try
         {
             state = JsonUtility.FromJson<Save>(json);
@@ -436,6 +440,8 @@ public class GameManager : MonoBehaviour
     private void StateToVars()
     {
         level = state.nextLevel;
+
+        if (level > state.levelsUnlocked) level = state.levelsUnlocked;
 
         if (level < 1) state.nextLevel = level = 1;
     }
