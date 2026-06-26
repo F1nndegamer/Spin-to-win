@@ -397,9 +397,6 @@ public class GameManager : MonoBehaviour
                 levelStars = new int[_totalLevels],
 
             };
-            if (state.levelStars.Length > 0) state.levelStars[0] = 3;
-            if (state.levelStars.Length > 1) state.levelStars[1] = 2;
-            if (state.levelStars.Length > 2) state.levelStars[2] = 1;
             // Initially, fill with 0, false, or default values
             StateToVars();
             stateLoaded = true;
