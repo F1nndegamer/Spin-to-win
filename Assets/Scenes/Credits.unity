@@ -1960,9 +1960,10 @@ Animation:
   m_GameObject: {fileID: 1515508851}
   m_Enabled: 1
   serializedVersion: 4
-  m_Animation: {fileID: 7400000, guid: 3cedb9ba9b8ef4085b4105a82ff575c1, type: 2}
+  m_Animation: {fileID: 7400000, guid: fcf215512bc14482b8c826343c66fd66, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 3cedb9ba9b8ef4085b4105a82ff575c1, type: 2}
+  - {fileID: 7400000, guid: fcf215512bc14482b8c826343c66fd66, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
