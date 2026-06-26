@@ -880,15 +880,9 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1089794316}
   solidBlocks: 0
   teleportBlocks: 
-<<<<<<< HEAD
   levelName: Well, theres always a starting point
   minMoves: 2
   minTime: 4
-=======
-  levelName: 
-  minMoves: 1
-  minTime: 100
->>>>>>> 51f013241eb7fd8d960446c435fa48382f715459
 --- !u!1 &1754279555
 GameObject:
   m_ObjectHideFlags: 0

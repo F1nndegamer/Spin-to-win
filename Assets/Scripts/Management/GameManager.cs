@@ -315,12 +315,7 @@ public class GameManager : MonoBehaviour
     public static bool stateLoaded;
 
     public static Save state;
-<<<<<<< HEAD
     
-=======
-
-    [System.Serializable]
->>>>>>> 51f013241eb7fd8d960446c435fa48382f715459
     public struct Save
     {
         public bool postProcessing;
