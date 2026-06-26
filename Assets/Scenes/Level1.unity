@@ -882,7 +882,7 @@ MonoBehaviour:
   teleportBlocks: 
   levelName: Well, theres always a starting point
   minMoves: 2
-  minTime: 4
+  minTime: 6
 --- !u!1 &1754279555
 GameObject:
   m_ObjectHideFlags: 0

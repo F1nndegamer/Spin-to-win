@@ -35,6 +35,8 @@ public class Teleporter : GameBehaviour
         else
         {
             Debug.Log("ahh");
+            Debug.Log(direction);
+            Debug.Log(targetpos);
             Debug.Log(Vector2Int.RoundToInt(targetpos));
         }
         transform.parent.GetComponent<DraggableItem>()?.shapeCells.Add(Vector2Int.RoundToInt(targetpos));

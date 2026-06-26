@@ -1158,9 +1158,9 @@ MonoBehaviour:
   bottomRightBound: {fileID: 886110977}
   solidBlocks: 0
   teleportBlocks: 
-  levelName: 
-  minMoves: 10
-  minTime: 1
+  levelName: Just another level
+  minMoves: 6
+  minTime: 8
 --- !u!1 &1747194711
 GameObject:
   m_ObjectHideFlags: 0
