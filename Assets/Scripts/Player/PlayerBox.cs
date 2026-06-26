@@ -74,11 +74,6 @@ public class PlayerBox : GameBehaviour
     }
     private IEnumerator AnimateStars(int stars)
     {
-        for (int i = 0; i < 3; i++)
-        {
-            starImages[i].transform.localScale = Vector3.zero;
-        }
-
         yield return new WaitForSecondsRealtime(0.25f);
 
         for (int i = 0; i < 3; i++)
@@ -243,6 +238,11 @@ public class PlayerBox : GameBehaviour
         GameManager.state.levelMoves[GameManager.level - 1] = GameManager.movesThisLevel;
         GameManager.state.levelTimes[GameManager.level - 1] = GameManager.timeThisLevel;
         // I have no idea why we didnt set this in game manager itself - Ali
+        
+        for (int i = 0; i < 3; i++)
+        {
+            starImages[i].transform.localScale = Vector3.zero;
+        }
 
         // Transition the box to cover the whole screen
         float t = 0;
