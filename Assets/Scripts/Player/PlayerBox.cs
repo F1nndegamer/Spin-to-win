@@ -231,14 +231,20 @@ public class PlayerBox : GameBehaviour
         if(Level.Instance.currentTutorial == 4) Level.Instance.DismissTutorial();
         if (GameManager.movesThisLevel <= GameManager.levelData.minMoves) stars++;
         if (GameManager.timeThisLevel <= GameManager.levelData.minTime) stars++;
-        Debug.Log($"Level: {GameManager.level}");
-        Debug.Log($"Stars length: {GameManager.state.levelStars.Length}");
-        Debug.Log($"Moves length: {GameManager.state.levelMoves.Length}");
-        Debug.Log($"Times length: {GameManager.state.levelTimes.Length}");
+        if (GameManager.logLevel >= GameManager.LogLevel.Info)
+        {
+            Debug.Log($"Level: {GameManager.level}");
+            Debug.Log($"Stars length: {GameManager.state.levelStars.Length}");
+            Debug.Log($"Moves length: {GameManager.state.levelMoves.Length}");
+            Debug.Log($"Times length: {GameManager.state.levelTimes.Length}");
+        }
 
-        GameManager.state.levelStars[GameManager.level - 1] = stars;
-        GameManager.state.levelMoves[GameManager.level - 1] = GameManager.movesThisLevel;
-        GameManager.state.levelTimes[GameManager.level - 1] = GameManager.timeThisLevel;
+        if (!RestartMode) // Only save to gamestate only if the level was actually completed
+        {
+            GameManager.state.levelStars[GameManager.level - 1] = stars;
+            GameManager.state.levelMoves[GameManager.level - 1] = GameManager.movesThisLevel;
+            GameManager.state.levelTimes[GameManager.level - 1] = GameManager.timeThisLevel;
+        }
         // I have no idea why we didnt set this in game manager itself - Ali
         
         for (int i = 0; i < 3; i++)
