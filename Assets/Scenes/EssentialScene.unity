@@ -2870,6 +2870,14 @@ MonoBehaviour:
   lerpSpeed: 4
   followSpeed: 0.8
   accelerativeLerpSpeed: 0.2
+  turotials:
+  - You are currently in preview mode! Use WASD to look around
+  - Use Q and E to zoom in and out
+  - Press ENTER when you're ready to play!
+  - You are now in play mode! Use A/D or Right/Left arrow keys to switch gravity
+    direction
+  - Find an exit to the level!
+  currentTutorial: -1
   tutorialText: {fileID: 2123684575}
   tutorialObj: {fileID: 342607522}
   allowMidairSwitch: 0
