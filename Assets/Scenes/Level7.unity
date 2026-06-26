@@ -2104,7 +2104,7 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1282155764}
   solidBlocks: 0
   teleportBlocks: 
-  levelName: 
+  levelName: Find The Hole
   minMoves: 24
   minTime: 22
 --- !u!1 &1282155763
