@@ -32,6 +32,7 @@ public class Inventory : GameBehaviour
             obj.GetComponent<DraggableItem>().text = level.normalObjectPosition.GetComponentInChildren<TextMeshPro>();
 
             obj.name = $"SolidBlocks_{data.solidBlocks}";
+            obj.transform.localScale = new Vector3(70, 70, 70);
         }
         if (data.teleportBlocks.Length != 0)
         {
@@ -71,6 +72,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = ups;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionUp.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
+                obj.transform.localScale = new Vector3(70, 70, 70);
             }
             if (rights != 0)
             {
@@ -79,6 +81,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = rights;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
+                obj.transform.localScale = new Vector3(70, 70, 70);
             }
             if (lefts != 0)
             {
@@ -88,6 +91,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = lefts;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
+                obj.transform.localScale = new Vector3(70, 70, 70);
             }
             if (downs != 0)
             {
@@ -96,6 +100,7 @@ public class Inventory : GameBehaviour
                 obj.GetComponent<DraggableItem>().CloneAmount = downs;
                 obj.GetComponent<DraggableItem>().text = level.teleporObjectPositionDown.GetComponentInChildren<TextMeshPro>();
                 obj.transform.SetParent(objectParent);
+                obj.transform.localScale = new Vector3(70, 70, 70);
             }
         }
     }
