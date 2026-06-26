@@ -37,6 +37,10 @@ public class Menu : GameBehaviour
         {
             bottomText.text = "Consistent!";
         }
+        if (GameManager.state.secretThing)
+        {
+            bottomText.text = "Wow, you've been driving out of bounds lately";
+        }
         if (DateTime.Now.Ticks - GameManager.state.firstPlayedTicks > new DateTime(1, 0, 0).Ticks)
         {
             bottomText.text = "Nostalgic";

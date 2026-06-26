@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
     // The GameManager must always exist!!
     // Always use GameManager.LoadScene instead of SceneManager
     // - Ali
-    [SerializeField] private bool _skip = false;
-    [SerializeField] private bool _clearStorage = false;
+    [SerializeField] private bool _skip;
+    [SerializeField] private bool _clearStorage;
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(player.TransitionCoroutine(false));
         Level.Instance.GetComponent<AudioListener>().enabled = false; // Only disable the AudioListener, there is no EventSystem in credits scene
         SaveState(); // Make sure to not lose data, as GameManager will probably be destroyed now
-        SceneManager.LoadScene("Credits"); // Just unload EVERYTHING and load credits
+        SceneManager.LoadScene(sceneIndex); // Just unload EVERYTHING and load this scene
     }
 
     private IEnumerator LoadLevelCoroutine(int sceneIndex) // Different from LoadSceneCoroutine as we are not unloading the active scene
@@ -335,6 +335,7 @@ public class GameManager : MonoBehaviour
         public int totalMoves;
         public int wins, retries, lost;
         public string username;
+        public bool secretThing;
         public long firstPlayedTicks;
         private long lastPlayedTicks;
         // Save lastPlayed as a long, return it as a DateTime
@@ -377,6 +378,7 @@ public class GameManager : MonoBehaviour
                 totalMoves = 0,
                 totalTime = 0f,
                 username = "Player1",
+                secretThing = false,
                 wins = 0,
                 retries = 0,
                 lost = 0,
