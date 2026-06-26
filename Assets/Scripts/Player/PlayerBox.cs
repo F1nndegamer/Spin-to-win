@@ -170,7 +170,11 @@ public class PlayerBox : GameBehaviour
         {
             grounded = true;
             sinceSwitch = 5;
-            if (lastFrameGrounded == false) Instantiate(HitGroundVFX_Prefab, transform.position, Level.Instance.camera.transform.rotation, transform);
+            if (lastFrameGrounded == false)
+            {
+                AudioManager.Instance.playHitGroundSFX();
+                Instantiate(HitGroundVFX_Prefab, transform.position, Level.Instance.camera.transform.rotation, transform);
+            }
         }
         lastFrameGrounded = isOnGround;
     }

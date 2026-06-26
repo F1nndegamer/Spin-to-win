@@ -252,6 +252,7 @@ public class GameManager : MonoBehaviour
     public void Win()
     {
         if (!levelLoaded || !levelReady || !levelStarted || levelEnding) return;
+        AudioManager.Instance.playWinSFX();
         levelEnding = true;
         levelWon = true;
         state.nextLevel = Mathf.Max(state.nextLevel, level + 1);

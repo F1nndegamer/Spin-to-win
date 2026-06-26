@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class DraggableItem : MonoBehaviour
@@ -29,6 +30,10 @@ public class DraggableItem : MonoBehaviour
         }
         collider = GetComponent<BoxCollider2D>();
         cam = Camera.main;
+    }
+    void Update()
+    {
+    
     }
     void Start()
     {
@@ -89,7 +94,21 @@ public class DraggableItem : MonoBehaviour
     private void Drag()
     {
         if (!isDragging) return;
+        Transform parent = transform.parent;
 
+        if (parent == null)
+        {
+            transform.localScale = Vector3.one;
+        }
+        else
+        {
+            Vector3 p = parent.lossyScale;
+            transform.localScale = new Vector3(
+                1f / p.x,
+                1f / p.y,
+                1f / p.z
+            );
+        }
         Vector3 mouse = Input.mousePosition;
         if (cam == null)
         {
