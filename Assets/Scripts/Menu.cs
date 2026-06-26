@@ -25,7 +25,7 @@ public class Menu : GameBehaviour
 
     private IEnumerator IAmAlive()
     {
-        if (GameManager.state.postProcessing)
+        if (!GameManager.state.postProcessing)
         {
             bottomText.text = "Optimized. Does it work on potatoes? Maybe let the results speak...";
         }
