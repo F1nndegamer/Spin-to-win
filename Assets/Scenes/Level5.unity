@@ -1631,10 +1631,10 @@ MonoBehaviour:
   topLeftBound: {fileID: 506267060}
   bottomRightBound: {fileID: 1758692389}
   solidBlocks: 0
-  teleportBlocks: 01000000
-  levelName: 
-  minMoves: 10
-  minTime: 14
+  teleportBlocks: 02000000
+  levelName: Wormhole
+  minMoves: 7
+  minTime: 12
 --- !u!1 &1730045542
 GameObject:
   m_ObjectHideFlags: 0

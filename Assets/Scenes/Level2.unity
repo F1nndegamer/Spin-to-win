@@ -1158,7 +1158,7 @@ MonoBehaviour:
   bottomRightBound: {fileID: 886110977}
   solidBlocks: 0
   teleportBlocks: 
-  levelName: Just another level
+  levelName: Watch Out for Spikes!
   minMoves: 6
   minTime: 8
 --- !u!1 &1747194711

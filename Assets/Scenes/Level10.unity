@@ -2567,8 +2567,8 @@ MonoBehaviour:
   solidBlocks: 0
   teleportBlocks: 
   levelName: 
-  minMoves: 1
-  minTime: 1
+  minMoves: 28
+  minTime: 25
 --- !u!1 &1694874250
 GameObject:
   m_ObjectHideFlags: 0

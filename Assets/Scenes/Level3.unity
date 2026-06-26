@@ -1751,9 +1751,9 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1311121185}
   solidBlocks: 2
   teleportBlocks: 
-  levelName: 
+  levelName: Floors Down
   minMoves: 4
-  minTime: 9
+  minTime: 8
 --- !u!1 &1311121184
 GameObject:
   m_ObjectHideFlags: 0
