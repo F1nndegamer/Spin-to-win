@@ -12,9 +12,8 @@ public class Inventory : GameBehaviour
 
     public override void GameStart()
     {
-        GameObject mainCamera = Level.Instance.gameObject;
-
-        Invoke(nameof(SpawnInventory), 0.02f); // Wait 1 or 2 frames before invoking this method, to avoid conflict with previous camera direction
+        CancelInvoke(nameof(SpawnInventory));
+        Invoke(nameof(SpawnInventory), 0.02f);
     }
     public void SpawnInventory()
     {

@@ -25,7 +25,7 @@ public class Menu : GameBehaviour
 
     private IEnumerator IAmAlive()
     {
-        if (GameManager.state.postProcessing)
+        if (!GameManager.state.postProcessing)
         {
             bottomText.text = "Optimized. Does it work on potatoes? Maybe let the results speak...";
         }
@@ -41,11 +41,11 @@ public class Menu : GameBehaviour
         {
             bottomText.text = "Wow, you've been driving out of bounds lately";
         }
-        if (DateTime.Now.Ticks - GameManager.state.firstPlayedTicks > new DateTime(1, 0, 0).Ticks)
+        if ((DateTime.Now - new DateTime(GameManager.state.firstPlayedTicks)).TotalDays > 365)
         {
             bottomText.text = "Nostalgic";
         }
-        if (DateTime.Now.Ticks - GameManager.state.lastPlayed.Ticks > new DateTime(0, 3, 0).Ticks)
+        if ((DateTime.Now - GameManager.state.lastPlayed).TotalDays > 60)
         {
             bottomText.text = "Long time no see!";
         }
@@ -120,6 +120,8 @@ public class Menu : GameBehaviour
 
     public void Credits()
     {
+        GameManager.Instance.SaveState();
+        currentCamera.GetComponent<AudioListener>().enabled = false;
         SceneManager.LoadScene("Credits");
     }
 }

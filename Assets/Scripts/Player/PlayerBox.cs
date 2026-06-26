@@ -34,7 +34,7 @@ public class PlayerBox : GameBehaviour
 
     public override void GameAwake()
     {
-        // Move the player to spawn while the box is covering the screen
+        StopAllCoroutines();
         transform.position = GameManager.levelData.PlayerSpawnPos.position;
         transform.rotation = Quaternion.Euler(0, 0, 0);
         GetComponent<SpriteRenderer>().color = Color.clear;
