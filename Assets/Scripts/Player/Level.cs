@@ -17,7 +17,8 @@ public class Level : GameBehaviour
     private int _unsyncedOffset;
     private Vector3 targetPosition;
     public float accelerativeLerpSpeed = 0.9f;
-
+    public string[] turotials;
+    public int currentTutorial = -1;
     public TextMeshProUGUI tutorialText;
     public GameObject tutorialObj;
 
@@ -62,13 +63,14 @@ public class Level : GameBehaviour
         Left = 3
     };
 
-    public void ShowTutorial(string text)
+    public void ShowTutorial(int text)
     {
         tutorialObj.SetActive(true);
-        tutorialText.text = text;
+        tutorialText.text = turotials[text];
+        currentTutorial = text;
     }
 
-    public void ShowTutorial(string text, float autoDismissTime)
+    public void ShowTutorial(int text, float autoDismissTime)
     {
         ShowTutorial(text);
         Invoke(nameof(DismissTutorial), autoDismissTime);
@@ -77,6 +79,7 @@ public class Level : GameBehaviour
     private void DismissTutorial()
     {
         tutorialObj.SetActive(false);
+        currentTutorial = -1;
     }
 
     private Direction gravityDirection;
@@ -120,6 +123,11 @@ public class Level : GameBehaviour
         teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>().text = "";
         teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>().text = "";
         normalObjectPosition.GetComponentInChildren<TextMeshPro>().text = "";
+
+        if (GameManager.level == 1)
+        {
+            ShowTutorial(0);
+        }
     }
 
     private void LateUpdate()
@@ -139,6 +147,9 @@ public class Level : GameBehaviour
 
     public void PassDirectionalInput(int x, int y, int z) // Passed from Controller, based on WASD and Q E
     {
+        if(x != 0 || y != 0 && currentTutorial == 0) ShowTutorial(1);
+        if(z != 0 && currentTutorial == 1) ShowTutorial(2);
+        if(currentTutorial == 3) ShowTutorial(4);
         camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
         // change it here so we can set _targetOrthoSize to anything to lerp to, even after the edit mode ends
         if (GameManager.levelStarted)
@@ -194,6 +205,7 @@ public class Level : GameBehaviour
 
     public void Confirm()
     {
+        if(currentTutorial == 2) ShowTutorial(3);
         helpPlayMode.SetActive(true);
         helpEditMode.SetActive(false);
         if (GameManager.levelStarted) return;
