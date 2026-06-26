@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class PlayerBox : GameBehaviour
     [SerializeField] private Transform transition;
     [SerializeField] private CanvasGroup levelCompletePanel;
     [SerializeField] private TextMeshProUGUI movesText, timeText;
+    [SerializeField] private Image[] starImages;
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private GameObject HitGroundVFX_Prefab;
 
@@ -153,6 +155,27 @@ public class PlayerBox : GameBehaviour
         nextLevel = true;
     }
 
+    private IEnumerator SubTransitionCoroutine(int _stars)
+    {
+        // This is to display stars, while the rest of the counters are displaying in parallel
+        int c = 0; // Countery, initially, zero stars are visible
+        const float delay = 0.3f; // Delay between stars becoming visible
+        const float durationMultiplier = 2f; // Reciprocal of duration of per-star animation
+        while (c < _stars)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.unscaledDeltaTime * durationMultiplier;
+                starImages[c].color = new Color(1, 1, 1, t);
+                yield return null;
+            }
+            starImages[c].color = Color.white;
+            c++; // wait, did someone say C++? - Ali
+        }
+    }
+
     public IEnumerator TransitionCoroutine(bool RestartMode) // Called and awaited by GameManager in LoadLevel coroutine
     {
         int stars = 1; // todo: @F1nn display these stars!
@@ -179,6 +202,8 @@ public class PlayerBox : GameBehaviour
             // Deal with the levelCompletePanel only when moving to next level
             // Transition in the levelCompletePanel and show stats
             levelCompletePanel.gameObject.SetActive(true);
+            // Start the stars coroutine in parallel
+            StartCoroutine(SubTransitionCoroutine(stars));
             t = 0;
             while (t < 1)
             {
@@ -207,6 +232,10 @@ public class PlayerBox : GameBehaviour
 
             levelCompletePanel.alpha = 0;
             movesText.text = timeText.text = "";
+            foreach (Image starImage in starImages)
+            {
+                starImage.color = new Color(1, 1, 1, t);
+            }
             levelCompletePanel.gameObject.SetActive(false);
         }
     }

@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         // Load the menu after the Setup is done, only if this scene was opened directly
         if (SceneManager.GetActiveScene().buildIndex == 0)
         {
-            Invoke(nameof(LoadMenu), 4.2f);
+            Invoke(nameof(LoadMenu), 5.6f);
         }
         else
         {
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
             SetLevel: // Labels are awesome. - Ali
             if (foundLevel)
             {
-                level = System.Int32.Parse(levelScene.name.Replace("Level",
+                level = Int32.Parse(levelScene.name.Replace("Level",
                     "")); // Parse level number from current scene's name
                 if (level < 1) level = 1;
                 currentLevel = levelScene;
@@ -304,11 +304,10 @@ public class GameManager : MonoBehaviour
     public static int movesThisLevel;
     public static float timeThisLevel;
     public static bool levelWon = true; // Ignore the naming but, this variable is meant to store whether we reached the current level by winning or by restarting
-    public static bool stateLoaded = false;
+    public static bool stateLoaded;
 
     public static Save state;
     
-    [System.Serializable]
     public struct Save
     {
         public bool postProcessing;
@@ -320,9 +319,8 @@ public class GameManager : MonoBehaviour
         public int wins, retries, lost;
         public string username;
         public long firstPlayedTicks;
-        [SerializeField] private long lastPlayedTicks;
+        private long lastPlayedTicks;
         // Save lastPlayed as a long, return it as a DateTime
-        [HideInInspector]
         public DateTime lastPlayed
         {
             get => new DateTime(lastPlayedTicks);
@@ -370,7 +368,7 @@ public class GameManager : MonoBehaviour
         {
             state = JsonUtility.FromJson<Save>(json);
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             PlayerPrefs.DeleteKey("state"); // If the JSON is corrupted, clear it out and start fresh
             goto Initialize;
