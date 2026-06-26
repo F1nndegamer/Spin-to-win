@@ -289,6 +289,7 @@ public class PlayerBox : GameBehaviour
 
     private IEnumerator TransitionInCoroutine() // Called on level start by player
     {
+        GameManager.state.levelAttempts[GameManager.level - 1]++;
         // Uncover the screen
         float t = 50;
         while (t > 0)
