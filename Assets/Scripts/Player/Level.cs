@@ -237,11 +237,13 @@ public class Level : GameBehaviour
         SetPhysicsEnabled(false);
         if (!player.WillTeleport(gravityDirection)) // Do not coroutine when the player teleports next step, instead, initiate the coroutine when player teleports 
         {
+            AudioManager.Instance.playTeleportSFX();
             StartCoroutine(RotateCamera(dir)); // wait for the rotate coroutine to finish before changing gravity -Sabrina
             yield return new WaitForSecondsRealtime(0.1f); // needs to be fixed in order to not collide with the teleport coroutine - Ali
         }
         else
         {
+            AudioManager.Instance.playRotateSFX();
             _unsyncedOffset += dir;
         }
         UpdateGravity();

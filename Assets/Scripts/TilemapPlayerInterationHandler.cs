@@ -44,9 +44,11 @@ public class TilemapPlayerInterationHandler : GameBehaviour
             positionToTilemapPos(player.transform.position + Vector3.left),
             positionToTilemapPos(player.transform.position + Vector3.right),
         };
+        Vector3Int standingOnPos = positionToTilemapPos(player.transform.position - (Vector3)Physics2D.gravity);
 
         checkAndHandleTileCollisions(playerPos);
         checkFragileTiles(adjacentTilePositions);
+        //checkFragileTiles(new List<Vector3Int>(){ standingOnPos }); // only on the one we're standing on
     }
 
     private void checkAndHandleTileCollisions(Vector3Int playerPos)
@@ -86,6 +88,7 @@ public class TilemapPlayerInterationHandler : GameBehaviour
             Vector3Int tilePos = fragileTilesToDestroy[i];
             if (adjacentTilePositions.Contains(tilePos)) { continue; } // We are still touching that tile, dont destroy it yet
             // destroy tile and remove it from the destroy queue
+            AudioManager.Instance.playFragileBlockBreakSFX();
             tilemap.SetTile(tilePos, null);
             fragileTilesToDestroy.RemoveAt(i);
             i--;
