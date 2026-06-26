@@ -76,24 +76,19 @@ public class PlayerBox : GameBehaviour
     {
         yield return new WaitForSecondsRealtime(0.25f);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < stars; i++)
         {
-            bool earned = i < stars;
-
             float t = 0;
 
             while (t < 1)
             {
                 t += Time.unscaledDeltaTime * 8f;
-
                 float scale = Mathf.LerpUnclamped(
                     0f,
                     1f,
                     Mathf.Sin(t * Mathf.PI * 0.5f) * 1.25f
                 );
-
                 starImages[i].transform.localScale = Vector3.one * scale;
-
                 yield return null;
             }
 
@@ -103,11 +98,8 @@ public class PlayerBox : GameBehaviour
             while (t < 1)
             {
                 t += Time.unscaledDeltaTime * 10f;
-
                 float scale = Mathf.Lerp(1.25f, 1f, t);
-
                 starImages[i].transform.localScale = Vector3.one * scale;
-
                 yield return null;
             }
 
