@@ -218,12 +218,19 @@ public class GameManager : MonoBehaviour
         if (nextLevel != null)
         {
             while (!nextLevel.isDone) yield return null;
-            AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
-            if (unload != null)
+            if (currentLevel.IsValid())
             {
-                while (!unload.isDone) yield return null;
+                AsyncOperation unload = SceneManager.UnloadSceneAsync(currentLevel);
+                if (unload != null)
+                {
+                    while (!unload.isDone) yield return null;
+                }
+                else
+                {
+                    if (logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed");
+                }
             }
-            else { if (logLevel >= LogLevel.Warn) Debug.LogWarning("Unload failed"); }
+
             currentLevel =
                 SceneManager.GetSceneByBuildIndex(sceneIndex); // we have to update currentLevel after loading the level
             inventory.gameObject.SetActive(true);
