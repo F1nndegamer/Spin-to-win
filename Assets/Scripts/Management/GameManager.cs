@@ -41,12 +41,6 @@ public class GameManager : MonoBehaviour
         if (transform.parent != null) transform.SetParent(null); // Make sure we are root hehe
         Object.DontDestroyOnLoad(gameObject);
     }
-
-    private int IAmAlive()
-    {
-        return 0;
-    }
-
     private void LoadMenu()
     {
         LoadScene(1);

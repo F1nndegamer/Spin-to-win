@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class Menu : GameBehaviour
@@ -13,10 +14,31 @@ public class Menu : GameBehaviour
     public Slider volume;
     public Toggle postProcessing;
     public Image fade;
+    [SerializeField] private TextMeshProUGUI bottomText;
 
     private void Awake()
     {
         StartCoroutine(Fade());
+        StartCoroutine(IAmAlive());
+    }
+
+    private IEnumerator IAmAlive()
+    {
+        
+        using (UnityWebRequest webRequest = UnityWebRequest.Get("https://live.alimad.co/ping?app=spin-to-win"))
+        {
+            yield return webRequest.SendWebRequest();
+            if (webRequest.result != UnityWebRequest.Result.ConnectionError && webRequest.result != UnityWebRequest.Result.ProtocolError)
+            {
+                int t;
+                System.Int32.TryParse(webRequest.downloadHandler.text, out t);
+                if (t > 1)
+                {
+                    if(bottomText.text == "")
+                        bottomText.text = t.ToString() + " users are playing this game rn!";
+                }
+            }
+        }
     }
 
     private IEnumerator Fade()
@@ -58,6 +80,11 @@ public class Menu : GameBehaviour
     public void SetPostProcessing(bool enable)
     {
         GameManager.state.postProcessing = enable;
+    }
+
+    public void Quit()
+    {
+        Application.Quit(0);
     }
 
     public override void GameAwake()
