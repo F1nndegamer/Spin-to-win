@@ -364,6 +364,7 @@ public class GameManager : MonoBehaviour
         state.lastPlayed = DateTime.Now;
         string stateJson = JsonUtility.ToJson(state);
         if (PlayerPrefs.GetString("state") == stateJson) return; // We do this to avoid certain crash situations, at the cost of mild performance
+        if(logLevel >= LogLevel.Saves) Debug.Log("Saving: " + stateJson);
         PlayerPrefs.SetString("state", stateJson);
         PlayerPrefs.Save();
     }
@@ -397,6 +398,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         string json = PlayerPrefs.GetString("state");
+        if(logLevel >= LogLevel.Info) Debug.Log("Loaded: " + json);
         try
         {
             state = JsonUtility.FromJson<Save>(json);
@@ -442,7 +444,8 @@ public class GameManager : MonoBehaviour
         None = 0,
         Error = 1,
         Warn = 2,
-        Info = 3
+        Info = 3,
+        Saves = 4
     }
 
     public static LogLevel logLevel

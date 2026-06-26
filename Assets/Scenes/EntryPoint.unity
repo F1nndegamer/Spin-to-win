@@ -527,7 +527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _skip: 1
   totalLevels: 11
-  _logLevel: 3
+  _logLevel: 4
 --- !u!1 &1515508851
 GameObject:
   m_ObjectHideFlags: 0
