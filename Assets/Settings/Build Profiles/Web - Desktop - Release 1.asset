@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 15003, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Web - Mobile - Development
+  m_Name: Web - Desktop - Release 1
   m_EditorClassIdentifier: UnityEditor.dll::UnityEditor.Build.Profile.BuildProfile
   m_AssetVersion: 2
   m_BuildTarget: 20
   m_Subtarget: 0
   m_PlatformId: 84a3bb9e7420477f885e98145999eb20
   m_PlatformBuildProfile:
-    rid: 5423443936006897740
+    rid: 5423443965333995597
   m_ActivePlatformGuid: 
   m_AdditionalPlatformBuildSettings: []
   m_OverrideGlobalSceneList: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
     - line: '|   targetDevice: 2'
     - line: '|   useOnDemandResources: 0'
     - line: '|   accelerometerFrequency: 60'
-    - line: '|   companyName: DefaultCompany'
-    - line: '|   productName: Spin To WI'
+    - line: '|   companyName: F1nndegamer'
+    - line: '|   productName: Spin To WIn'
     - line: '|   defaultCursor: {instanceID: 0}'
     - line: '|   cursorHotspot: {x: 0, y: 0}'
     - line: '|   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b:
@@ -84,8 +84,8 @@ MonoBehaviour:
     - line: '|   iosShowActivityIndicatorOnLoading: -1'
     - line: '|   androidShowActivityIndicatorOnLoading: -1'
     - line: '|   iosUseCustomAppBackgroundBehavior: 0'
-    - line: '|   allowedAutorotateToPortrait: 1'
-    - line: '|   allowedAutorotateToPortraitUpsideDown: 1'
+    - line: '|   allowedAutorotateToPortrait: 0'
+    - line: '|   allowedAutorotateToPortraitUpsideDown: 0'
     - line: '|   allowedAutorotateToLandscapeRight: 1'
     - line: '|   allowedAutorotateToLandscapeLeft: 1'
     - line: '|   useOSAutorotation: 1'
@@ -195,6 +195,7 @@ MonoBehaviour:
     - line: '|   androidMaxAspectRatio: 2.4'
     - line: '|   androidMinAspectRatio: 1'
     - line: '|   applicationIdentifier:'
+    - line: '|     Android: com.F1nndegamer.SpinToWin'
     - line: '|     Standalone: com.DefaultCompany.2D-URP'
     - line: '|   buildNumber:'
     - line: '|     Standalone: 0'
@@ -324,8 +325,106 @@ MonoBehaviour:
     - line: '|   AndroidReportGooglePlayAppDependencies: 1'
     - line: '|   androidSymbolsSizeThreshold: 800'
     - line: '|   m_BuildTargetIcons: []'
-    - line: '|   m_BuildTargetPlatformIcons: []'
-    - line: '|   m_BuildTargetBatching: []'
+    - line: '|   m_BuildTargetPlatformIcons:'
+    - line: '|   - m_BuildTarget: Android'
+    - line: '|     m_Icons:'
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 432'
+    - line: '|       m_Height: 432'
+    - line: '|       m_Kind: 2'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 324'
+    - line: '|       m_Height: 324'
+    - line: '|       m_Kind: 2'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 216'
+    - line: '|       m_Height: 216'
+    - line: '|       m_Kind: 2'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 162'
+    - line: '|       m_Height: 162'
+    - line: '|       m_Kind: 2'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 108'
+    - line: '|       m_Height: 108'
+    - line: '|       m_Kind: 2'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 81'
+    - line: '|       m_Height: 81'
+    - line: '|       m_Kind: 2'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 192'
+    - line: '|       m_Height: 192'
+    - line: '|       m_Kind: 1'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 144'
+    - line: '|       m_Height: 144'
+    - line: '|       m_Kind: 1'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 96'
+    - line: '|       m_Height: 96'
+    - line: '|       m_Kind: 1'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 72'
+    - line: '|       m_Height: 72'
+    - line: '|       m_Kind: 1'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 48'
+    - line: '|       m_Height: 48'
+    - line: '|       m_Kind: 1'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 36'
+    - line: '|       m_Height: 36'
+    - line: '|       m_Kind: 1'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 192'
+    - line: '|       m_Height: 192'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 144'
+    - line: '|       m_Height: 144'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 96'
+    - line: '|       m_Height: 96'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 72'
+    - line: '|       m_Height: 72'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 48'
+    - line: '|       m_Height: 48'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: '
+    - line: '|     - m_Textures: []'
+    - line: '|       m_Width: 36'
+    - line: '|       m_Height: 36'
+    - line: '|       m_Kind: 0'
+    - line: '|       m_SubKind: '
+    - line: '|   m_BuildTargetBatching:'
+    - line: '|   - m_BuildTarget: Android'
+    - line: '|     m_StaticBatching: 1'
+    - line: '|     m_DynamicBatching: 0'
+    - line: '|   - m_BuildTarget: WebGL'
+    - line: '|     m_StaticBatching: 0'
+    - line: '|     m_DynamicBatching: 0'
     - line: '|   m_BuildTargetShaderSettings: []'
     - line: '|   m_BuildTargetGraphicsJobs: []'
     - line: '|   m_BuildTargetGraphicsJobMode: []'
@@ -349,6 +448,9 @@ MonoBehaviour:
     - line: '|   - serializedVersion: 3'
     - line: '|     m_BuildTarget: WebGL'
     - line: '|     m_Formats: 05000000'
+    - line: '|   - serializedVersion: 3'
+    - line: '|     m_BuildTarget: Android'
+    - line: '|     m_Formats: 01000000'
     - line: '|   playModeTestRunnerEnabled: 0'
     - line: '|   runPlayModeTestAsEditModeTest: 0'
     - line: '|   actionOnDotNetUnhandledException: 1'
@@ -592,14 +694,14 @@ MonoBehaviour:
     - line: '|   webGLExceptionSupport: 1'
     - line: '|   webGLNameFilesAsHashes: 0'
     - line: '|   webGLShowDiagnostics: 0'
-    - line: '|   webGLDataCaching: 0'
+    - line: '|   webGLDataCaching: 1'
     - line: '|   webGLDebugSymbols: 0'
     - line: '|   webGLEmscriptenArgs: '
     - line: '|   webGLModulesDirectory: '
     - line: '|   webGLTemplate: APPLICATION:Default'
     - line: '|   webGLAnalyzeBuildSize: 0'
     - line: '|   webGLUseEmbeddedResources: 0'
-    - line: '|   webGLCompressionFormat: 2'
+    - line: '|   webGLCompressionFormat: 0'
     - line: '|   webGLWasmArithmeticExceptions: 0'
     - line: '|   webGLLinkerTarget: 1'
     - line: '|   webGLThreadsSupport: 0'
@@ -622,7 +724,7 @@ MonoBehaviour:
     - line: '|   scriptingBackend:'
     - line: '|     Android: 1'
     - line: '|   il2cppCompilerConfiguration:'
-    - line: '|     WebGL: 0'
+    - line: '|     WebGL: 2'
     - line: '|   il2cppCodeGeneration:'
     - line: '|     WebGL: 1'
     - line: '|   il2cppLTOMode: {}'
@@ -741,10 +843,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5423443936006897740
+    - rid: 5423443965333995597
       type: {class: WebGLPlatformSettings, ns: UnityEditor.WebGL, asm: UnityEditor.WebGL.Extensions}
       data:
-        m_Development: 1
+        m_Development: 0
         m_ConnectProfiler: 0
         m_BuildWithDeepProfilingSupport: 0
         m_BuildWithCodeCoverage: 0
@@ -759,7 +861,7 @@ MonoBehaviour:
         m_InsightsSettingsContainer:
           m_BuildProfileEngineDiagnosticsState: 2
         m_AdaptivePerformanceEnabled: 0
-        m_CodeOptimization: 0
+        m_CodeOptimization: 3
         m_WebGLClientBrowserPath: 
         m_WebGLClientBrowserType: 0
-        m_WebGLTextureSubtarget: 4
+        m_WebGLTextureSubtarget: 1

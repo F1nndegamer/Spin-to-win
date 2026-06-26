@@ -17,6 +17,7 @@ public class GridManager : GameBehaviour
     {
         occupied.Clear();
         blockingTilemap = null;
+        occupied[Vector2Int.RoundToInt(GameManager.levelData.PlayerSpawnPos.position)] = null;
     }
 
     public Vector2Int WorldToCell(Vector3 worldPos)
