@@ -191,7 +191,8 @@ public class Menu : GameBehaviour
         {
             return;
         }
-        GameManager.Instance.LoadLevel(LevelNumber);
+        GameManager.level = LevelNumber;
+        OnPlay();
     }
     public void Credits()
     {
