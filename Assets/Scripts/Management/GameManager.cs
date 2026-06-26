@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     // Always use GameManager.LoadScene instead of SceneManager
     // - Ali
     [SerializeField] private bool _skip = false;
+    [SerializeField] private bool _clearStorage = false;
     private static GameManager _instance;
     public static GameManager Instance
     {
@@ -362,7 +363,7 @@ public class GameManager : MonoBehaviour
     private void SaveState()
     {
         state.lastPlayed = DateTime.Now;
-        string stateJson = JsonUtility.ToJson(state);
+        string stateJson = JsonUtility.ToJson(state, true);
         if (PlayerPrefs.GetString("state") == stateJson) return; // We do this to avoid certain crash situations, at the cost of mild performance
         if(logLevel >= LogLevel.Saves) Debug.Log("Saving: " + stateJson);
         PlayerPrefs.SetString("state", stateJson);
@@ -372,7 +373,7 @@ public class GameManager : MonoBehaviour
     public void LoadState()
     {
     Initialize:
-        if (!PlayerPrefs.HasKey("state"))
+        if (!PlayerPrefs.HasKey("state") || _clearStorage)
         {
             state = new Save
             {
