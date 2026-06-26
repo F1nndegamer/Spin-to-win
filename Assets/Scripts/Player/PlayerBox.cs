@@ -227,7 +227,8 @@ public class PlayerBox : GameBehaviour
 
     public IEnumerator TransitionCoroutine(bool RestartMode) // Called and awaited by GameManager in LoadLevel coroutine
     {
-        int stars = 1; // todo: @F1nn display these stars!
+        int stars = 1;
+        if(Level.Instance.currentTutorial == 4) Level.Instance.DismissTutorial();
         if (GameManager.movesThisLevel <= GameManager.levelData.minMoves) stars++;
         if (GameManager.timeThisLevel <= GameManager.levelData.minTime) stars++;
         Debug.Log($"Level: {GameManager.level}");
@@ -309,5 +310,9 @@ public class PlayerBox : GameBehaviour
         }
         transition.localScale = Vector3.zero;
         GameManager.levelReady = true;
+        if (GameManager.level == 1)
+        {
+            Level.Instance.ShowTutorial(0);
+        }
     }
 }

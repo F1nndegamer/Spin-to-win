@@ -76,7 +76,7 @@ public class Level : GameBehaviour
         Invoke(nameof(DismissTutorial), autoDismissTime);
     }
 
-    private void DismissTutorial()
+    public void DismissTutorial()
     {
         tutorialObj.SetActive(false);
         currentTutorial = -1;
@@ -123,11 +123,6 @@ public class Level : GameBehaviour
         teleporObjectPositionLeft.GetComponentInChildren<TextMeshPro>().text = "";
         teleporObjectPositionRight.GetComponentInChildren<TextMeshPro>().text = "";
         normalObjectPosition.GetComponentInChildren<TextMeshPro>().text = "";
-
-        if (GameManager.level == 1)
-        {
-            ShowTutorial(0);
-        }
     }
 
     private void LateUpdate()
@@ -147,9 +142,9 @@ public class Level : GameBehaviour
 
     public void PassDirectionalInput(int x, int y, int z) // Passed from Controller, based on WASD and Q E
     {
-        if(x != 0 || y != 0 && currentTutorial == 0) ShowTutorial(1);
+        if((x != 0 || y != 0) && currentTutorial == 0) ShowTutorial(1);
         if(z != 0 && currentTutorial == 1) ShowTutorial(2);
-        if(currentTutorial == 3) ShowTutorial(4);
+        if(currentTutorial == 3 && x != 0) ShowTutorial(4, 3f);
         camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, _targetOrthoSize, 0.2f); // this is our zoom factor
         // change it here so we can set _targetOrthoSize to anything to lerp to, even after the edit mode ends
         if (GameManager.levelStarted)
@@ -205,7 +200,7 @@ public class Level : GameBehaviour
 
     public void Confirm()
     {
-        if(currentTutorial == 2) ShowTutorial(3);
+        if(currentTutorial > -1 && currentTutorial <= 2) ShowTutorial(3);
         helpPlayMode.SetActive(true);
         helpEditMode.SetActive(false);
         if (GameManager.levelStarted) return;
