@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
             // Level* scenes will be loaded after the EssentialScene, thereby at index 1.
             // If the Level* scene is not at index 1, try find the scene in all loaded scenes
             // and if none of the scenes is a level scene, not a very sensible man has pulled this repo to test
+            GameRegistry.executed = false;
             Scene levelScene = SceneManager.GetSceneAt(1);
             bool foundLevel = false;
             if (!levelScene.name.StartsWith("Level"))
@@ -139,6 +140,7 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
+        GameRegistry.executed = false;
         int activeSceneIndex = SceneManager.GetActiveScene().buildIndex;
         AsyncOperation loadScene = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
         if (loadScene != null)
@@ -210,6 +212,7 @@ public class GameManager : MonoBehaviour
     {
         levelLoaded = false;
         levelReady = false;
+        GameRegistry.executed = false;
         //GameObject grid = GameObject.Find("Grid");
         //if (grid != null)
         //    Destroy(grid);

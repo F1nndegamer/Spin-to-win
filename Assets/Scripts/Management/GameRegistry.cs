@@ -7,8 +7,19 @@ using System.Collections.Generic;
 public static class GameRegistry
 {
     private static readonly List<GameBehaviour> ActiveObjects = new List<GameBehaviour>();
-    
-    public static void Register(GameBehaviour obj) => ActiveObjects.Add(obj);
+
+    public static bool executed = false;
+
+    public static void Register(GameBehaviour obj)
+    {
+        ActiveObjects.Add(obj);
+        if (executed)
+        {
+            obj.GameAwake();
+            obj.GameStart();
+        }
+    }
+
     public static void Unregister(GameBehaviour obj) => ActiveObjects.Remove(obj);
 
     public static void Execute()
@@ -25,5 +36,7 @@ public static class GameRegistry
         {
             if(obj != null) obj.GameStart();
         }
+
+        executed = true;
     }
 }
