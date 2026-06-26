@@ -1661,9 +1661,9 @@ MonoBehaviour:
   bottomRightBound: {fileID: 1957804445}
   solidBlocks: 2
   teleportBlocks: 
-  levelName: 
+  levelName: Squared Center
   minMoves: 7
-  minTime: 11
+  minTime: 10
 --- !u!1 &1525052965
 GameObject:
   m_ObjectHideFlags: 0

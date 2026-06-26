@@ -164,11 +164,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2650149213345930953, guid: adca468ab0e481436b71c804dd11149e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.5
+      value: -9.500001
       objectReference: {fileID: 0}
     - target: {fileID: 2650149213345930953, guid: adca468ab0e481436b71c804dd11149e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.5
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2650149213345930953, guid: adca468ab0e481436b71c804dd11149e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1909,8 +1909,8 @@ MonoBehaviour:
   topLeftBound: {fileID: 2010887798}
   bottomRightBound: {fileID: 1354832195}
   solidBlocks: 1
-  teleportBlocks: 01000000
-  levelName: 
+  teleportBlocks: 00000000
+  levelName: Dual Exit
   minMoves: 3
   minTime: 6
 --- !u!1 &1354832194
