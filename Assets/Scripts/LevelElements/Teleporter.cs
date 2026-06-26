@@ -31,7 +31,7 @@ public class Teleporter : GameBehaviour
             _ => Vector3.zero
         };
         DraggableItem item = transform.parent.GetComponent<DraggableItem>();
-        item.shapeCells.Add(Vector2Int.RoundToInt(-targetpos));
+        if(item!=null) item.shapeCells.Add(Vector2Int.RoundToInt(-targetpos));
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
