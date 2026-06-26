@@ -17,7 +17,7 @@ public class Teleporter : GameBehaviour
     {
         GameManager.teleporters.Add(this);
     }
-     void Awake()
+    private void Start()
     {
         Vector3 targetpos = direction switch
         {
@@ -39,7 +39,7 @@ public class Teleporter : GameBehaviour
             Debug.Log(targetpos);
             Debug.Log(Vector2Int.RoundToInt(targetpos));
         }
-        transform.parent.GetComponent<DraggableItem>()?.shapeCells.Add(Vector2Int.RoundToInt(targetpos));
+        transform.parent.GetComponent<DraggableItem>()?.shapeCells.Add(Vector2Int.RoundToInt(-targetpos));
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
