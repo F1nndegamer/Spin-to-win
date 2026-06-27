@@ -33,7 +33,7 @@ public class DraggableItem : MonoBehaviour
     }
     void Update()
     {
-    
+
     }
     void Start()
     {
@@ -46,7 +46,8 @@ public class DraggableItem : MonoBehaviour
     }
     public void OnMouseDown()
     {
-        StartDrag();
+        if (!GameManager.levelStarted)
+            StartDrag();
     }
 
     public void OnMouseDrag()
@@ -153,7 +154,7 @@ public class DraggableItem : MonoBehaviour
         transform.position = GridManager.Instance.CellToWorld(cell);
         transform.parent = GameManager.placedObjects;
         Teleporter t = GetComponent<Teleporter>();
-        if(t != null)
+        if (t != null)
         {
             if (!GameManager.teleporters.Contains(t))
             {
