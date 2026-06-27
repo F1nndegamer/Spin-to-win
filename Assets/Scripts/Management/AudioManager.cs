@@ -3,15 +3,8 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    private static AudioManager _instance;
-    public static AudioManager Instance
-    {
-        get
-        {
-            if (_instance == null) { _instance = FindAnyObjectByType<AudioManager>(); }
-            return _instance;
-        }
-    }
+    public static AudioManager Instance;
+
 
     [SerializeField] private GameObject deathSFXPrefab;
     [SerializeField] private GameObject teleportSFXPrefab;
@@ -26,7 +19,7 @@ public class AudioManager : MonoBehaviour
     private List<AudioSource> musicList = new List<AudioSource>();
     private void spawnAudioPrefab(GameObject prefab)
     {
-        if(prefab == null)
+        if (prefab == null)
         {
             if (GameManager.logLevel >= GameManager.LogLevel.Error) Debug.LogWarning("Trying to play sound but prefab is null!");
             return;
@@ -35,7 +28,6 @@ public class AudioManager : MonoBehaviour
         audio.Play();
         musicList.Add(audio);
     }
-
     public void playDeathSFX() { spawnAudioPrefab(deathSFXPrefab); }
     public void playTeleportSFX() { spawnAudioPrefab(teleportSFXPrefab); }
     public void playWinSFX() { spawnAudioPrefab(winSFXPrefab); }
@@ -48,27 +40,35 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        Object.DontDestroyOnLoad(gameObject); // keep this alive
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            Object.DontDestroyOnLoad(gameObject); // keep this alive
+        }
     }
 
     private bool hasStartedMusic = false;
     private void FixedUpdate()
     {
-        if(hasStartedMusic == false)
+        if (hasStartedMusic == false)
         {
             // prevent a million evil messages from when we transition from entryPoint to MainMenu
             AudioListener listener = GameObject.FindAnyObjectByType<AudioListener>();
-            if(listener == null) { return; }
+            if (listener == null) { return; }
             playMusic();
             hasStartedMusic = true;
         }
 
-        for(int i=0; i<musicList.Count; i++)
+        for (int i = 0; i < musicList.Count; i++)
         {
             AudioSource audio = musicList[i];
-            if(audio.loop) { continue; } // this audio just loops, we will never remove it based on time
-            if(audio.isPlaying) { continue; } // still playing, ignore it
-            
+            if (audio.loop) { continue; } // this audio just loops, we will never remove it based on time
+            if (audio.isPlaying) { continue; } // still playing, ignore it
+
             // audio is done playing, get rid of it
             Destroy(audio.gameObject);
             musicList.RemoveAt(i);
